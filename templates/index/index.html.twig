@@ -1,6 +1,6 @@
-{% extends 'InoBase.html.twig' %}
+{% extends '../InoBase.html.twig' %}
 {% block stylesheets %}
-  <style type="text/css">
+  <style>
     body,html {
       height: 100%;
     }
@@ -13,8 +13,10 @@
 <div class="container h-100">
   <div class="row align-items-center h-100">
     <div class="col-xl-4 col-10 mx-auto text-center">
+{#
       <img src="{{ asset('images/inolares-logo.png') }}" id="inolares_logo" class="pb-2 img-fluid">
-      <h4>HACCP {{ APP_VERSION }}</h4>
+#}
+      <h4>InoTool {{ APP_VERSION }}</h4>
       {% if error %}
         <div class="alert alert-danger mt-2 mb-2">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
       {% endif %}
@@ -23,13 +25,13 @@
     </div>
     <form method="post" action="#" id="frm_login" novalidate>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-      <div class="form-group">
+      <div class="mb-2">
         <input type="email" name="email" id="email" class="form-control" required="required" autofocus="autofocus" placeholder="E-Mail Adresse">
       </div>
-      <div class="form-group">
+      <div class="mb-2">
         <input type="password" name="password" id="password" class="form-control" required="required" placeholder="Ihr Passwort">
       </div>
-      <div class="form-group">
+      <div class="mb-2">
         <button type="submit" class="btn btn-outline-dark"><i class="fas fa-sign-in-alt"></i> Einloggen</button>
       </div>
     </form>

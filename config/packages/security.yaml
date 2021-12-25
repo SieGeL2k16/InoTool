@@ -19,7 +19,20 @@ security:
             security: false
         main:
             lazy: true
-            provider: app_user_provider
+            login_throttling:
+                max_attempts: 5
+            entry_point: form_login
+            form_login:
+                login_path: index
+                check_path: index
+                enable_csrf: true
+                default_target_path: home
+                username_parameter: email
+                password_parameter: password
+
+            logout:
+                path:   app_logout
+
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
