@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use LogicException;
 
 
 /**
@@ -38,6 +41,25 @@ class IndexController extends AbstractController
   public function home():Response
     {
     return $this->render('index/home.html.twig');
+    }
+  
+  /**
+   * Dummy for logout functionality
+   */
+  #[Route('/logout',name: 'app_logout')]
+  public function logout()
+    {
+    throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+  /**
+   * Refreshes the session every 60 seconds
+   */
+  #[IsGranted("ROLE_USER")]
+  #[Route("/ajax/Ping",name: "ajaxPing",methods: "POST")]
+  public function Ping():JsonResponse
+    {
+    return new JsonResponse(['PONG' => microtime(true)]);
     }
   
   }

@@ -13,9 +13,7 @@
 <div class="container h-100">
   <div class="row align-items-center h-100">
     <div class="col-xl-4 col-10 mx-auto text-center">
-{#
-      <img src="{{ asset('images/inolares-logo.png') }}" id="inolares_logo" class="pb-2 img-fluid">
-#}
+      <img src="{{ asset('images/Logo-Transparent.png') }}" id="index_logo" class="pb-2 img-fluid">
       <h4>InoTool {{ APP_VERSION }}</h4>
       {% if error %}
         <div class="alert alert-danger mt-2 mb-2">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -31,7 +29,7 @@
       <div class="mb-2">
         <input type="password" name="password" id="password" class="form-control" required="required" placeholder="Ihr Passwort">
       </div>
-      <div class="mb-2">
+      <div class="mb-5">
         <button type="submit" class="btn btn-outline-dark"><i class="fas fa-sign-in-alt"></i> Einloggen</button>
       </div>
     </form>

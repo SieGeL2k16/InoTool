@@ -15,7 +15,7 @@
   <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
   {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body{% block body_classes %}{% endblock %}>
 {% block navbar_top %}{% endblock %}
 {% block navbar_side %}{% endblock %}
 {% block body_before %}{% endblock %}

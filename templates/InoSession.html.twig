@@ -1,0 +1,51 @@
+{% extends 'InoBase.html.twig' %}
+{% block navbar_top %}
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{{ path("home") }}">InoTool {{ APP_VERSION }}</a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <strong>{% block navbar_title %}{% endblock %}</strong>
+  <div class="navbar-nav">
+    <div class="nav-item text-nowrap">
+      <a class="nav-item pr-3 text-white" href="#" id="profile">{{ app.user.firstname }} {{ app.user.lastname }}</a>
+    </div>
+  </div>
+</header>
+{% endblock %}
+{% block js_refresh %}
+<script>
+  $(document).ready(function() { function ping() {$.ajax('{{ path("ajaxPing") }}',{method: 'post',dataType: 'json'}).done(function(data) {}).fail(function(jqXHR, textStatus, errorThrown) {let emsg = "AJAX-ERROR[UPDATE]: "+textStatus+" ("+errorThrown+")";console.log(emsg);});setTimeout(ping,60000);}ping();});
+</script>
+{% endblock %}
+{% block toasts %}
+{% if app.session.flashbag.peekAll() is not empty %}
+<script>
+  $(document).ready(function() {
+    {% for label, messages in app.flashes() %}
+    {% for message in messages %}
+    {% if label == 'error' %}
+    {% set toast_type  = 'error' %}
+    {% set toast_title = 'Fehler' %}
+    {% elseif label == 'warning' %}
+    {% set toast_type = 'warning' %}
+    {% set toast_title = 'Warnung' %}
+    {% elseif label == 'success' %}
+    {% set toast_type = 'success' %}
+    {% set toast_title = 'Erfolgreich' %}
+    {% else %}
+    {% set toast_type = 'info' %}
+    {% set toast_title = 'Information' %}
+    {% endif %}
+    $.toast({
+      text:'{{ message }}',
+      position : 'bottom-right',
+      'icon': '{{ toast_type }}',
+      'heading': '{{ toast_title }}',
+    });
+    {% endfor %}
+    {% endfor %}
+  });
+</script>
+{% endif %}
+{% endblock %}
