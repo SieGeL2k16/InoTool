@@ -113,7 +113,8 @@ a:hover {
 }
 
 .sidebar .nav-link.active {
-  color: #2470dc;
+  color: #2470dc !important;
+  font-weight: bold !important;
 }
 
 .sidebar .nav-link:hover .feather,
