@@ -5,7 +5,7 @@
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <strong>{% block navbar_title %}{% endblock %}</strong>
+  <span class="ino_navbar_title">{% block navbar_title %}{% endblock %}</span>
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
       <a class="nav-item pr-3 text-white" href="#" id="profile">{{ app.user.firstname }} {{ app.user.lastname }}</a>

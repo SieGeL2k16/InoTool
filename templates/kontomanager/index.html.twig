@@ -1,91 +1,81 @@
 {% extends 'InoKontoManager.html.twig' %}
 {% block body %}
-<p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
-  <p>CONTENT</p>
+<div class="row">
+  <div class="col-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title h3">Gesamt Übersicht</div>
+        <table class="table table-sm">
+        <tbody>
+        <tr>
+          <td>Anzahl Datensätze:</td>
+          <td>{{TOTAL_STATS['TOTAL_ROWS']|format_number(locale='de')}} </td>
+        </tr>
+        <tr>
+          <td>Bereich:</td>
+          <td>{{TOTAL_STATS['MIN_DATE']|date('d.m.Y')}} - {{ TOTAL_STATS['MAX_DATE']|date('d.m.Y') }}</td>
+        </tr>
+        <tr>
+          <td>Anzahl Kategorien:</td>
+          <td>{{TOTAL_STATS['TOTAL_CATEGORIES']|format_number(locale='de')}} </td>
+        </tr>
+        <tr>
+          <td>Anzahl Importfilter:</td>
+          <td>{{TOTAL_STATS['TOTAL_FILTER']|format_number(locale='de')}} </td>
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title h3">Umsatz {{ YEAR }}</div>
+        <table class="table table-sm">
+          <tbody>
+          <tr>
+            <td>Einnahmen:</td>
+            <td class="text-end text-success">{{YEAR_STATS['INCOME']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          <tr>
+            <td>Ausgaben:</td>
+            <td class="text-end text-danger">{{ YEAR_STATS['OUTCOME']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          <tr>
+            <td>Differenz:</td>
+            <td class="text-end {{ YEAR_STATS['DIFFERENCE']|MoneyColor }}">{{ YEAR_STATS['DIFFERENCE']|format_currency('EUR',locale='de')}}</td>
+          </tr>
 
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title h3">Gesamt Umsatz</div>
+        <table class="table table-sm">
+          <tbody>
+          <tr>
+            <td>Einnahmen:</td>
+            <td class="text-end text-success">{{ALLTIME_STATS['INCOME']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          <tr>
+            <td>Ausgaben:</td>
+            <td class="text-end text-danger">{{ ALLTIME_STATS['OUTCOME']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          <tr>
+            <td>Differenz:</td>
+            <td class="text-end {{ ALLTIME_STATS['DIFFERENCE']|MoneyColor }}">{{ ALLTIME_STATS['DIFFERENCE']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
 {% endblock %}

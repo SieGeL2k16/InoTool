@@ -1,29 +1,50 @@
 {% extends 'InoSession.html.twig' %}
 {% block navbar_title %}Freelancer Manager{% endblock %}
 {% block navbar_side %}
+  {% set naventries = {
+    'home':'',
+    'time':'',
+    'customer':'',
+    'projects':'',
+    'reports':'',
+    'invoices':'',
+    'contracts':'',
+    'config':'',
+  } %}
+  {% if ACTNAV is not defined %}
+    {% set naventries = set_element(naventries,'home','active') %}
+  {% else %}
+    {% if naventries[ACTNAV] is not defined %}
+      <div class="alert alert-danger" role="alert">
+        Unknown navigation tag "{{ ACTNAV }}" - CHECK YOUR CODE!
+      </div>
+    {% else %}
+      {% set naventries = set_element(naventries,ACTNAV,'active') %}
+    {% endif %}
+  {% endif %}
 <div class="container-fluid">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ path("flm_index") }}"><i class="fa-solid fa-gauge fa-fw"></i> Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-clock fa-fw"></i> Zeiterfassung</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-user-group fa-fw"></i> Kunden</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-diagram-project fa-fw"></i> Projekte</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> Rechnungen</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-file-signature fa-fw"></i> Service Verträge</a></li>
-          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['home'] }}" href="{{ path("flm_index") }}"><i class="fa-solid fa-gauge fa-fw"></i> Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['time'] }}" href="#"><i class="fa-solid fa-clock fa-fw"></i> Zeiterfassung</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['customer'] }}" href="#"><i class="fa-solid fa-user-group fa-fw"></i> Kunden</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['projects'] }}" href="#"><i class="fa-solid fa-diagram-project fa-fw"></i> Projekte</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['reports'] }}" href="#"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['invoices'] }}" href="#"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> Rechnungen</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['contracts'] }}" href="#"><i class="fa-solid fa-file-signature fa-fw"></i> Service Verträge</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['config'] }}" href="#"><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</a></li>
         </ul>
         <hr>
         <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link" aria-current="page" href="{{ path("home") }}"><i class="fa-solid fa-home fa-fw"></i> Startseite</a></li>
+          <li class="nav-item"><a class="nav-link" aria-current="page" href="{{ path("home") }}"><i class="fa-solid fa-home fa-fw"></i> Zurück zum Start</a></li>
         </ul>
       </div>
     </nav>
     {% endblock %}
     {% block body_before %}
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
       {% endblock %}
       {% block body_after %}
     </main>
