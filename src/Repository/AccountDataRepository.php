@@ -74,5 +74,40 @@ class AccountDataRepository extends ServiceEntityRepository
     $stats['TOTAL_FILTER']      = $this->getEntityManager()->getRepository(AccountImportFilter::class)->count(['RefUser' => $user]);
     return $stats;
     }
-
+  
+  /**
+   * Calculates the sum of a given category grouped by YYYYMM
+   * @param User $user
+   * @param int $category
+   * @return array
+   * @throws Exception
+   */
+  public function GetCategorySumYYYYMM(User $user, int $category):array
+    {
+    $ret  = [];
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select sum(amount) as asum,to_char(booking_date,'YYYYMM') as yyyymm from account_data where ref_user_id=:uid and ref_category_id=:cid group by 2 order by 2",['uid' => $user->getId(),'cid' => $category]);
+    while($d = $stmt->fetchAssociative())
+      {
+      $ret[$d['yyyymm']] = $d['asum'];
+      }
+    return $ret;
+    }
+  
+  /**
+   * Calculates the sum of a given category grouped by YYYY (year)
+   * @param User $user
+   * @param int $category
+   * @return array
+   * @throws Exception
+   */
+  public function GetCategorySumYYYY(User $user, int $category):array
+    {
+    $ret  = [];
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select sum(amount) as asum,to_char(booking_date,'YYYY') as yyyymm from account_data where ref_user_id=:uid and ref_category_id=:cid group by 2 order by 2",['uid' => $user->getId(),'cid' => $category]);
+    while($d = $stmt->fetchAssociative())
+      {
+      $ret[$d['yyyymm']] = $d['asum'];
+      }
+    return $ret;
+    }
   }

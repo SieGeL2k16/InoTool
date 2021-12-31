@@ -8,7 +8,7 @@
         <table class="table table-sm">
         <tbody>
         <tr>
-          <td>Anzahl Datensätze:</td>
+          <td>Anz. Datensätze:</td>
           <td>{{TOTAL_STATS['TOTAL_ROWS']|format_number(locale='de')}} </td>
         </tr>
         <tr>
@@ -16,11 +16,11 @@
           <td>{{TOTAL_STATS['MIN_DATE']|date('d.m.Y')}} - {{ TOTAL_STATS['MAX_DATE']|date('d.m.Y') }}</td>
         </tr>
         <tr>
-          <td>Anzahl Kategorien:</td>
+          <td>Anz. Kategorien:</td>
           <td>{{TOTAL_STATS['TOTAL_CATEGORIES']|format_number(locale='de')}} </td>
         </tr>
         <tr>
-          <td>Anzahl Importfilter:</td>
+          <td>Anz. Importfilter:</td>
           <td>{{TOTAL_STATS['TOTAL_FILTER']|format_number(locale='de')}} </td>
         </tr>
         </tbody>
@@ -46,7 +46,6 @@
             <td>Differenz:</td>
             <td class="text-end {{ YEAR_STATS['DIFFERENCE']|MoneyColor }}">{{ YEAR_STATS['DIFFERENCE']|format_currency('EUR',locale='de')}}</td>
           </tr>
-
           </tbody>
         </table>
       </div>
@@ -70,12 +69,76 @@
             <td>Differenz:</td>
             <td class="text-end {{ ALLTIME_STATS['DIFFERENCE']|MoneyColor }}">{{ ALLTIME_STATS['DIFFERENCE']|format_currency('EUR',locale='de')}}</td>
           </tr>
-          
+          <tr>
+            <td>Nur Gehalt:</td>
+            <td class="text-end text-success">{{ TOTAL_GEHALT|format_currency('EUR',locale='de')}}</td>
+          </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
 </div>
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title h3 text-center">Netto-Gehaltsentwicklung</div>
+        <canvas id="myChart" width="100%" height="20"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/chart.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+  const ctx = $('#myChart');
+  const labels = {{ G_LABELS|raw }};
+  const values = {{ G_VALUES|raw }};
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Jahresnettogehalt in EUR',
+        data: values,
+        borderColor: 'rgb(50, 61, 83)',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      locale: 'de-DE',
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context)
+              {
+              let label = context.dataset.label || '';
+              if (label)
+                {
+                label += ': ';
+                }
+              if (context.parsed.y !== null)
+                {
+                label += new Intl.NumberFormat('de-DE', {
+                  style: 'currency',
+                  currency: 'EUR'
+                  }).format(context.parsed.y);
+                  }
+                return label;
+              }
+            }
+          }
+        },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
+</script>
 {% endblock %}

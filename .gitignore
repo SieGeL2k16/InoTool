@@ -1,4 +1,5 @@
 .idea
+convert_kontomanager.php
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
