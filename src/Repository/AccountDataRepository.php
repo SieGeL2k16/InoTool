@@ -112,6 +112,13 @@ class AccountDataRepository extends ServiceEntityRepository
     return $ret;
     }
   
+  /**
+   * Datatables Ajax backend for account_data table.
+   * @param int $uid
+   * @param array $params
+   * @return array
+   * @throws Exception
+   */
   public function GetDataTablesValues(int $uid,array $params):array
     {
     $SEARCH_SQL = "";
@@ -148,10 +155,47 @@ class AccountDataRepository extends ServiceEntityRepository
       $total  = $data[0][6];      // Total Count column
       }
     return [
-    'DATA'  => $data,
-    'TOTAL' => $total,
-    ];
+      'DATA'  => $data,
+      'TOTAL' => $total,
+      ];
+    }
+  
+  /**
+   * Returns data stream as choosen by given parameters.
+   * @param User $user
+   * @param array $params
+   * @return array
+   * @throws Exception
+   */
+  public function GetBrowserData(User $user,array $params):array
+    {
+    $dbpar = ['uid' => $user->getId()];
+    $where  = "";
+    if($params['F_CATEGORY'] !== null && (int)$params['F_CATEGORY'] !== -1)
+      {
+      $where.=" and ac.id=:cid";
+      $dbpar['cid'] = $params['F_CATEGORY'];
+      }
+    if($params['F_MONTH'] !== null && (int)$params['F_MONTH'] !== -1)
+      {
+      $where.=" and to_char(ad.booking_date,'MM')=:mon";
+      $dbpar['mon'] = sprintf("%02d",$params['F_MONTH']);
+      }
+    if($params['F_YEAR'] !== null && (int)$params['F_YEAR'] !== -1)
+      {
+      $where.=" and to_char(ad.booking_date,'YYYY')=:y";
+      $dbpar['y'] = $params['F_YEAR'];
+      }
+    $SQL  = "select ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.name as category_name,ad.description,ad.amount,aba.bank_shortcut,ad.is_income,count(*) OVER() AS total_count
+             from account_data ad
+             left join account_categories ac on (ad.ref_category_id = ac.id)
+             left join account_bank_accounts aba on(ad.accounting_number = aba.iban)
+             where ad.ref_user_id=:uid
+             $where
+             order by ad.booking_date desc
+            ";
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$dbpar);
+    return $stmt->fetchAllAssociative();
+    }
+
   }
-  
-  
-}

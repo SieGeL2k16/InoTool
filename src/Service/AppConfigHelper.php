@@ -38,17 +38,18 @@ class AppConfigHelper
   /**
    * Returns value for a given key/user combo.
    * @param string $key
+   * @param string|null $default
    * @param User|null $user
    * @return string|null
    */
-  public function Get(string $key, User $user = null):?string
+  public function Get(string $key, string $default = null, User $user = null):?string
     {
     $obj = $this->GetObject($key,$user);
     if($obj !== null)
       {
       return $obj->getValue();
       }
-    return null;
+    return $default;
     }
   
   /**
@@ -63,7 +64,7 @@ class AppConfigHelper
     if($obj === null)
       {
       $obj = new AppConfig();
-      $obj->setRefUserId($user)->setKeyName($key);
+      $obj->setRefUser($user)->setKeyName($key);
       }
     $obj->setValue($val);
     $this->entity->persist($obj);

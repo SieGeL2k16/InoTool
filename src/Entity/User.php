@@ -11,7 +11,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
-{
+  {
+    /* Constants for AppConfigHelper */
+    const CFG_ACC_BROWSER_F_CAT     = "cfg.acc.browser.f_cat";
+    const CFG_ACC_BROWSER_F_MONTH   = "cfg.acc.browser.f_month";
+    const CFG_ACC_BROWSER_F_YEAR    = "cfg.acc.browser.f_year";
+  
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

@@ -89,7 +89,7 @@ $(document).ready(function () {
   });
 
   /** Setup select2 defaults */
-  $.fn.select2.defaults.set("theme","bootstrap4");
+  $.fn.select2.defaults.set("theme","bootstrap-5");
   $.fn.select2.defaults.set("language", "de");
 
 });
