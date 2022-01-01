@@ -10,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\ArrayShape;
+use NumberFormatter;
 
 /**
  * @method AccountData|null find($id, $lockMode = null, $lockVersion = null)
@@ -110,4 +111,47 @@ class AccountDataRepository extends ServiceEntityRepository
       }
     return $ret;
     }
+  
+  public function GetDataTablesValues(int $uid,array $params):array
+    {
+    $SEARCH_SQL = "";
+    $par = []; //['sd' => $params['SD'], 'ed' => $params['ED']];
+    if($params['SEARCH'] !== "")
+      {
+      $SEARCH_SQL   = " WHERE (lower(ad.description) LIKE :srch OR lower(l.level_name) LIKE :srch OR lower(l.message) LIKE :srch)";
+      $par['srch']  = '%'.mb_strtolower($params['SEARCH']).'%';
+      }
+      //               WHERE l.created_at BETWEEN :sd AND :ed
+    $SQL  = "SELECT ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.name,ad.description,ad.amount,ad.bank_id, count(*) OVER() AS total_count
+               FROM account_data ad
+               left join account_categories ac on (ad.ref_category_id = ac.id)
+                $SEARCH_SQL
+              ORDER BY {$params['ORDER']} {$params['SDIR']}
+              LIMIT {$params['LIMIT']} OFFSET {$params['START']}";
+    $data   = []; //$this->getEntityManager()->getConnection()->executeQuery($SQL,$par)->fetchAllNumeric();
+    $total = 0;
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
+    while($item = $stmt->fetchAssociative())
+      {
+      $data[] = [
+        $item['id'],
+        $item['dt'],
+        $item['name'],
+        $item['description'],
+        (new NumberFormatter("de-DE", NumberFormatter::CURRENCY))->format($item['amount']),
+        $item['bank_id'],
+        $item['total_count']
+      ];
+      }
+    if(count($data))
+      {
+      $total  = $data[0][6];      // Total Count column
+      }
+    return [
+    'DATA'  => $data,
+    'TOTAL' => $total,
+    ];
   }
+  
+  
+}
