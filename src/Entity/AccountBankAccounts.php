@@ -27,6 +27,9 @@ class AccountBankAccounts
     #[ORM\JoinColumn(nullable: false, onDelete: 'cascade')]
     private $RefUser;
 
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private $LogoName;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class AccountBankAccounts
     public function setRefUser(?User $RefUser): self
     {
         $this->RefUser = $RefUser;
+
+        return $this;
+    }
+
+    public function getLogoName(): ?string
+    {
+        return $this->LogoName;
+    }
+
+    public function setLogoName(?string $LogoName): self
+    {
+        $this->LogoName = $LogoName;
 
         return $this;
     }

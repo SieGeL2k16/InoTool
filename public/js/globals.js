@@ -30,6 +30,30 @@ function AskForDelete(confirm_url, add_text)
   }
 
 /**
+ * Confirm dialog which submits a given form id
+ * @param confirm_text
+ * @param form_id
+ */
+function SwalConfirmSubmit(confirm_text, form_id)
+  {
+  Swal.fire({
+    title: 'Achtung!',
+    text: confirm_text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Löschen',
+      cancelButtonText: 'Abbruch'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $("#"+form_id).submit();
+      }
+    })
+  }
+
+
+/**
  *
  * @param urlToSend
  */
@@ -81,15 +105,29 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip({ boundary: 'window' });
   });
 
-  /** Add click handler to all alert history tables */
-  $(document).ready(function() {
-    $("body").on('click','.tbl_ah_list tbody td',function() {
-      window.location.href=$(this).data('url');
-    });
-  });
-
   /** Setup select2 defaults */
   $.fn.select2.defaults.set("theme","bootstrap-5");
   $.fn.select2.defaults.set("language", "de");
 
 });
+
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+  .forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()

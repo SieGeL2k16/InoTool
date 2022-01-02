@@ -8,14 +8,17 @@
 
 namespace App\Controller\KontoManager;
 
+use App\Entity\AccountBankAccounts;
 use App\Entity\AccountCategories;
 use App\Entity\AccountData;
 use App\Entity\User;
 use App\Service\AppConfigHelper;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use IntlDateFormatter;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +29,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('ROLE_USER')]
 class OverviewController extends AbstractController
   {
+  const ACT_NAV = 'list';
+  const ACT_NAV_ADD = 'add';
+  
   /**
    * @param Request $request
    * @param ManagerRegistry $registry
@@ -98,7 +104,7 @@ class OverviewController extends AbstractController
       }
     $revenue['DIFF'] = abs($revenue['INCOME']) - abs($revenue['OUTCOME']);
     return $this->render('kontomanager/list.html.twig',[
-      'ACTNAV'        => 'list',
+      'ACTNAV'        => self::ACT_NAV,
       'CATEGORYLIST'  => $registry->getRepository(AccountCategories::class)->getCategoryList($user),
       'MONTHLIST'     => $month_list,
       'YEARLIST'      => $year_list,
@@ -113,60 +119,135 @@ class OverviewController extends AbstractController
     }
   
   /**
-   * Ajax backend for datatables
+   * Saves changed category entry.
    * @param Request $request
    * @param ManagerRegistry $registry
-   * @return JsonResponse
+   * @param LoggerInterface $logger
+   * @return Response
    * @throws Exception
    */
-  #[Route('/kontomanager/liste-ajax',name: 'km_listAjax')]
-  public function ajaxList(Request $request,ManagerRegistry $registry):JsonResponse
+  #[Route('/kontomanager/kategorie_aendern',name: 'km_catSaver')]
+  public function CatSaver(Request $request,ManagerRegistry $registry, LoggerInterface $logger):Response
     {
     /** @var User $user */
-    $user     = $this->getUser();
-    // error_log(var_export($_REQUEST,true));
-    $draw     = $request->get('draw');    // Draw counter for datatable rendering
-    $start    = $request->get('start');   // 0-based starting index
-    $length   = $request->get('length');  // Number of records to show
-    $search   = $request->get('search');  // Global search term
-    $order    = $request->get('order');   // Array holds ordering informations
-    $sd       = $request->get('SD');
-    $ed       = $request->get('ED');
-    /* Prepare parameter to pass directly to Repository: */
-    $sort_col = (int)$order[0]['column'] + 1;
-    if($sort_col > 4)
+    $user = $this->getUser();
+    $id   = (int)$request->get('accid');
+    $cid  = (int)$request->get('newcat');
+    $registry->getRepository(AccountData::class)->CatSaver($user,$id,$cid);
+    $logger->info("Updated category of entry #{$id}");
+    $this->addFlash('info','Kategorie wurde aktualisiert');
+    return $this->redirectToRoute('km_list',['_fragment' => 'R'.$id]);
+    }
+  
+  /**
+   * Calls the form to create new entry or modify existing entry.
+   * @param ManagerRegistry $registry
+   * @param LoggerInterface $logger
+   * @param int $id
+   * @return Response
+   * @throws Exception
+   */
+  #[Route('/kontomanager/form/{id}',name: 'km_accForm',requirements: ['id' => '\d+'])]
+  public function Form(ManagerRegistry $registry, LoggerInterface $logger, int $id = 0):Response
+    {
+    /** @var User $user */
+    $user = $this->getUser();
+    if(!$id)
       {
-      $sort_col = 1;
+      $entry = new AccountData();
+      $entry->setRefUser($user);
+      $ACTNAV = self::ACT_NAV_ADD;
+      $title = "Kontoeintrag hinzufügen";
       }
-    $sort_dir = strtolower($order[0]['dir']);
-    if($sort_dir !== "asc" && $sort_dir !== "desc")
+    else
       {
-      $sort_dir = "asc";
+      $entry = $registry->getRepository(AccountData::class)->findOneBy(['RefUser' => $user, 'id' => $id]);
+      if($entry === null)
+        {
+        $this->addFlash('warning',"Eintrag #$id kann nicht bearbeitet werden!");
+        $logger->warning("No accounting data found for ID=$id ?!");
+        return $this->redirectToRoute('km_list');
+        }
+      $ACTNAV = self::ACT_NAV;
+      $title = "Kontoeintrag bearbeiten";
       }
-    // Workaround to render table data sorted by datetime desc instead of asc:
-    if($draw == 1)
-      {
-      $sort_col = 2;
-      $sort_dir = "desc";
-      }
-    $params = [
-      'SD'      => $sd.' 00:00:00',
-      'ED'      => $ed.' 23:59:59',
-      'START'   => (int)$start,
-      'LIMIT'   => (int)$length,
-      'SEARCH'  => $search['value'],
-      'ORDER'   => $sort_col,
-      'SDIR'    => $sort_dir,
-      ];
-    $data     = $registry->getRepository(AccountData::class)->GetDataTablesValues($user->getId(),$params);
-    $total    = $registry->getRepository(AccountData::class)->count(['RefUser' => $user]);
-    //error_log("TOTAL=".$total."|DATA_TOTAL=".$data['TOTAL']);
-    return new JsonResponse([
-      'draw'            => (int)$draw,
-      'recordsTotal'    => $total,
-      'recordsFiltered' => $data['TOTAL'],
-      'data'            => $data['DATA'],
+    return $this->render('kontomanager/account_data_form.html.twig',[
+      'ACTNAV'    => $ACTNAV,
+      'ENTRY'     => $entry,
+      'TITLE'     => $title,
+      'BANKLIST'  => $registry->getRepository(AccountBankAccounts::class)->findBy(['RefUser' => $user]),
+      'CATLIST'   => $registry->getRepository(AccountCategories::class)->getCategoryList($user),
       ]);
     }
-
+  
+  /**
+   * Saves form data (both insert / update)
+   * @param Request $request
+   * @param ManagerRegistry $registry
+   * @param LoggerInterface $logger
+   * @return Response
+   * @throws \Exception
+   */
+  #[Route('/kontomanager/form-speichern',name: 'km_accFormSave',methods: ['POST'])]
+  public function SaveForm(Request $request,ManagerRegistry $registry,LoggerInterface $logger):Response
+    {
+    /** @var User $user */
+    $user = $this->getUser();
+    $id   = (int)$request->get('accid');
+    $obj  = $registry->getRepository(AccountData::class)->findOneBy(['RefUser' => $user,'id' => $id]);
+    if($obj === null)
+      {
+      $obj = new AccountData();
+      $obj->setRefUser($user);
+      $lmsg = "Adding new accountData entry";
+      $info = "Neuen Eintrag erzeugt";
+      }
+    else
+      {
+      $lmsg = "Editing existing accountData entry #$id";
+      $info = "Eintrag #$id aktualisiert";
+      }
+    $amount = str_replace(",",".",$request->get('amount'));
+    $obj->setBookingDate(new DateTimeImmutable($request->get('booking_date')))
+      ->setAccountingNumber($request->get('account_number'))
+      ->setRefCategory($registry->getRepository(AccountCategories::class)->find((int)$request->get('catid')))
+      ->setAmount($amount)
+      ->setCurrency($request->get('currency'))
+      ->setDescription($request->get('description'))
+      ->setIsIncomeByAmount($amount)
+      ;
+    $registry->getManager()->persist($obj);
+    $registry->getManager()->flush();
+    $logger->info($lmsg);
+    $this->addFlash('info',$info);
+    return $this->redirectToRoute('km_list');
+    }
+  
+  /**
+   * Removes one or multiple entries from list (via checkboxes)
+   * @param Request $request
+   * @param ManagerRegistry $registry
+   * @return Response
+   */
+  #[Route('/kontomanager/liste-loeschen',name: 'km_accListDel',methods: ["POST"])]
+  public function RemoveEntries(Request $request,ManagerRegistry $registry):Response
+    {
+    $removed = 0;
+    /** @var User $user */
+    $user = $this->getUser();
+    foreach($request->get('ACC_REMOVAL') as $item)
+      {
+      $obj = $registry->getRepository(AccountData::class)->findOneBy(['RefUser' => $user,'id' => (int)$item]);
+      if($obj === null)
+        {
+        continue;
+        }
+      $registry->getManager()->remove($obj);
+      $removed++;
+      }
+    $registry->getManager()->flush();
+    $this->addFlash('info',"Es wurden $removed Zeile(n) gelöscht");
+    return $this->redirectToRoute("km_list");
+    }
+  
   }

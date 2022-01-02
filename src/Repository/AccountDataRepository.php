@@ -113,54 +113,6 @@ class AccountDataRepository extends ServiceEntityRepository
     }
   
   /**
-   * Datatables Ajax backend for account_data table.
-   * @param int $uid
-   * @param array $params
-   * @return array
-   * @throws Exception
-   */
-  public function GetDataTablesValues(int $uid,array $params):array
-    {
-    $SEARCH_SQL = "";
-    $par = []; //['sd' => $params['SD'], 'ed' => $params['ED']];
-    if($params['SEARCH'] !== "")
-      {
-      $SEARCH_SQL   = " WHERE (lower(ad.description) LIKE :srch OR lower(l.level_name) LIKE :srch OR lower(l.message) LIKE :srch)";
-      $par['srch']  = '%'.mb_strtolower($params['SEARCH']).'%';
-      }
-      //               WHERE l.created_at BETWEEN :sd AND :ed
-    $SQL  = "SELECT ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.name,ad.description,ad.amount,ad.bank_id, count(*) OVER() AS total_count
-               FROM account_data ad
-               left join account_categories ac on (ad.ref_category_id = ac.id)
-                $SEARCH_SQL
-              ORDER BY {$params['ORDER']} {$params['SDIR']}
-              LIMIT {$params['LIMIT']} OFFSET {$params['START']}";
-    $data   = []; //$this->getEntityManager()->getConnection()->executeQuery($SQL,$par)->fetchAllNumeric();
-    $total = 0;
-    $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
-    while($item = $stmt->fetchAssociative())
-      {
-      $data[] = [
-        $item['id'],
-        $item['dt'],
-        $item['name'],
-        $item['description'],
-        (new NumberFormatter("de-DE", NumberFormatter::CURRENCY))->format($item['amount']),
-        $item['bank_id'],
-        $item['total_count']
-      ];
-      }
-    if(count($data))
-      {
-      $total  = $data[0][6];      // Total Count column
-      }
-    return [
-      'DATA'  => $data,
-      'TOTAL' => $total,
-      ];
-    }
-  
-  /**
    * Returns data stream as choosen by given parameters.
    * @param User $user
    * @param array $params
@@ -186,7 +138,7 @@ class AccountDataRepository extends ServiceEntityRepository
       $where.=" and to_char(ad.booking_date,'YYYY')=:y";
       $dbpar['y'] = $params['F_YEAR'];
       }
-    $SQL  = "select ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.name as category_name,ad.description,ad.amount,aba.bank_shortcut,ad.is_income,count(*) OVER() AS total_count
+    $SQL  = "select ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.id as catid,ac.name as category_name,ad.description,ad.amount,aba.bank_shortcut,aba.logo_name,ad.is_income,count(*) OVER() AS total_count
              from account_data ad
              left join account_categories ac on (ad.ref_category_id = ac.id)
              left join account_bank_accounts aba on(ad.accounting_number = aba.iban)
@@ -197,5 +149,20 @@ class AccountDataRepository extends ServiceEntityRepository
     $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$dbpar);
     return $stmt->fetchAllAssociative();
     }
-
+  
+  /**
+   * Updates entry with new category id.
+   * @param User $user
+   * @param int $accid
+   * @param int $catid
+   * @return void
+   * @throws Exception
+   */
+  public function CatSaver(User $user, int $accid, int $catid)
+    {
+    $par  = ['catid' => $catid, 'uid' => $user->getId(), 'accid' => $accid];
+    $SQL  = "update account_data set ref_category_id=:catid where ref_user_id=:uid and id=:accid";
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
+    }
+  
   }

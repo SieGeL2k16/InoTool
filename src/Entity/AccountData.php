@@ -52,7 +52,7 @@ class AccountData
 
     public function __construct()
       {
-      $this->setCurrency('EUR')->setBankId(self::BANK_DEUTSCHE_BANK);
+      $this->setCurrency('EUR')->setBankId(1);
       }
     
     public function getId(): ?int
@@ -166,5 +166,24 @@ class AccountData
         $this->IsIncome = $IsIncome;
 
         return $this;
+    }
+  
+  /**
+   * If $amount is negative sets "self::IsIncome" = false, else true
+   * @param string $amount
+   * @return $this
+   */
+  public function setIsIncomeByAmount(string $amount):self
+    {
+    if(str_starts_with($amount, '-'))
+      {
+      $fl = false;
+      }
+    else
+      {
+      $fl = true;
+      }
+    $this->IsIncome = $fl;
+    return $this;
     }
 }

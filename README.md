@@ -2,25 +2,35 @@
 
 ## Installation
 
-Install copy from gitlab to your work space:
+Make sure to met the requirements:
 
-1. `git clone ssh://git@gitlab.inolares.de:60022/inocore/haccp.git`
+- PHP 8.0 or newer - lower versions are not supported!
+- PostgreSQL 9.x or newer - tested with PgSql 12.9
+
+If you have already the symfony binary on your system, check your system with:
+
+`symfony check:requirements`
+
+### install copy from github to your work space:
+
+1. `git clone https://git.in-ovation.org:49152/SieGeL/InoTool.git`
 2. Install composer packages:
    `composer install`
 
-### Database
+### Setup Database
 
-Create first a new database user and database for HACCP, i.e.:
+Create a new database user and database for InoTool, i.e.:
 
 1. `su - postgres`
 3. `psql`
 2. `postgres=# CREATE ROLE inotool LOGIN CREATEDB PASSWORD 'inotool2k21';`
 3. `postgres=# CREATE DATABASE inotool OWNER inotool;`
 
-### Configure Symfony
+## Configure Symfony
 
 1. Create `.env.local` file in Symfony root directory and takeover the following variables:
    ```
+   APP_ENV=prod
    DATABASE_URL=postgresql://inotool:inotool2k21@127.0.0.1:5432/inotool?serverVersion=12&charset=utf8
    ```
    Please refer to the supplied `.env` file for a description of these variables.

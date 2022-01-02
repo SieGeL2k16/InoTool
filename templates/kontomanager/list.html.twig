@@ -35,50 +35,109 @@
   </div>
   <div class="col-auto">
     <button type="submit" name="btn_filter" id="btn_filter" class="btn btn-outline-secondary"><i class="fa fa-filter"></i></button>
+    <button type="button" name="btn_delete" id="btn_delete" class="btn btn-outline-danger" disabled><i class="fa fa-trash"></i></button>
   </div>
 </form>
-<div class="row mt-3">
-  <div class="col-xxl-8 col-xl-10 col-12">
-    <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover" id="tbl_account_data">
-      <thead>
-      <tr>
-        <th>&nbsp;</th>
-        <th>Datum</th>
-        <th>Kategorie</th>
-        <th>Buchungstext</th>
-        <th class="text-end">Summe</th>
-        <th class="text-end">Bank</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for d in DATA %}
-      <tr>
-        <td><div><input class="form-check-input" type="checkbox" id="chk_{{ d['id'] }}" value="{{ d['id'] }}" aria-label="Eintrag löschen"></div></td>
-        <td>{{ d['dt'] }}</td>
-        <td>{{ d['category_name'] }}</td>
-        <td>{{ d['description'] }}</td>
-        <td class="text-end {{ d['amount']|MoneyColor }}">{{ d['amount']|format_currency('EUR',locale='de') }}</td>
-        <td class="text-end">{{ d['bank_shortcut'] }}</td>
-      </tr>
-      {% else %}
-      <tr>
-        <td colspan="5" class="text-center fst-italic fw-bold">Keine Daten gefunden!</td>
-      </tr>
-      {% endfor %}
-      </tbody>
-      </table>
+<form method="post" action="{{ path("km_accListDel") }}" id="frm_acc_list_table">
+  <div class="row mt-3">
+    <div class="col-xxl-8 col-xl-10 col-12">
       <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover" id="tbl_account_data">
+        <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th>Datum</th>
+          <th>Kategorie</th>
+          <th>Buchungstext</th>
+          <th class="text-end">Summe</th>
+          <th class="text-end">Bank</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for d in DATA %}
+        <tr id="R{{ d['id'] }}">
+          <td><div><input class="form-check-input chk_delete" type="checkbox" id="chk_{{ d['id'] }}" value="{{ d['id'] }}" aria-label="Eintrag löschen" name="ACC_REMOVAL[]"></div></td>
+          <td>{{ d['dt'] }}</td>
+          <td class="catchanger mp_click" data-id="{{ d['id'] }}" data-catid="{{ d['catid'] }}">{{ d['category_name'] }}</td>
+          <td class="details mp_click" data-url="{{ path('km_accForm',{'id':d['id']}) }}">{{ d['description'] }}</td>
+          <td class="text-end {{ d['amount']|MoneyColor }}">{{ d['amount']|format_currency('EUR',locale='de') }}</td>
+          <td class="text-end">{% if d['logo_name'] == "" %}{{ d['bank_shortcut'] }}{% else %}<img src="{{ asset('images') }}/{{ d['logo_name'] }}" title="{{ d['bank_shortcut'] }}">{% endif %}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center fst-italic fw-bold">Keine Daten gefunden!</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+        <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="modal fade" tabindex="-1" id="modal_catchange">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kategorie ändern</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{{ path('km_catSaver') }}" id="frm_catchange">
+          <input type="hidden" name="accid" id="accid" value="">
+          <div>
+            <select class="form-select" aria-label="Kategorie anpassen" name="newcat" id="newcat">
+            {% for cid,cn in CATEGORYLIST %}
+              <option value="{{ cn['id'] }}"{% if F_CATEGORY == cn['id'] %} selected{% endif %}>{{ cn['name'] }}</option>
+            {% endfor %}
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbruch</button>
+        <button type="submit" class="btn btn-primary" form="frm_catchange">Speichern</button>
+      </div>
     </div>
   </div>
 </div>
 {% endblock %}
 {% block javascripts %}
 <script>
-$(document).ready(function()
-  {
+$(document).ready(function() {
   $('.ino-select2').select2({});
+  
+  /** Handle category changes */
+  $(".catchanger").on('click', function() {
+    $("#accid").val($(this).data('id'));
+    document.getElementById('newcat').value=parseInt($(this).data('catid'));
+    let myModal = new bootstrap.Modal(document.getElementById('modal_catchange'));
+    myModal.show();
+  });
+
+  /** Handle click on description */
+  $(".details").on('click', function() {
+    window.location.href=$(this).data('url');
+  });
+
+  /** Handle checkboxes */
+  $(".chk_delete").on('click', function() {
+    if($(".chk_delete:checked").length)
+      {
+      $("#btn_delete").prop('disabled', false);
+      }
+    else
+      {
+      $("#btn_delete").prop('disabled', true);
+      }
+  });
+
+  /** Handle removal */
+  $("#btn_delete").on('click', function() {
+    // frm_acc_list_table
+    SwalConfirmSubmit("Wirklich "+$(".chk_delete:checked").length+" Zeile(n) löschen?",'frm_acc_list_table');
+  });
 });
 </script>
 {% endblock %}

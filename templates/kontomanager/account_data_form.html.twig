@@ -1,0 +1,65 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <div class="card-title h3">{{ TITLE }}</div>
+  </div>
+</div>
+<form method="post" action="{{ path("km_accFormSave") }}" id="frm_accData" class="needs-validation" novalidate>
+  <input type="hidden" name="accid" id="accid" value="{{ ENTRY.id }}">
+  <div class="row">
+    <div class="col-xl-5 col-md-8 col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="mb-3 col">
+              <label for="booking_date" class="form-label">Buchungsdatum</label>
+              <input type="date" name="booking_date" id="booking_date" class="form-control" required="required" value="{{ ENTRY.bookingDate|date('Y-m-d') }}">
+            </div>
+            <div class="mb-3 col">
+              <label for="account_number" class="form-label">Bankkonto</label>
+              <select class="form-select" aria-label="Bankkonto" name="account_number" id="account_number" required="required">
+              {% for b in BANKLIST %}
+              <option value="{{ b.iban }}"{% if b.iban == ENTRY.accountingNumber %} selected{% endif %}>{{ b.bankName }}</option>
+              {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mb-3 col-6">
+              <label for="catid" class="form-label">Kategorie</label>
+              <select class="form-select" aria-label="Kategorie" name="catid" id="catid" required="required">
+              {% for c in CATLIST %}
+              <option value="{{ c['id'] }}">{{ c['name'] }}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3 col-3">
+              <label for="amount" class="form-label">Summe</label>
+              <input type="text" name="amount" id="amount" class="form-control text-end" required="required" value="{{ ENTRY.amount }}">
+            </div>
+            <div class="mb-3 col-3">
+              <label for="currency" class="form-label">Währung</label>
+              <input type="text" name="currency" id="currency" class="form-control" required="required" value="{{ ENTRY.currency }}">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <label for="description" class="form-label">Buchungstext</label>
+              <textarea class="form-control" rows="5" name="description" id="description" required="required">{{ ENTRY.description }}</textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="mt-3 col-12">
+              <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+              {% if ENTRY.id %}
+              <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("km_list") }}'"><i class="fas fa-times"></i> Abbruch</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

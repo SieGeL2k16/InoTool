@@ -48,9 +48,17 @@ a:hover {
   color: #666666 !important;
 }
 
-.md_edit {
+/** Mousepointer classes (mp-*) */
+.mp_click {
   cursor: pointer;
 }
+.mp_wait {
+  cursor: wait;
+}
+.mp_not_allowed {
+  cursor: not-allowed;
+}
+
 
 .w-20 {
   width: 20% !important;

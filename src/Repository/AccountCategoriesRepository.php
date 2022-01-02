@@ -35,12 +35,13 @@ class AccountCategoriesRepository extends ServiceEntityRepository
   public function getCategoryList(User $user):array
     {
     $ret = [['id' => 0, 'name' => 'Keine Kategorie']];
-    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select id,name from account_categories where id != 0 and ref_user_id=:uid order by name",['uid' => $user->getId()]);
+    $stmt = $this->db->executeQuery("select id,name from account_categories where id != 0 and ref_user_id=:uid order by name",['uid' => $user->getId()]);
     while($d = $stmt->fetchAssociative())
       {
       $ret[] = $d;
       }
     return $ret;
     }
+  
   
   }
