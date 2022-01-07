@@ -1,0 +1,37 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <div class="card-title h3">Ergebnis des CSV Imports</div>
+    <p>Es wurden {{ RESULT|length }} Zeile(n) in {{ IMPTIME }} importiert.</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-sm table-striped table-hover">
+    <thead>
+    <tr>
+      <th class="w-auto">Buchungsdatum</th>
+      <th class="w-100">Buchungstext</th>
+      <th class="w-auto text-end">Summe</th>
+      <th class="w-auto">Kontonummer</th>
+      <th class="w-auto">Ergebnis</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for r in RESULT %}
+    <tr >
+      <td class="{% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.BDATE }}</td>
+      <td class="{% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %} td-truncate">
+        {{ r.TXT }}
+      </td>
+      <td class="text-end {% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.SUM|format_currency('EUR',locale='de') }}</td>
+      <td class="{% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.IBAN }}</td>
+      <td class="text-nowrap {% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.RESULT }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <div class="card-title h3">CSV Daten importieren</div>
+  </div>
+  <div class="col-xl-6 col-md-8 col-12">
+    <p>Hiermit kann eine CSV Datei, die von der Targo Bank bzw. Deutsche Bank Website erstellt wurde, in die Datenbank übernommen werden.</p>
+    <p>
+      Dazu bitte die gewünschte CSV-Datei auswählen und hochladen, die Einträge werden dann automatisch in die Datenbank übernommen.<br>
+      Doppelt vorhandene Einträge werden dabei übersprungen und am Ende wird eine Übersicht angezeigt, welche Daten importiert bzw. übersprungen worden sind.
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <form method="post" action="{{ path("km_importCsv") }}" enctype="multipart/form-data" id="form_csv" class="needs-validation" novalidate>
+          <div>
+            <input class="form-check-input" type="radio" name="CSVFORMAT" checked value="DB" id="db">
+            <label class="form-check-label" for="db">
+              Deutsche Bank
+            </label>
+          </div>
+          <div>
+            <input class="form-check-input" type="radio" name="CSVFORMAT" id="to" value="TargoBank">
+            <label class="form-check-label" for="to">
+              Targo Bank (Excel '97)
+            </label>
+          </div>
+          <div class="mt-3">
+            <label for="csvdata" class="form-label">Bitte Datei auswählen</label>
+            <input class="form-control" type="file" id="csvdata" name="CSVDATA" placeholder="CSV Datei..." required="required">
+          </div>
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Hochladen</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

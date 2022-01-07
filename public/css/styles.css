@@ -177,3 +177,10 @@ a:hover {
   color: white;
   text-shadow: 2px 2px 2px #0a0a0a;
 }
+
+.td-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width:1px;
+}

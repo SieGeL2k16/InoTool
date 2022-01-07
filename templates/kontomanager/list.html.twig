@@ -40,7 +40,7 @@
 </form>
 <form method="post" action="{{ path("km_accListDel") }}" id="frm_acc_list_table">
   <div class="row mt-3">
-    <div class="col-xxl-8 col-xl-10 col-12">
+    <div class="col-xxl-10 col-12">
       <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
       <div class="table-responsive">
         <table class="table table-striped table-hover" id="tbl_account_data">

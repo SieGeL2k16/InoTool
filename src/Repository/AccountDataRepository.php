@@ -8,6 +8,8 @@ use App\Entity\AccountImportFilter;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Statement;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\ArrayShape;
 use NumberFormatter;
@@ -19,10 +21,14 @@ use NumberFormatter;
  * @method AccountData[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AccountDataRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
+  {
+  /** @var Statement $istmt Insert Statement */
+  private Statement $istmt;
+  
+  public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AccountData::class);
+    parent::__construct($registry, AccountData::class);
+    $this->istmt = $this->getEntityManager()->getConnection()->prepare("insert into account_data(id, ref_category_id, ref_user_id, booking_date, description, amount, accounting_number, currency, bank_id, is_income) values(nextval('account_data_id_seq'),:catid,:uid,:bdate,:descr,:amount,:accnum,:currency,:bankid,:isin)");
     }
   
   /**
@@ -165,4 +171,21 @@ class AccountDataRepository extends ServiceEntityRepository
     $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
     }
   
+  /**
+   * Inserts new record to account_data, ignoring duplicate values
+   * @param array $data
+   * @return int
+   */
+  public function Insert(array $data):int
+    {
+    try
+      {
+      $this->istmt->executeStatement($data);
+      return $this->getEntityManager()->getConnection()->lastInsertId();
+      }
+    catch(UniqueConstraintViolationException $e)
+      {
+      return 0;
+      }
+    }
   }

@@ -13,7 +13,7 @@ If you have already the symfony binary on your system, check your system with:
 
 ### install copy from github to your work space:
 
-1. `git clone https://git.in-ovation.org:49152/SieGeL/InoTool.git`
+1. `git clone https://github.com/SieGeL2k16/InoTool.git`
 2. Install composer packages:
    `composer install`
 
