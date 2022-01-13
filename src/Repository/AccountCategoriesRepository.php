@@ -43,5 +43,34 @@ class AccountCategoriesRepository extends ServiceEntityRepository
     return $ret;
     }
   
+  /**
+   * Returns complete list of all user-defined categories together with number of assignments in accounting_data table.
+   * @param User $user
+   * @return array
+   * @throws Exception
+   */
+  public function GetFullCategoryList(User $user):array
+    {
+    $ret  = [];
+    $stmt = $this->db->executeQuery("select ac.*,(select count(*) from account_data where ref_category_id=ac.id) as data_count from account_categories ac where ac.ref_user_id=:uid order by ac.name",['uid' => $user->getId()]);
+    while($d = $stmt->fetchAssociative())
+      {
+      $ret[] = $d;
+      }
+    return $ret;
+    }
+  
+  /**
+   * Removes category from database, reassigns existing entries to null.
+   * @param User $user
+   * @param int $catid
+   * @return void
+   * @throws Exception
+   */
+  public function Delete(User $user, int $catid)
+    {
+    $this->db->executeQuery("update account_data set ref_category_id = null where ref_user_id=:uid and ref_category_id=:cid",['uid' => $user->getId(),'cid' => $catid]);
+    $this->db->executeQuery("delete from account_categories where ref_user_id=:uid and id=:cid",['uid' => $user->getId(),'cid' => $catid]);
+    }
   
   }

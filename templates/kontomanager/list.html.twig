@@ -59,14 +59,14 @@
         <tr id="R{{ d['id'] }}">
           <td><div><input class="form-check-input chk_delete" type="checkbox" id="chk_{{ d['id'] }}" value="{{ d['id'] }}" aria-label="Eintrag löschen" name="ACC_REMOVAL[]"></div></td>
           <td>{{ d['dt'] }}</td>
-          <td class="catchanger mp_click" data-id="{{ d['id'] }}" data-catid="{{ d['catid'] }}">{{ d['category_name'] }}</td>
+          <td class="catchanger mp_click" data-id="{{ d['id'] }}" data-catid="{{ d['catid']|number_format }}">{% if d['catid'] %}{{ d['category_name'] }}{% else %}<span class="fst-italic">Keine Kategorie</span>{% endif %}</td>
           <td class="details mp_click" data-url="{{ path('km_accForm',{'id':d['id']}) }}">{{ d['description'] }}</td>
           <td class="text-end {{ d['amount']|MoneyColor }}">{{ d['amount']|format_currency('EUR',locale='de') }}</td>
           <td class="text-end">{% if d['logo_name'] == "" %}{{ d['bank_shortcut'] }}{% else %}<img src="{{ asset('images') }}/{{ d['logo_name'] }}" title="{{ d['bank_shortcut'] }}">{% endif %}</td>
         </tr>
         {% else %}
         <tr>
-          <td colspan="5" class="text-center fst-italic fw-bold">Keine Daten gefunden!</td>
+          <td colspan="6" class="text-center fst-italic fw-bold">Keine Daten gefunden!</td>
         </tr>
         {% endfor %}
         </tbody>
@@ -111,6 +111,7 @@ $(document).ready(function() {
   /** Handle category changes */
   $(".catchanger").on('click', function() {
     $("#accid").val($(this).data('id'));
+    console.log(parseInt($(this).data('catid')));
     document.getElementById('newcat').value=parseInt($(this).data('catid'));
     let myModal = new bootstrap.Modal(document.getElementById('modal_catchange'));
     myModal.show();

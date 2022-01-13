@@ -1,0 +1,44 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">Kategorien bearbeiten</div>
+    <button type="button" class="btn btn-outline-primary mb-1" onclick="window.location.href='{{ path('km_category_form') }}'">Neue Kategorie</button>
+    <p>Kategorien definiert: <strong>{{ CATEGORY_LIST|length|format_number }}</strong> | Einträge ohne Kategorie: <strong>{{ NO_CAT_COUNT|format_number }}</strong></p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-6 col-12">
+    <table class="table table-sm table-striped table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th class="text-end">Einträge</th>
+      <th class="text-center"><abbr title="Fixkosten">Fix?</abbr></th>
+      <th class="text-center"><abbr title="Kategorie aktiv?">Akt?</abbr></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for c in CATEGORY_LIST %}
+    <tr data-url="{{ path("km_category_form",{'id':c.id}) }}">
+      <td class="mp_click">{{ c.id }}</td>
+      <td class="mp_click {% if c.is_active == 0 %}text-decoration-line-through{% endif %}">{{ c.name }}</td>
+      <td class="mp_click text-end">{{ c.data_count|format_number }}</td>
+      <td class="mp_click text-center">{{ c.is_fixed|FormatCheckbox|raw }}</td>
+      <td class="mp_click text-center">{{ c.is_active|FormatCheckbox|raw }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+/** Handle click on category entry */
+$(".mp_click").on('click', function() {
+  window.location.href=$(this).parent().data('url');
+});
+</script>
+{% endblock %}

@@ -5,10 +5,9 @@
     'home':'',
     'list':'',
     'import':'',
-    'editcat':'',
+    'categories':'',
     'report':'',
     'add':'',
-    'invoices':'',
     'filter':'',
   } %}
   {% if ACTNAV is not defined %}
@@ -30,10 +29,9 @@
           <li class="nav-item"><a class="nav-link {{ naventries['home'] }}" href="{{ path("km_index") }}"><i class="fa-solid fa-gauge fa-fw"></i> Dashboard</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['list'] }}" href="{{ path("km_list") }}"><i class="fa-solid fa-list fa-fw"></i> Kontoübersicht anzeigen</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['import'] }}" href="{{ path("km_csvImport") }}"><i class="fa-solid fa-file-import fa-fw"></i> CSV Daten importieren</a></li>
-          <li class="nav-item"><a class="nav-link {{ naventries['editcat'] }}" href="#"><i class="fa-solid fa-pen-to-square fa-fw"></i> Kategorien bearbeiten</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['categories'] }}" href="{{ path("km_categories") }}"><i class="fa-solid fa-pen-to-square fa-fw"></i> Kategorien bearbeiten</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['report'] }}" href="#"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['add'] }}" href="{{ path("km_accForm",{'id':0}) }}"><i class="fa-solid fa-square-plus fa-fw"></i> Kontoeintrag hinzufügen</a></li>
-          <li class="nav-item"><a class="nav-link {{ naventries['invoices'] }}" href="#"><i class="fa-solid fa-receipt fa-fw"></i> Quittungen und Belege</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['filter'] }}" href="#"><i class="fa-solid fa-filter fa-fw"></i> Importfilter bearbeiten</a></li>
         </ul>
         <hr>

@@ -1,0 +1,46 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">{% if ENTRY.id %}Kategorie #{{ ENTRY.id }} bearbeiten{% else %}Neue Kategorie anlegen{% endif %}</div>
+  </div>
+</div>
+<form method="post" action="{{ path('km_category_save') }}" id="frm_category" class="needs-validation" novalidate>
+  <input type="hidden" name="CATID" value="{{ ENTRY.id|number_format }}">
+  <div class="row">
+    <div class="col-xl-4 col-md-6 col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="mb-2">
+            <label class="form-check-label" for="catname">Name</label>
+            <input type="text" name="catname" id="catname" class="form-control" placeholder="Name der Kategorie" value="{{ ENTRY.name }}" required autofocus>
+          </div>
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" role="switch" id="is_fixed" name="is_fixed" value="1"{% if ENTRY.isFixed %} checked{% endif %}>
+            <label class="form-check-label" for="is_fixed">Fixkosten?</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" value="1"{% if ENTRY.isActive %} checked{% endif %}>
+            <label class="form-check-label" for="is_active">Aktiv?</label>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+            <button type="button" class="btn btn-danger btn_del_cat"><i class="fa fa-trash"></i> Löschen</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('km_categories') }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<form method="post" action="{{ path("km_category_del") }}" id="frm_del">
+  <input type="hidden" name="CATID" value="{{ ENTRY.id }}">
+</form>
+{% endblock %}
+{% block javascripts %}
+<script>
+$(".btn_del_cat").on('click', function() {
+  SwalConfirmSubmit("Diese Kategorie wirklich löschen?<br><br>Bereits zugewiesene Einträge werden auf \"Keine Kategorie\" gesetzt!","frm_del");
+});
+</script>
+{% endblock %}

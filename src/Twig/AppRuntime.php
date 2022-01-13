@@ -53,9 +53,9 @@ class AppRuntime implements RuntimeExtensionInterface
     {
     if($val)
       {
-      return '<i class="far fa-check text-success"></i>';
+      return '<i class="fa-solid fa-check text-success"></i>';
       }
-    return '<i class="far fa-times text-danger"></i>';
+    return '<i class="fa-solid fa-xmark text-danger"></i>';
     }
   
   

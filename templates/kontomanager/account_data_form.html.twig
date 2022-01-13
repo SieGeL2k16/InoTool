@@ -30,7 +30,7 @@
               <label for="catid" class="form-label">Kategorie</label>
               <select class="form-select" aria-label="Kategorie" name="catid" id="catid" required="required">
               {% for c in CATLIST %}
-              <option value="{{ c['id'] }}">{{ c['name'] }}</option>
+              <option value="{{ c['id'] }}"{% if ENTRY.refCategory.id is defined and c['id'] == ENTRY.refCategory.id %} selected{% endif %}>{{ c['name'] }}</option>
               {% endfor %}
               </select>
             </div>

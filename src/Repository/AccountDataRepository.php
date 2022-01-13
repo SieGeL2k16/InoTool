@@ -129,10 +129,14 @@ class AccountDataRepository extends ServiceEntityRepository
     {
     $dbpar = ['uid' => $user->getId()];
     $where  = "";
-    if($params['F_CATEGORY'] !== null && (int)$params['F_CATEGORY'] !== -1)
+    if($params['F_CATEGORY'] !== null && (int)$params['F_CATEGORY'] !== -1 && (int)$params['F_CATEGORY'] !== 0)
       {
       $where.=" and ac.id=:cid";
       $dbpar['cid'] = $params['F_CATEGORY'];
+      }
+    if($params['F_CATEGORY'] === "0")
+      {
+      $where.= " and ad.ref_category_id is null";
       }
     if($params['F_MONTH'] !== null && (int)$params['F_MONTH'] !== -1)
       {
@@ -166,7 +170,7 @@ class AccountDataRepository extends ServiceEntityRepository
    */
   public function CatSaver(User $user, int $accid, int $catid)
     {
-    $par  = ['catid' => $catid, 'uid' => $user->getId(), 'accid' => $accid];
+    $par  = ['catid' => ($catid === 0) ? null : $catid, 'uid' => $user->getId(), 'accid' => $accid];
     $SQL  = "update account_data set ref_category_id=:catid where ref_user_id=:uid and id=:accid";
     $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
     }
@@ -175,6 +179,7 @@ class AccountDataRepository extends ServiceEntityRepository
    * Inserts new record to account_data, ignoring duplicate values
    * @param array $data
    * @return int
+   * @throws Exception
    */
   public function Insert(array $data):int
     {
