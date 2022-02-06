@@ -56,6 +56,7 @@ class CsvImportController extends AbstractController
    * @param ManagerRegistry $registry
    * @param kmImportFilter $importFilter
    * @return Response
+   * @throws Exception
    */
   #[Route("/kontomanager/import-csv",name: 'km_importCsv',methods: ["POST"])]
   public function doImport(Request $request, LoggerInterface $logger,

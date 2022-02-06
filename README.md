@@ -14,7 +14,7 @@ Used to gather statistics and general overview of my private banking account.
 - No frameworks except JPGraph for graph support
 - CSV Importer for DB and TargoBank
 
-###Freelancer Manager (manages my Freelancer projects/customer)
+### Freelancer Manager (manages my Freelancer projects/customer)
 
 Used to handle my freelancer activity including invoices/customer/project management.
 

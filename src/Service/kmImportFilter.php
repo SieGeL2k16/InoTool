@@ -53,13 +53,13 @@ class kmImportFilter
       $this->categories[$item->getId()] = $item->getName();
       }
     }
-
+  
   /**
    * Tests if a given Accounting text matches one of our filters
    * @param string $acctext The accounting text
-   * @return int 0 If no match was found, else the corresponding category id
+   * @return int|null null If no match was found, else the corresponding category id
    */
-  public function CheckFilter(string $acctext): int
+  public function CheckFilter(string $acctext):?int
     {
     /** @var AccountImportFilter $data */
       foreach($this->filter as $data)
@@ -70,7 +70,7 @@ class kmImportFilter
         return $data->getRefCategory()->getId();
         }
       }
-    return 0;
+    return null;
     }
   
   /**
