@@ -8,6 +8,7 @@
 
 namespace App\Controller\KontoManager;
 
+use App\Entity\AccountBankAccounts;
 use App\Entity\AccountCategories;
 use App\Entity\AccountData;
 use App\Entity\User;
@@ -49,6 +50,7 @@ class IndexController extends AbstractController
       $gvalues[]  = $sum;
       $totgehalt+=$sum;
       }
+    $balance_stats = $doctrine->getRepository(AccountBankAccounts::class)->getCurrentBalance($user);
     return $this->render('kontomanager/index.html.twig',[
       'YEAR'          => date('Y'),
       'YEAR_STATS'    => $doctrine->getRepository(AccountData::class)->GetYearlyStats($user->getId(),(int)date('Y')),
@@ -58,6 +60,7 @@ class IndexController extends AbstractController
       'G_LABELS'      => json_encode($glabels),
       'G_VALUES'      => json_encode($gvalues),
       'TOTAL_GEHALT'  => $totgehalt,
+      'BALANCE_STATS' => $balance_stats,
       ]);
     }
   }

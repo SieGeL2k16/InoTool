@@ -30,6 +30,12 @@ class AccountBankAccounts
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private $LogoName;
 
+    #[ORM\Column(type: 'decimal', precision: 12, scale: 2, nullable: true)]
+    private $Balance;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private $BalanceDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +97,30 @@ class AccountBankAccounts
     public function setLogoName(?string $LogoName): self
     {
         $this->LogoName = $LogoName;
+
+        return $this;
+    }
+
+    public function getBalance(): ?string
+    {
+        return $this->Balance;
+    }
+
+    public function setBalance(?string $Balance): self
+    {
+        $this->Balance = $Balance;
+
+        return $this;
+    }
+
+    public function getBalanceDate(): ?\DateTimeInterface
+    {
+        return $this->BalanceDate;
+    }
+
+    public function setBalanceDate(?\DateTimeInterface $BalanceDate): self
+    {
+        $this->BalanceDate = $BalanceDate;
 
         return $this;
     }

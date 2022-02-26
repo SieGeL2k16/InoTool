@@ -1,0 +1,50 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">Bankkonten verwalten</div>
+    <button type="button" class="btn btn-outline-primary mb-1" onclick="window.location.href='{{ path('km_bank_form') }}'">Neues Konto</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-8 col-12">
+    <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name der Bank</th>
+      <th>Kürzel</th>
+      <th>IBAN</th>
+      <th>Logo</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for b in BANKACCOUNTS %}
+    <tr data-url="{{ path("km_bank_form",{'id':b.id}) }}">
+      <td class="mp_click">{{ b.id }}</td>
+      <td class="mp_click">{{ b.bankName }}</td>
+      <td class="mp_click">{{ b.bankShortcut }}</td>
+      <td class="mp_click">{{ b.iban }}</td>
+      <td>
+        {% if b.logoName == "" %}
+        -/-
+        {% else %}
+        <img src="{{ asset("images/") ~ b.logoName }}">
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+  $(".mp_click").on('click', function() {
+    window.location.href=$(this).parent().data('url');
+  });
+});
+</script>
+{% endblock %}

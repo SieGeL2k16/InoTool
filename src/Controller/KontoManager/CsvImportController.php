@@ -18,7 +18,6 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -122,7 +121,7 @@ class CsvImportController extends AbstractController
    * @return array
    * @throws Exception
    */
-  private function doImportDb(UploadedFile $csvfile,AccountBankAccounts $bank,
+  private function doImportDb(UploadedFile $csvfile,AccountBankAccounts &$bank,
                               kmImportFilter $importFilter,ManagerRegistry $registry):array
     {
     $result       = [];
@@ -140,6 +139,13 @@ class CsvImportController extends AbstractController
             {
             throw new Exception("CSV Dateiformat der Deutschen Bank nicht erkannt!?");
             }
+          }
+        if(trim($csv[0]) === "Kontostand")
+          {
+          $bank->setBalance(str_replace(',','.',str_replace('.','',trim($csv[4]))));
+          $bank->setBalanceDate(new DateTime($csv[1]));
+          $registry->getManager()->persist($bank);
+          $registry->getManager()->flush();
           }
         continue;
         }
@@ -196,6 +202,7 @@ class CsvImportController extends AbstractController
         'uid'       => $this->getUser()->getId(),
         'catid'     => $importFilter->CheckFilter($acctext),
         ];
+
       $rc = $registry->getRepository(AccountData::class)->Insert($data);
       if(!$rc)  // Already in database
         {

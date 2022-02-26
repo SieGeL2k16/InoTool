@@ -1,0 +1,58 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">{% if ENTRY.id %}Bankkonto &quot;{{ ENTRY.iban }}&quot; bearbeiten{% else %}Neues Bankkonto anlegen{% endif %}</div>
+  </div>
+</div>
+<form method="post" action="{{ path("km_bank_save") }}" id="frm_bank" class="needs-validation" novalidate>
+  <input type="hidden" name="BANKID" value="{{ ENTRY.id|default(0) }}">
+  <div class="row">
+    <div class="col-xl-4 col-md-6 col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-8">
+              <div class="mb-2">
+                <label class="form-check-label" for="bankname">Bank</label>
+                <input type="text" name="bankname" id="bankname" class="form-control" placeholder="Name der Bank" value="{{ ENTRY.bankName }}" required autofocus>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="mb-2">
+                <label class="form-check-label" for="shortcut">Kürzel</label>
+                <input type="text" name="shortcut" id="shortcut" class="form-control" placeholder="Kürzel der Bank" value="{{ ENTRY.bankShortcut }}" required>
+              </div>
+            </div>
+          </div>
+          <div class="mb-2">
+            <label class="form-check-label" for="iban">IBAN / Kontonummer</label>
+            <input type="text" name="iban" id="iban" class="form-control" placeholder="IBAN" value="{{ ENTRY.iban }}" required>
+          </div>
+          <div class="mb-2 col-6">
+            <label class="form-check-label" for="logoname">Logo (max. 30x30px!)</label>
+            <input type="text" name="logoname" id="logoname" class="form-control" placeholder="Name des Logos" value="{{ ENTRY.logoName }}" title="Das Logo muss im Verzeichnis images/ abgelegt sein!">
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+            {% if ENTRY.id %}
+              <button type="button" class="btn btn-danger btn_del_account"><i class="fa fa-trash"></i> Löschen</button>
+            {% endif %}
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('km_bank') }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<form method="post" action="{{ path("km_bank_del",{'id':ENTRY.id|default(0)}) }}" id="frm_del">
+  <input type="hidden" name="BANKID" value="{{ ENTRY.id|default(0) }}">
+</form>
+{% endblock %}
+{% block javascripts %}
+  <script>
+    $(".btn_del_account").on('click', function() {
+      SwalConfirmSubmit("Dieses Konto wirklich löschen?<br><br>Alle zugewiesenen Einträge werden ebenfalls gelöscht!","frm_del");
+    });
+  </script>
+{% endblock %}

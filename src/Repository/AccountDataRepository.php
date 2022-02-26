@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\ArrayShape;
@@ -192,5 +193,17 @@ class AccountDataRepository extends ServiceEntityRepository
       {
       return 0;
       }
+    }
+  
+  /**
+   * Removes all rows with given bankid + userid
+   * @param int $bankid
+   * @param int $userid
+   * @return Result
+   * @throws Exception
+   */
+  public function DeleteByBankId(int $bankid, int $userid):Result
+    {
+    return $this->getEntityManager()->getConnection()->executeQuery("delete from account_data where bank_id=:bid and ref_user_id=:uid",['bid' => $bankid, 'uid' => $userid]);
     }
   }

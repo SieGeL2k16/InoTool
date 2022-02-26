@@ -6,7 +6,7 @@
   </div>
 </div>
 <form method="post" action="{{ path('km_category_save') }}" id="frm_category" class="needs-validation" novalidate>
-  <input type="hidden" name="CATID" value="{{ ENTRY.id|number_format }}">
+  <input type="hidden" name="CATID" value="{{ ENTRY.id|default(0) }}">
   <div class="row">
     <div class="col-xl-4 col-md-6 col-12">
       <div class="card">
@@ -25,7 +25,9 @@
           </div>
           <div class="mt-3">
             <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+            {% if ENTRY.id %}
             <button type="button" class="btn btn-danger btn_del_cat"><i class="fa fa-trash"></i> Löschen</button>
+            {% endif %}
             <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('km_categories') }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
           </div>
         </div>

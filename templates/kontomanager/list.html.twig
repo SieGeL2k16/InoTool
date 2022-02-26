@@ -111,7 +111,6 @@ $(document).ready(function() {
   /** Handle category changes */
   $(".catchanger").on('click', function() {
     $("#accid").val($(this).data('id'));
-    console.log(parseInt($(this).data('catid')));
     document.getElementById('newcat').value=parseInt($(this).data('catid'));
     let myModal = new bootstrap.Modal(document.getElementById('modal_catchange'));
     myModal.show();

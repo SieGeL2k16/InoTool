@@ -1,9 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\AccountBankAccounts;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,38 +15,22 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AccountBankAccounts[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AccountBankAccountsRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
+  {
+  public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AccountBankAccounts::class);
+    parent::__construct($registry, AccountBankAccounts::class);
     }
-
-    // /**
-    //  * @return AccountBankAccounts[] Returns an array of AccountBankAccounts objects
-    //  */
-    /*
-    public function findByExampleField($value)
+  
+  /**
+   * Returns latest balance found for in all bank accounts
+   * @param User $user
+   * @return array
+   * @throws Exception
+   */
+  public function getCurrentBalance(User $user):array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select aba.balance, aba.balance_date from account_bank_accounts aba where aba.ref_user_id=? and aba.balance_date = (select max(i.balance_date) from account_bank_accounts i where i.id = aba.id)",[$user->getId()]);
+    return $stmt->fetchAssociative();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?AccountBankAccounts
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-}
+  
+  }

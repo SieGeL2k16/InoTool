@@ -46,6 +46,12 @@
             <td>Differenz:</td>
             <td class="text-end {{ YEAR_STATS['DIFFERENCE']|MoneyColor }}">{{ YEAR_STATS['DIFFERENCE']|format_currency('EUR',locale='de')}}</td>
           </tr>
+          {% if BALANCE_STATS['balance'] is defined %}
+          <tr>
+            <td>Kontostand am {{ BALANCE_STATS['balance_date']|date('d.m.Y') }}:</td>
+            <td class="text-end {{ BALANCE_STATS['balance']|MoneyColor }}">{{ BALANCE_STATS['balance']|format_currency('EUR',locale='de')}}</td>
+          </tr>
+          {% endif %}
           </tbody>
         </table>
       </div>

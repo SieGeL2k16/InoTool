@@ -6,7 +6,7 @@
   </div>
 </div>
 <form method="post" action="{{ path("km_accFormSave") }}" id="frm_accData" class="needs-validation" novalidate>
-  <input type="hidden" name="accid" id="accid" value="{{ ENTRY.id }}">
+  <input type="hidden" name="accid" id="accid" value="{{ ENTRY.id|default(0) }}">
   <div class="row">
     <div class="col-xl-5 col-md-8 col-12">
       <div class="card">

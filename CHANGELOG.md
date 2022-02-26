@@ -1,3 +1,6 @@
+#### 26-Feb-2022
+- Added bank manager
+
 #### 14-Jan-2022 
 - Category management implemented
 - Fixed bugs in account data viewer 
