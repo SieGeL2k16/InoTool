@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\AccountImportFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -13,38 +14,14 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AccountImportFilter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AccountImportFilterRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
+  {
+  /** @var Connection */
+  private Connection $db;
+  
+  public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AccountImportFilter::class);
+    parent::__construct($registry, AccountImportFilter::class);
+    $this->db = $this->getEntityManager()->getConnection();
     }
 
-    // /**
-    //  * @return AccountImportFilter[] Returns an array of AccountImportFilter objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?AccountImportFilter
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-}
+  }

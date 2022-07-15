@@ -1,0 +1,16 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">Importfilter bearbeiten</div>
+    <button type="button" class="btn btn-outline-primary mb-1" onclick="window.location.href='{{ path('km_category_form') }}'">Neuer Filter</button>
+{#
+    <p>Kategorien definiert: <strong>{{ CATEGORY_LIST|length|format_number }}</strong> | Einträge ohne Kategorie: <strong>{{ NO_CAT_COUNT|format_number }}</strong></p>
+#}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-6 col-12">
+  </div>
+</div>
+{% endblock %}
