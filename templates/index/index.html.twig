@@ -13,7 +13,7 @@
 <div class="container h-100">
   <div class="row align-items-center h-100">
     <div class="col-xl-4 col-10 mx-auto text-center">
-      <img src="{{ asset('images/Logo-Transparent.png') }}" id="index_logo" class="pb-2 img-fluid">
+      <img src="{{ asset(APP_LOGIN_LOGO) }}" id="index_logo" class="pb-2 img-fluid">
       <h4>InoTool {{ APP_VERSION }}</h4>
       {% if error %}
         <div class="alert alert-danger mt-2 mb-2">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
