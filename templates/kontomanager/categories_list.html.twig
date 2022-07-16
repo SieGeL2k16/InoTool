@@ -8,8 +8,8 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-xl-6 col-12">
-    <table class="table table-sm table-striped table-hover">
+  <div class="col-xl-7 col-12 mt-2">
+    <table class="table table-sm table-striped table-hover" id="tbl_km_categories">
     <thead>
     <tr>
       <th>ID</th>
@@ -40,5 +40,6 @@
 $(".mp_click").on('click', function() {
   window.location.href=$(this).parent().data('url');
 });
+var table = $("#tbl_km_categories").dataTable();
 </script>
 {% endblock %}
