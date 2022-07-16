@@ -9,6 +9,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}"/>
   <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />
   <link href="{{ asset("css/select2.min.css") }}" rel="stylesheet" />
+  <link href="{{ asset('css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet">
   <link href="{{ asset('css/all.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/datatables.min.css')}}" rel="stylesheet" />
   <link href="{{ asset('css/jquery.toast.min.css') }}" rel="stylesheet" />
@@ -21,12 +22,15 @@
 {% block body_before %}{% endblock %}
 {% block body %}{% endblock %}
 {% block body_after %}{% endblock %}
+<script>
+  var JS_DIR="{{ asset("js") }}";
+  var APP_LANG="{{ app.request.locale }}";
+</script>
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}" ></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}" ></script>
 <script src="{{ asset('js/datatables.min.js') }}" ></script>
 <script src="{{ asset('js/sweetalert2.all.min.js') }}" ></script>
 <script src="{{ asset('js/select2.full.min.js') }}" ></script>
-<link href="{{ asset('css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet">
 <script src="{{ asset('js/i18n/de.js') }}"></script>
 <script src="{{ asset('js/jquery.toast.min.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
@@ -35,5 +39,6 @@
 {% block javascripts %}{% endblock %}
 {% block js_refresh %}{% endblock %}
 {% block toasts %}{% endblock %}
+<div class="mt-5">&nbsp;</div>
 </body>
 </html>

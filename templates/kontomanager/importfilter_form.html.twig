@@ -1,0 +1,56 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+  <div class="row">
+    <div class="col">
+      <div class="card-title h3">{% if ENTRY.id %}Importfilter #{{ ENTRY.id }} bearbeiten{% else %}Neuen Importfilter anlegen{% endif %}</div>
+    </div>
+  </div>
+  <form method="post" action="{{ path("km_importfilter_save") }}" id="frm_importfilter" class="needs-validation" novalidate>
+    <input type="hidden" name="ID" value="{{ ENTRY.id|default(0) }}">
+    <div class="row">
+      <div class="col-xl-5 col-md-7 col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3">
+              <label class="form-label" for="ifname">Name</label>
+              <input type="text" name="ifname" id="ifname" class="form-control" placeholder="Name des Filters" value="{{ ENTRY.name }}" required autofocus>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="ifdef">Filter Definition</label>
+              <input type="text" name="ifdef" id="ifdef" class="form-control" placeholder="Filter Definition" value="{{ ENTRY.definition }}" required>
+            </div>
+            <div class="mb-3">
+              <label for="catid" class="form-label">Kategorie (wird bei Übereinstimmung zugewiesen)</label>
+              <select class="form-select" aria-label="Kategorie" name="catid" id="catid" required="required">
+                {% for c in CATLIST %}
+                  <option value="{{ c['id'] }}"{% if ENTRY.refCategory.id is defined and c['id'] == ENTRY.refCategory.id %} selected{% endif %}>{{ c['name'] }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="is_active" name="is_active" value="1"{% if ENTRY.isActive %} checked{% endif %}>
+              <label class="form-check-label" for="is_active">Aktiv?</label>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+              {% if ENTRY.id %}
+                <button type="button" class="btn btn-danger btn_del_if"><i class="fa fa-trash"></i> Löschen</button>
+              {% endif %}
+              <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path('km_importfilter') }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form method="post" action="{{ path("km_importfilter_del") }}" id="frm_del">
+    <input type="hidden" name="ID" value="{{ ENTRY.id }}">
+  </form>
+{% endblock %}
+{% block javascripts %}
+  <script>
+    $(".btn_del_if").on('click', function() {
+      SwalConfirmSubmit("Diesen Eintrag wirklich löschen?","frm_del");
+    });
+  </script>
+{% endblock %}

@@ -3,14 +3,44 @@
 <div class="row">
   <div class="col">
     <div class="card-title h3">Importfilter bearbeiten</div>
-    <button type="button" class="btn btn-outline-primary mb-1" onclick="window.location.href='{{ path('km_category_form') }}'">Neuer Filter</button>
-{#
-    <p>Kategorien definiert: <strong>{{ CATEGORY_LIST|length|format_number }}</strong> | Einträge ohne Kategorie: <strong>{{ NO_CAT_COUNT|format_number }}</strong></p>
-#}
+    <button type="button" class="btn btn-outline-primary mb-1" onclick="window.location.href='{{ path('km_importfilter_form') }}'">Neuer Filter</button>
   </div>
 </div>
 <div class="row">
-  <div class="col-xl-6 col-12">
+  <div class="col-xl-8 col-12 mt-4">
+    <table class="table table-sm table-striped table-hover" id="tbl_iflist">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Kategorie</th>
+      <th>Aktiv</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in IFLIST %}
+    <tr data-url="{{ path("km_importfilter_form",{'id':i.id}) }}">
+      <td class="mp_click {% if i.isActive == 0 %}text-decoration-line-through{% endif %}">{{ i.id }}</td>
+      <td class="mp_click {% if i.isActive == 0 %}text-decoration-line-through{% endif %}">{{ i.name }}</td>
+      <td class="mp_click {% if i.isActive == 0 %}text-decoration-line-through{% endif %}">{{ i.refCategory.name }}</td>
+      <td class="mp_click text-center">{{ i.isActive|FormatCheckbox|raw  }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="4">Keine Filter vorhanden.</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
   </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+  <script>
+    /** Handle click on importfilter entry */
+    $(".mp_click").on('click', function() {
+      window.location.href=$(this).parent().data('url');
+    });
+    var table = $("#tbl_iflist").dataTable();
+  </script>
 {% endblock %}

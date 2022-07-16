@@ -1,3 +1,9 @@
+#### 16-Jul-2022
+
+- Added importfilter management
+- Upgraded datatables
+- Updated Symfony to 6.0.10
+
 #### 26-Feb-2022
 - Added bank manager
 

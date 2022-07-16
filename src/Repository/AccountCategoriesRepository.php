@@ -67,8 +67,8 @@ class AccountCategoriesRepository extends ServiceEntityRepository
    * @return void
    * @throws Exception
    */
-  public function Delete(User $user, int $catid)
-    {
+  public function Delete(User $user, int $catid): void
+  {
     $this->db->executeQuery("update account_data set ref_category_id = null where ref_user_id=:uid and ref_category_id=:cid",['uid' => $user->getId(),'cid' => $catid]);
     $this->db->executeQuery("delete from account_categories where ref_user_id=:uid and id=:cid",['uid' => $user->getId(),'cid' => $catid]);
     }

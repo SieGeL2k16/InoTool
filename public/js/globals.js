@@ -110,6 +110,15 @@ $(document).ready(function () {
 
 });
 
+/** Set default values for DataTables */
+$.extend( $.fn.dataTable.defaults, {
+  "stateSave": true,      // Save filter settings
+  "stateDuration": 0,     // save forever
+  "language": {
+    "url": JS_DIR+"/datatables."+APP_LANG+".json",
+  },
+});
+
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
   'use strict'
@@ -129,4 +138,5 @@ $(document).ready(function () {
       form.classList.add('was-validated')
     }, false)
   })
-})()
+})
+()
