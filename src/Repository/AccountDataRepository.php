@@ -206,4 +206,15 @@ class AccountDataRepository extends ServiceEntityRepository
     {
     return $this->getEntityManager()->getConnection()->executeQuery("delete from account_data where bank_id=:bid and ref_user_id=:uid",['bid' => $bankid, 'uid' => $userid]);
     }
+  
+  /**
+   * Returns list of all existing years (for reporting start screen)
+   * @return array
+   * @throws Exception
+   */
+  public function GetDistinctYears():array
+    {
+    $res = $this->getEntityManager()->getConnection()->executeQuery("select distinct to_char(ad.booking_date,'YYYY') as y from account_data ad order by 1 desc");
+    return $res->fetchAllAssociative();
+    }
   }

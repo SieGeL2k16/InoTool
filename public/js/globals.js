@@ -115,7 +115,7 @@ $.extend( $.fn.dataTable.defaults, {
   "stateSave": true,      // Save filter settings
   "stateDuration": 0,     // save forever
   "language": {
-    "url": JS_DIR+"/datatables."+APP_LANG+".json",
+    "url": JS_DIR+"/vendor/datatables."+APP_LANG+".json",
   },
 });
 

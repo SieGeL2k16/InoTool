@@ -8,10 +8,13 @@
 
 namespace App\Controller\KontoManager;
 
+use App\Entity\AccountData;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,7 +44,21 @@ class ReportingController extends AbstractController
     {
     return $this->render('kontomanager/report_overview.html.twig', [
       'ACTNAV'    => self::ACT_NAV,
+      'YEARLIST'  => $this->registry->getRepository(AccountData::class)->GetDistinctYears(),
       ]);
+    }
+  
+  /**
+   * @param int $year
+   * @return JsonResponse
+   */
+  #[Route("/kontomanager/report/ajax-overview/{year}",name: "km_report_ajaxOverview")]
+  public function loadData(int $year = 0):JsonResponse
+    {
+    /** @var User $user */
+    $user = $this->getUser();
+    $ydata= $this->registry->getRepository(AccountData::class)->GetYearlyStats($user->getId(),$year);
+    return new JsonResponse($ydata);
     }
   
   }

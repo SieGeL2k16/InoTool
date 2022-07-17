@@ -6,5 +6,34 @@
   </div>
 </div>
 <div class="row">
+  <div class="col-3">
+    <form method="get" action="#" id="frm_report_filter">
+      <div class="form-floating">
+         <select name="year" id="year" class="form-select">
+          {% for year in YEARLIST %}
+          <option value="{{ year['y'] }}">{{ year['y'] }}</option>
+          {% endfor %}
+        </select>
+        <label for="year">Gewünschtes Jahr auswählen</label>
+      </div>
+    </form>
+  </div>
 </div>
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/vendor/chart.min.js') }}"></script>
+<script>
+function loadData()
+  {
+  var selYear = $("#year").val();
+  var url = "{{ path("km_report_ajaxOverview") }}/"+selYear;
+
+  }
+$(document).ready(function() {
+
+  loadData();
+
+});
+
+</script>
 {% endblock %}
