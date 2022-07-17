@@ -217,4 +217,42 @@ class AccountDataRepository extends ServiceEntityRepository
     $res = $this->getEntityManager()->getConnection()->executeQuery("select distinct to_char(ad.booking_date,'YYYY') as y from account_data ad order by 1 desc");
     return $res->fetchAllAssociative();
     }
+  
+  /**
+   * Returns yearly overview of income/outcome indexed by month.
+   * NOTE: Always returns a full year set indexed by month (0-11)
+   * @param int $userid
+   * @param int $year
+   * @return array
+   * @throws Exception
+   */
+  public function GetInOutByYear(int $userid, int $year):array
+    {
+    $res = $this->getEntityManager()->getConnection()->executeQuery("
+      select abs(sum(amount)) as monthsum,is_income,to_char(booking_date,'MM') as mon
+        from account_data ad
+       where to_char(booking_date,'YYYY') = :y
+         and ref_user_id = :uid
+       group by 2,3
+       order by 3, 2",['y' => $year, 'uid' => $userid]);
+    for($i = 0; $i < 12; $i++)
+      {
+      $ystats['INCOME'][$i]   = 0.00;
+      $ystats['OUTCOME'][$i]  = 0.00;
+      }
+    while($d = $res->fetchAssociative())
+      {
+      if($d['is_income'] === true)
+        {
+        $k = 'INCOME';
+        }
+      else
+        {
+        $k = 'OUTCOME';
+        }
+      $ystats[$k][(int)($d['mon']-1)] = $d['monthsum'];
+      }
+    return $ystats;
+    }
+
   }

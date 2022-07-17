@@ -78,6 +78,36 @@ function downloadFile(urlToSend,id_to_disable)
   req.send();
   }
 
+/**
+ * Returns locale-aware currency string for Euro and colorizes red for minus and green for plus values
+ * @param value
+ * @param use_html
+ * @param locale Defaults to germany
+ * @returns {string}
+ * @constructor
+ */
+function FormatEuro(value,use_html = false, locale='de-DE')
+  {
+  let currencystr =  new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(value);
+  if(use_html === false)
+    {
+    return currencystr;
+    }
+  let cl = "";
+  if(value < 0)
+    {
+    cl = 'text-danger';
+    }
+  else
+    {
+    cl = 'text-success';
+    }
+  return '<span class="'+cl+'">'+currencystr+"</span>";
+  }
+
 
 $(document).ready(function () {
   $.validator.setDefaults({
@@ -138,5 +168,4 @@ $.extend( $.fn.dataTable.defaults, {
       form.classList.add('was-validated')
     }, false)
   })
-})
-()
+})()

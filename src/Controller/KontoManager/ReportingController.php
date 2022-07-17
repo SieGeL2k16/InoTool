@@ -58,7 +58,12 @@ class ReportingController extends AbstractController
     /** @var User $user */
     $user = $this->getUser();
     $ydata= $this->registry->getRepository(AccountData::class)->GetYearlyStats($user->getId(),$year);
-    return new JsonResponse($ydata);
+    $ydata['INCOME']  = (float)$ydata['INCOME'];
+    $ydata['OUTCOME'] = (float)$ydata['OUTCOME'];
+    return new JsonResponse([
+      'PIE_DATA'  => $ydata,
+      'YEAR_DATA' => $this->registry->getRepository(AccountData::class)->GetInOutByYear($user->getId(),$year),
+      ]);
     }
   
   }

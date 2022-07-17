@@ -6,7 +6,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-3">
+  <div class="col-xl-3 col-12">
     <form method="get" action="#" id="frm_report_filter">
       <div class="form-floating">
          <select name="year" id="year" class="form-select">
@@ -19,21 +19,135 @@
     </form>
   </div>
 </div>
+<div class="row">
+  <div class="col-xl-3 col-12 mt-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title fw-bold text-center pie_title"></div>
+        <div class="card chart-container">
+          <canvas id="pie_inout" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-8 col-12 mt-3">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title fw-bold text-center bar_title"></div>
+        <div class="card chart-container">
+          <canvas id="bar_inout" width="100%" height="30"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block javascripts %}
 <script src="{{ asset('js/vendor/chart.min.js') }}"></script>
 <script>
-function loadData()
-  {
-  var selYear = $("#year").val();
-  var url = "{{ path("km_report_ajaxOverview") }}/"+selYear;
+  var myChart   = undefined;
+  var yearChart = undefined;
+  function loadData()
+    {
+      const labels = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+      var selYear = $("#year").val();
+      var url = "{{ path("km_report_ajaxOverview") }}/" + selYear;
+      $.ajax(url, {
+        'dataType': 'json',
+      }).done(function (json)
+      {
+        $(".pie_title").html("Einnahmen / Ausgaben "+selYear);
+        $(".bar_title").html(selYear+": Einnahmen: "+FormatEuro(json['PIE_DATA']['INCOME'],true)+" | Ausgaben: "+FormatEuro(json['PIE_DATA']['OUTCOME'],true)+" | Differenz: "+FormatEuro(json['PIE_DATA']['DIFFERENCE'],true));
+        if(myChart === undefined)
+          {
+          myChart = new Chart($('#pie_inout'), {
+            type: 'pie',
+            data: {
+              labels: ['Einnahmen', 'Ausgaben'],
+              datasets: [{
+                data: [json['PIE_DATA']['INCOME'], json['PIE_DATA']['OUTCOME']],
+                backgroundColor: [
+                  '#198754',
+                  '#dc3545',
+                ],
+                borderColor: 'rgb(50, 61, 83)',
+                borderWidth: 1,
+              }]
+            },
+            options: {
+              aspectRatio: 0,
+              locale: 'de-DE',
+              plugins: {
+                tooltip: {
+                  enabled: true,
+                  usePointStyle: true,
+                  callbacks: {
+                    // To change title in tooltip
+//              title: (data) => { return data[0].parsed.x },
+                    // To change label in tooltip
+                    label: (data) =>
+                      {
+                      return data.label + ": " + FormatEuro(data.raw)
+                      }
+                    },
+                  },
+                },
+              },
+            });
+          var data = {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Einnahmen',
+                data: json['YEAR_DATA']['INCOME'],
+                backgroundColor: ['#198754',],
+              },
+              {
+                label: 'Ausgaben',
+                data: json['YEAR_DATA']['OUTCOME'],
+                backgroundColor: ['#dc3545',],
+              }
+            ]
+          };
+          yearChart = new Chart($("#bar_inout"), {
+            type: 'bar',data: data,
+            options: {
+              scales: {y: {beginAtZero: true}},
+              plugins: {
+                tooltip: {
+                  enabled: true,
+                  usePointStyle: true,
+                  callbacks: {
+                    // To change title in tooltip
+//              title: (data) => { return data[0].parsed.x },
+                    // To change label in tooltip
+                    label: (data) =>
+                      {
+                        return FormatEuro(data.raw)
+                      }
+                  },
+                },
+              },
+            },
+            });
+          }
+        else
+          {
+          myChart.data.datasets[0].data = [json['PIE_DATA']['INCOME'],json['PIE_DATA']['OUTCOME']];
+          myChart.update();
+          yearChart.data.datasets[0].data = json['YEAR_DATA']['INCOME'];
+          yearChart.data.datasets[1].data = json['YEAR_DATA']['OUTCOME'];
+          yearChart.update();
+          }
+      });
+    }
 
-  }
-$(document).ready(function() {
-
-  loadData();
-
-});
-
+  $(document).ready(function () {
+    /** Handle selection of a year */
+    $("#year").on('change', function() {
+      loadData();
+    });
+    loadData();
+  });
 </script>
 {% endblock %}
