@@ -1,0 +1,35 @@
+<table class="table table-sm table-striped table-bordered table-hover">
+<thead>
+<tr>
+  <th>Kategorie</th>
+{% for m in MONTHS %}
+  <th class="text-center">{{ m }}</th>
+{% endfor %}
+  <th class="text-end">Total pro<br>Kategorie</th>
+  <th class="text-end">Monats-<br>durchschnitt</th>
+</tr>
+</thead>
+<tbody>
+{% for c in DATA['all_cats'] %}
+  <tr>
+    <td>{{ c }}</td>
+  {% for m,mname in MONTHS %}
+    {% if DATA['data'][c][m] is defined %}
+    <td class="text-end {{ DATA['data'][c][m]|MoneyColor }}">{{ DATA['data'][c][m]|format_currency('EUR') }}</td>
+    {% else %}
+    <td class="text-end">---</td>
+    {% endif %}
+  {% endfor %}
+  <td class="text-end {{ DATA['cat_sums'][c]|MoneyColor }}" title="Gesamtkosten für {{ c }}">{{ DATA['cat_sums'][c]|format_currency('EUR') }}</td>
+  {% set avg = DATA['cat_sums'][c] / 12 %}
+  <td class="text-end" title="Monatsdurchschnitt für {{ c }} auf 12 Monate">{{ avg|abs|format_currency('EUR') }}</td>
+  </tr>
+{% endfor %}
+</tbody>
+<tfoot>
+<tr>
+  <td>{{ DATA['all_cats']|length }} Kategorien</td>
+</tr>
+</tfoot>
+</table>
+{{ dump() }}

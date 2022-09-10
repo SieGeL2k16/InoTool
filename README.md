@@ -1,4 +1,4 @@
-# InoTool - Toolkit of private tools for freelancer management, accounting of my bank accounts etc.
+# InoTool - Toolkit of private tools for freelancer management and managing private bank accounts
 
 ## What is this?
 
@@ -20,7 +20,7 @@ Used to handle my freelancer activity including invoices/customer/project manage
 
 - Developed in 2011 as successor of my even older OraOffice Project from 2001
 - Oracle 8i+ based
-- Multi-tenant 
+- Multi-tenant
 - Uses jQueryUI as framework
 - Smarty for templating
 - TCPDF for PDF reporting
@@ -53,9 +53,9 @@ If you have already the symfony binary on your system, check your system with:
 Create a new database user and database for InoTool, i.e.:
 
 1. `su - postgres`
-3. `psql`
-2. `postgres=# CREATE ROLE inotool LOGIN CREATEDB PASSWORD 'inotool2k21';`
-3. `postgres=# CREATE DATABASE inotool OWNER inotool;`
+2. `psql`
+3. `postgres=# CREATE ROLE inotool LOGIN CREATEDB PASSWORD 'inotool2k21';`
+4. `postgres=# CREATE DATABASE inotool OWNER inotool;`
 
 ## Configure Symfony / InoTool
 
@@ -73,7 +73,7 @@ Create a new database user and database for InoTool, i.e.:
 
 
 3. Add a user to work with the application:
-   
+
    `bin/console app:user`
 
 

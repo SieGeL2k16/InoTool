@@ -1,0 +1,62 @@
+{% extends 'InoKontoManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col">
+    <div class="card-title h3">Kosten Pro Monat und Kategorie <span class="sp_year"></span></div>
+  </div>
+</div>
+<div class="row align-items-center">
+  <div class="col-xl-3 col-12">
+    <form method="get" action="#" id="frm_report_filter">
+      <div class="form-floating">
+        <select name="year" id="year" class="form-select">
+          {% for year in YEARLIST %}
+            <option value="{{ year['y'] }}"{% if year['y'] == ACTYEAR %} selected{% endif %}>{{ year['y'] }}</option>
+          {% endfor %}
+        </select>
+        <label for="year">Gewünschtes Jahr auswählen</label>
+      </div>
+    </form>
+  </div>
+  <div class="col-auto">
+    <div class="form-floating">
+      <button class="btn btn-primary btn_back" data-url="{{ path("km_report_overview") }}"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+    </div>
+  </div>
+</div>
+<div class="row mt-4">
+  <div class="col" id="html_injector">
+  
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+function loadData()
+  {
+    var year = $("#year").val();
+    $(".sp_year").html("für das Jahr "+year);
+    var url = "{{ path("km_report_costsMonthAjax") }}/" + year;
+    $.ajax(url, {
+      'dataType': 'json',
+    }).done(function (json)
+    {
+      $("#html_injector").html(json['HTML'])
+    });
+  }
+$(document).ready(function() {
+
+  $("#year").on('change', function() {
+    loadData();
+  })
+  
+  $(".btn_back").on('click', function() {
+    var u = $(this).data('url') + "/"+$("#year").val();
+    window.location.href=u;
+  });
+  
+  loadData();
+  
+})
+</script>
+{% endblock %}

@@ -155,7 +155,7 @@ class AccountDataRepository extends ServiceEntityRepository
              left join account_bank_accounts aba on(ad.accounting_number = aba.iban)
              where ad.ref_user_id=:uid
              $where
-             order by ad.booking_date desc
+             order by ad.booking_date desc,ad.description
             ";
     $stmt = $this->getEntityManager()->getConnection()->executeQuery($SQL,$dbpar);
     return $stmt->fetchAllAssociative();
@@ -209,12 +209,13 @@ class AccountDataRepository extends ServiceEntityRepository
   
   /**
    * Returns list of all existing years (for reporting start screen)
+   * @param int $userid
    * @return array
    * @throws Exception
    */
-  public function GetDistinctYears():array
+  public function GetDistinctYears(int $userid):array
     {
-    $res = $this->getEntityManager()->getConnection()->executeQuery("select distinct to_char(ad.booking_date,'YYYY') as y from account_data ad order by 1 desc");
+    $res = $this->getEntityManager()->getConnection()->executeQuery("select distinct to_char(ad.booking_date,'YYYY') as y from account_data ad where ad.ref_user_id=:uid order by 1 desc",['uid' => $userid]);
     return $res->fetchAllAssociative();
     }
   
@@ -254,5 +255,55 @@ class AccountDataRepository extends ServiceEntityRepository
       }
     return $ystats;
     }
+  
+  /**
+   * Determines costs per month and category.
+   * @param int $userid
+   * @param int $year
+   * @return array
+   * @throws Exception
+   */
+  public function GetCostsPerMonth(int $userid, int $year):array
+    {
+    $all_cats = [];
+    $cat_sums = [];
+    $data     = [];
+    $cat_map  = [];
+    $mon_sums = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 
+    $res = $this->getEntityManager()->getConnection()->executeQuery("
+      SELECT  coalesce(d.ref_category_id ,0) AS catid,
+              coalesce(c.name ,'__KEINE KATEGORIE__') AS catname,
+              round(sum(d.amount),2) AS sumstr,
+              to_char(d.booking_date ,'MM') AS monstr
+         FROM account_data d
+    LEFT JOIN account_categories c ON d.ref_category_id = c.id
+        WHERE to_char(d.booking_date ,'yyyy') = :y
+          and d.ref_user_id = :uid
+     GROUP BY d.ref_category_id , c.name , to_char(d.booking_date ,'MM')
+     ORDER BY 3,1,2",['y' => $year, 'uid' => $userid]);
+    while($d = $res->fetchAssociative())
+      {
+      if(!in_array($d['catname'],$all_cats))
+        {
+        $all_cats[] = $d['catname'];
+        $cat_map[$d['catname']] = $d['catid'];
+        }
+      $data[$d['catname']][intval($d['monstr'])] = $d['sumstr'];
+      if(isset($cat_sums[$d['catname']]) === FALSE)
+        {
+        $cat_sums[$d['catname']] = 0.00;
+        }
+      $cat_sums[$d['catname']]+=$d['sumstr'];
+      $mon_sums[intval($d['monstr'])]+=$d['sumstr'];
+      }
+    sort($all_cats);
+    return [
+      'all_cats'  => $all_cats,
+      'cat_sums'  => $cat_sums,
+      'data'      => $data,
+      'cat_map'   => $cat_map,
+      'mon_sums'  => $mon_sums,
+      ];
+    }
   }

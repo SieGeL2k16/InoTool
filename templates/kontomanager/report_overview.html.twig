@@ -11,10 +11,24 @@
       <div class="form-floating">
          <select name="year" id="year" class="form-select">
           {% for year in YEARLIST %}
-          <option value="{{ year['y'] }}">{{ year['y'] }}</option>
+          <option value="{{ year['y'] }}"{% if year['y'] == ACTYEAR %} selected{% endif %}>{{ year['y'] }}</option>
           {% endfor %}
         </select>
         <label for="year">Gewünschtes Jahr auswählen</label>
+      </div>
+    </form>
+  </div>
+  <div class="col-xl-8 col-12">
+    <form method="get" action="#" id="frm_report_tools">
+      <div class="form-floating">
+        <select name="report" id="report" class="form-select">
+          <option value=""></option>
+          <option value="{{ path("km_report_costsMonth") }}">Auflistung der Kosten/Monat</option>
+          <option value="#">Fixkosten Vergleich</option>
+          <option value="#">Kontoführungsgebühren anzeigen</option>
+          <option value="#">Auszüge für Steuerberater</option>
+        </select>
+        <label for="report">Gewünschten Report auswählen</label>
       </div>
     </form>
   </div>
@@ -148,6 +162,17 @@
       loadData();
     });
     loadData();
+
+    /** Handle selection of report */
+    $("#report").on('change', function() {
+      var rep = $(this).val();
+      if(rep === "")
+        {
+        return;
+        }
+      var y = $("#year").val();
+      window.location.href=rep+"/"+y;
+    });
   });
 </script>
 {% endblock %}
