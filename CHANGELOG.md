@@ -1,3 +1,10 @@
+#### 11-Sep-2022
+
+- Updated Symfony to 6.0.12
+- Updated Bootstrap to 5.2.1
+- Updated FontAwesome to 6.2.0
+- Updated ChartJS to 3.9.1
+
 #### 16-Jul-2022
 
 - Added importfilter management

@@ -108,6 +108,35 @@ function FormatEuro(value,use_html = false, locale='de-DE')
   return '<span class="'+cl+'">'+currencystr+"</span>";
   }
 
+/**
+ * Taken from Stackoverflow: https://stackoverflow.com/a/3605602/3874598
+ * @param len
+ * @returns {string}
+ */
+Number.prototype.padZero= function(len){
+  var s= String(this), c= '0';
+  len= len || 2;
+  while(s.length < len) s= c + s;
+  return s;
+}
+
+/**
+ * Handle Ajax error (write to console + use toast)
+ * @param jqXHR
+ * @param textStatus
+ * @param errorThrown
+ * @constructor
+ */
+function ajaxError(textStatus,errorThrown)
+  {
+  console.log("STATUS: "+textStatus+"\nERROR: "+errorThrown);
+  $.toast({
+    text:errorThrown,
+    position : 'bottom-right',
+    'icon': 'error',
+    'heading': textStatus,
+  });
+  }
 
 $(document).ready(function () {
   $.validator.setDefaults({

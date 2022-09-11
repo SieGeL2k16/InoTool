@@ -8,6 +8,7 @@
 
 namespace App\Controller\KontoManager;
 
+use App\Entity\AccountCategories;
 use App\Entity\AccountData;
 use App\Entity\User;
 use DateTime;
@@ -123,5 +124,27 @@ class ReportingController extends AbstractController
       'DATA'    => $data,
       ])->getContent();
     return new JsonResponse(['HTML' => $html]);
+    }
+  
+  /**
+   * Returns entries for a given Category ID + Month + year
+   * @param Request $request
+   * @return JsonResponse
+   */
+  #[Route("/kontomanager/report/listeKatMonAjax",name: "km_report_listCatMonAjax",methods: ["POST"])]
+  public function showDataForCategoryAndMonth(Request $request):JsonResponse
+    {
+    $catid= (int)$request->get('catid', 0);
+    $mon  = (int)$request->get('month',0);
+    $year = (int)$request->get('year',0);
+    /** @var User $user */
+    $user = $this->getUser();
+    $data = $this->registry->getRepository(AccountData::class)->GetListByCatMonYear($user->getId(),$catid,$mon,$year);
+    return new JsonResponse([
+      'HTML' => $this->render('kontomanager/report_costs_month_modal.html.twig',[
+                  'DATA'    => $data,
+                  'CATLIST' => $this->registry->getRepository(AccountCategories::class)->getCategoryList($user),
+                ])->getContent(),
+      ]);
     }
   }

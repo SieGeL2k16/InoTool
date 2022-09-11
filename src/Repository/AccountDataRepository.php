@@ -306,4 +306,25 @@ class AccountDataRepository extends ServiceEntityRepository
       'mon_sums'  => $mon_sums,
       ];
     }
+  
+  /**
+   * @param int $userid
+   * @param int $catid
+   * @param int $month
+   * @param int $year
+   * @return array
+   * @throws Exception
+   */
+  public function GetListByCatMonYear(int $userid, int $catid,int $month, int $year):array
+    {
+    $SQL = "
+      select * from account_data
+       where ref_user_id = :uid
+         and ref_category_id = :cid
+         and to_char(booking_date,'YYYYMM') = :ym
+       order by booking_date desc, description";
+    $params = ['uid' => $userid, 'cid' => $catid, 'ym' => sprintf("%04d%02d",$year,$month)];
+    $res = $this->getEntityManager()->getConnection()->executeQuery($SQL,$params);
+    return $res->fetchAllAssociative();
+    }
   }

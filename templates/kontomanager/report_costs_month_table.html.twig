@@ -2,20 +2,20 @@
 <thead>
 <tr>
   <th>Kategorie</th>
-{% for m in MONTHS %}
-  <th class="text-center">{{ m }}</th>
+{% for mi,m in MONTHS %}
+  <th class="text-center" id="M_{{ mi }}">{{ m }}</th>
 {% endfor %}
   <th class="text-end">Total pro<br>Kategorie</th>
   <th class="text-end">Monats-<br>durchschnitt</th>
 </tr>
 </thead>
-<tbody>
+<tbody class="table-group-divider">
 {% for c in DATA['all_cats'] %}
   <tr>
-    <td>{{ c }}</td>
+    <td id="C_{{ DATA['cat_map'][c] }}">{{ c }}</td>
   {% for m,mname in MONTHS %}
     {% if DATA['data'][c][m] is defined %}
-    <td class="text-end {{ DATA['data'][c][m]|MoneyColor }}">{{ DATA['data'][c][m]|format_currency('EUR') }}</td>
+    <td class="text-end {{ DATA['data'][c][m]|MoneyColor }} mp_click" data-catid="{{ DATA['cat_map'][c] }}" data-month="{{ m }}">{{ DATA['data'][c][m]|format_currency('EUR') }}</td>
     {% else %}
     <td class="text-end">---</td>
     {% endif %}
@@ -26,9 +26,14 @@
   </tr>
 {% endfor %}
 </tbody>
-<tfoot>
-<tr>
+<tfoot class="table-group-divider">
+<tr class="fw-bold">
   <td>{{ DATA['all_cats']|length }} Kategorien</td>
+{% for m,mname in MONTHS %}
+  <td class="text-end {{ DATA['mon_sums'][m]|MoneyColor }}">{{ DATA['mon_sums'][m]|format_currency('EUR') }}</td>
+{% endfor %}
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
 </tr>
 </tfoot>
 </table>

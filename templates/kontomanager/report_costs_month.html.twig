@@ -2,7 +2,7 @@
 {% block body %}
 <div class="row">
   <div class="col">
-    <div class="card-title h3">Kosten Pro Monat und Kategorie <span class="sp_year"></span></div>
+    <div class="card-title h3 mb-1">Kosten Pro Monat und Kategorie <span class="sp_year"></span></div>
   </div>
 </div>
 <div class="row align-items-center">
@@ -29,6 +29,26 @@
   
   </div>
 </div>
+<div class="modal fade" tabindex="-1" id="modal_list" data-ajax="{{ path("km_report_listCatMonAjax") }}">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_list_head"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="#" id="frm_modal_list">
+          <div id="frm_body">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="frm_catchange"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Abbruch</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block javascripts %}
 <script>
@@ -42,21 +62,47 @@ function loadData()
     }).done(function (json)
     {
       $("#html_injector").html(json['HTML'])
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      ajaxError(textStatus, errorThrown);
     });
   }
 $(document).ready(function() {
 
+  // Handle year selector
   $("#year").on('change', function() {
     loadData();
   })
   
+  // Handle back button
   $(".btn_back").on('click', function() {
     var u = $(this).data('url') + "/"+$("#year").val();
     window.location.href=u;
   });
   
+  // Handle click on a sum of category/month to show all entries
+  $("body").on('click', '.mp_click', function() {
+    var c = $(this).data('catid');
+    var m = $(this).data('month');
+    $.ajax($("#modal_list").data('ajax'), {
+      'dataType': 'json',
+      'method':'post',
+      'data': {'catid':c,'month':m,'year':$("#year").val(),}
+    }).done(function (json)
+    {
+      console.log(json);
+      $("#frm_body").html(json['HTML'])
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      ajaxError(textStatus, errorThrown);
+    });
+
+
+
+    $("#modal_list_head").html("Zeige Einträge für \""+$("#C_"+c).html()+"\" in "+m.padZero()+"/"+$("#year").val());
+    let myModal = new bootstrap.Modal(document.getElementById('modal_list'));
+    myModal.show();
+
+  });
   loadData();
-  
 })
 </script>
 {% endblock %}

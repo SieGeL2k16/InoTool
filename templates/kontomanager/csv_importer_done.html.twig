@@ -25,7 +25,7 @@
       <td class="{% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %} td-truncate">
         {{ r.TXT }}
       </td>
-      <td class="text-end {% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.SUM|format_currency('EUR',locale='de') }}</td>
+      <td class="text-end {% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.SUM|format_currency('EUR') }}</td>
       <td class="{% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.IBAN }}</td>
       <td class="text-nowrap {% if r.STATUS == 1 %}text-danger{% else %}text-success{% endif %}">{{ r.RESULT }}</td>
     </tr>
