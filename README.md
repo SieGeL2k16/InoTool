@@ -31,17 +31,17 @@ so I've decided to port them both to Symfony using PostgreSQL as database backen
 
 ## Installation
 
-Make sure to met the requirements:
+Make sure to meet the requirements:
 
 - PHP 8.0 or newer - lower versions are not supported!
-- PostgreSQL 9.x or newer - tested with PgSql 12.9
-- Modern browser (see https://getbootstrap.com/docs/5.1/getting-started/browsers-devices/)
+- PostgreSQL 12.x or newer - tested with PgSql 14.5
+- Modern browser (see https://getbootstrap.com/docs/5.2/getting-started/browsers-devices/)
 
 If you have already the symfony binary on your system, check your system with:
 
 `symfony check:requirements`
 
-### install copy from github to your work space:
+### install copy from gitHub to your work space:
 
 1. `git clone https://github.com/SieGeL2k16/InoTool.git`
 
@@ -59,25 +59,22 @@ Create a new database user and database for InoTool, i.e.:
 
 ## Configure Symfony / InoTool
 
-1. Create `.env.local` file in Symfony root directory and takeover the following variables:
-   ```
-   APP_ENV=prod
-   DATABASE_URL=postgresql://inotool:inotool2k21@127.0.0.1:5432/inotool?serverVersion=12&charset=utf8
-   ```
-   Please refer to the supplied `.env` file for a description of these variables.
+#### Create `.env.local` file in Symfony root directory and takeover the following variables:
+```
+APP_ENV=prod
+DATABASE_URL=postgresql://inotool:inotool2k21@127.0.0.1:5432/inotool?serverVersion=12&charset=utf8
+```
+Please refer to the supplied `.env` file for a description of these variables.
 
+#### Create database structure from Symfony:
 
-2. Create database structure from Symfony:
+`bin/console doctrine:migrations:migrate`
 
-   `bin/console doctrine:migrations:migrate`
+#### Add a user to work with the application:
 
+`bin/console app:user`
 
-3. Add a user to work with the application:
-
-   `bin/console app:user`
-
-
-4. Use your webbrowser to call the application (public is webdirectory!)
+####  Use your webbrowser to call the application (public is webdirectory!)
 
 
 ## Frameworks and third-party libraries used
@@ -87,3 +84,4 @@ Create a new database user and database for InoTool, i.e.:
 - FontAwesome 6.x (https://fontawesome.com/v6.0/icons)
 - jQuery 3.6.x (https://jquery.com/)
 - Chart.js (https://www.chartjs.org)
+- TCPDF 6.5.0 (http://www.tcpdf.org)

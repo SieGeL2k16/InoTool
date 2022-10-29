@@ -1,3 +1,9 @@
+#### 29-Oct-2022
+
+- Added printing of account data lists by exporting selected list as PDF file
+- Updated Symfony to 6.0.15
+- Updated Bootstrap to 5.2.2
+
 #### 11-Sep-2022
 
 - Updated Symfony to 6.0.12

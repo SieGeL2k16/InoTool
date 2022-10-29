@@ -35,13 +35,20 @@
   </div>
   <div class="col-auto">
     <button type="submit" name="btn_filter" id="btn_filter" class="btn btn-outline-secondary"><i class="fa fa-filter"></i></button>
+    <button type="button" name="btn_pdf" id="btn_pdf" class="btn btn-outline-secondary"><i class="fa-solid fa-print"></i></button>
     <button type="button" name="btn_delete" id="btn_delete" class="btn btn-outline-danger" disabled><i class="fa fa-trash"></i></button>
   </div>
+</form>
+<form method="post" action="{{ path("km_print") }}" id="frm_pdf">
+  <input type="hidden" name="f_cat" id="pdf_cat" value="">
+  <input type="hidden" name="f_month" id="pdf_month" value="">
+  <input type="hidden" name="f_year" id="pdf_year" value="">
+  <input type="hidden" name="f_search" id="pdf_search" value="">
 </form>
 <form method="post" action="{{ path("km_accListDel") }}" id="frm_acc_list_table">
   <div class="row mt-3">
     <div class="col-xxl-10 col-12">
-      <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
+      <p>Zeige {{ DATA_COUNT|format_number }} von {{ TOTAL_COUNT|format_number }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR') }}</span></p>
       <div class="table-responsive">
         <table class="table table-striped table-hover" id="tbl_account_data">
         <thead>
@@ -71,7 +78,7 @@
         {% endfor %}
         </tbody>
         </table>
-        <p>Zeige {{ DATA_COUNT|format_number(locale='de') }} von {{ TOTAL_COUNT|format_number(locale='de') }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR',locale='de')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR',locale='de') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
+        <p>Zeige {{ DATA_COUNT|format_number }} von {{ TOTAL_COUNT|format_number }} Einträge(n) | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR',locale='de') }}</span></p>
       </div>
     </div>
   </div>
@@ -104,40 +111,5 @@
 </div>
 {% endblock %}
 {% block javascripts %}
-<script>
-$(document).ready(function() {
-  $('.ino-select2').select2({});
-  
-  /** Handle category changes */
-  $(".catchanger").on('click', function() {
-    $("#accid").val($(this).data('id'));
-    document.getElementById('newcat').value=parseInt($(this).data('catid'));
-    let myModal = new bootstrap.Modal(document.getElementById('modal_catchange'));
-    myModal.show();
-  });
-
-  /** Handle click on description */
-  $(".details").on('click', function() {
-    window.location.href=$(this).data('url');
-  });
-
-  /** Handle checkboxes */
-  $(".chk_delete").on('click', function() {
-    if($(".chk_delete:checked").length)
-      {
-      $("#btn_delete").prop('disabled', false);
-      }
-    else
-      {
-      $("#btn_delete").prop('disabled', true);
-      }
-  });
-
-  /** Handle removal */
-  $("#btn_delete").on('click', function() {
-    // frm_acc_list_table
-    SwalConfirmSubmit("Wirklich "+$(".chk_delete:checked").length+" Zeile(n) löschen?",'frm_acc_list_table');
-  });
-});
-</script>
+<script src="{{ asset("js/km_list.js") }}"></script>
 {% endblock %}

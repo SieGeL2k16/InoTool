@@ -13,6 +13,7 @@ use App\Entity\AccountCategories;
 use App\Entity\AccountData;
 use App\Entity\User;
 use App\Service\AppConfigHelper;
+use App\Service\tcpdf_helper;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
@@ -71,8 +72,7 @@ class OverviewController extends AbstractController
       {
       $appConfigHelper->Set(User::CFG_ACC_BROWSER_F_YEAR,(string)$f_year,$user);
       }
-    // @todo Make locale configurable / read from user's setting
-    $dfmt = new IntlDateFormatter( "de-DE" ,IntlDateFormatter::FULL, IntlDateFormatter::NONE,null,null,"MMMM");
+    $dfmt = new IntlDateFormatter( $request->getLocale() ,IntlDateFormatter::FULL, IntlDateFormatter::NONE,null,null,"MMMM");
     $month_list = [];
     for($i = 1; $i < 13; $i++)
       {
@@ -115,6 +115,88 @@ class OverviewController extends AbstractController
       'TOTAL_COUNT'   => $dbstats['TOTAL_ROWS'],
       'REVENUE'       => $revenue,
       ]);
+    }
+  
+  /**
+   * Handles printing of selected list items.
+   * @param Request $request
+   * @param ManagerRegistry $registry
+   * @param tcpdf_helper $pdf
+   * @return Response
+   * @throws Exception
+   */
+  #[Route('/kontomanager/print',name: 'km_print',methods: ["POST"])]
+  public function Print(Request $request, ManagerRegistry $registry, tcpdf_helper $tcpdf):Response
+    {
+    /** @var User $user */
+    $user       = $this->getUser();
+    $f_category = $request->get('f_cat');
+    $f_month    = $request->get('f_month');
+    $f_year     = $request->get('f_year');
+    $f_search   = $request->get('f_search');
+    $dbstats    = $registry->getRepository(AccountData::class)->GetDatabaseStatistics($user);
+    $data       = $registry->getRepository(AccountData::class)->GetBrowserData($user,['F_CATEGORY' => $f_category,'F_MONTH' => $f_month,'F_YEAR' => $f_year,'F_SEARCH' => '']);
+    $revenue    = ['INCOME' => 0.00, 'OUTCOME' => 0.00,'DIFF' => 0.00];
+    $dmin       = new DateTime($data[count($data)-1]['dt']);
+    $dmax       = new DateTime($data[0]['dt']);
+    foreach($data as $item)
+      {
+      if($item['is_income'])
+        {
+        $key = 'INCOME';
+        }
+      else
+        {
+        $key = 'OUTCOME';
+        }
+      $revenue[$key]+=$item['amount'];
+      }
+    $revenue['DIFF'] = abs($revenue['INCOME']) - abs($revenue['OUTCOME']);
+    if($f_category !== "-1")
+      {
+      $fcname = ($registry->getRepository(AccountCategories::class)->find((int)$f_category))->getName();
+      }
+    else
+      {
+      $fcname = "Alle Kategorien";
+      }
+    if($f_month !== "-1")
+      {
+      $dfmt = new IntlDateFormatter( $request->getLocale() ,IntlDateFormatter::FULL, IntlDateFormatter::NONE,null,null,"MMMM");
+      $fmonth = $dfmt->format((new DateTime(sprintf("%04d-%02d-01",date('Y'),$f_month))));
+      }
+    else
+      {
+      $fmonth = "Januar-Dezember";
+      }
+    if($f_year !== "-1")
+      {
+      $fyear = $f_year;
+      }
+    else
+      {
+      $fyear = sprintf("der Jahre %s - %s",$dmin->format('Y'),$dmax->format('Y'));
+      }
+    // Create PDF:
+    $tcpdf->Init("P","mm","A4",false);
+    $pdf = $tcpdf->SetMetaData($user);
+    $pdf->setTitle("Kontoauszug");
+    $pdf->setSubject("Kontoauszug");
+    $html = $this->render('kontomanager/pdf/list.html.twig', [
+      'F_CATEGORY'      => $fcname,
+      'F_MONTH'         => $fmonth,
+      'F_YEAR'          => $fyear,
+      'DATA'            => $data,
+      'DATA_COUNT'      => count($data),
+      'TOTAL_COUNT'     => $dbstats['TOTAL_ROWS'],
+      'REVENUE'         => $revenue,
+      'ACCOUNT_NUMBER'  => $data[0]['iban'],
+      ])->getContent();
+    $pdf->SetFont('helvetica', '', 9);
+    $pdf->AddPage();
+    $pdf->WriteHTMLCell(0,0,tcpdf_helper::PAGE_MARGIN_X,10,$html);
+    $fname = sprintf("Kontoauszug_%s-%s.pdf",$dmin->format("Ymd"),$dmax->format("Ymd"));
+    return $tcpdf->Download($fname,$pdf->Output($fname,'S'));
     }
   
   /**

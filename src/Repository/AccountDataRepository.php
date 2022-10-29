@@ -149,7 +149,7 @@ class AccountDataRepository extends ServiceEntityRepository
       $where.=" and to_char(ad.booking_date,'YYYY')=:y";
       $dbpar['y'] = $params['F_YEAR'];
       }
-    $SQL  = "select ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.id as catid,ac.name as category_name,ad.description,ad.amount,aba.bank_shortcut,aba.logo_name,ad.is_income,count(*) OVER() AS total_count
+    $SQL  = "select ad.id, to_char(ad.booking_date,'DD.MM.YYYY') AS dt,ac.id as catid,ac.name as category_name,ad.description,ad.amount,aba.bank_shortcut,aba.logo_name,ad.is_income,aba.iban ,count(*) OVER() AS total_count
              from account_data ad
              left join account_categories ac on (ad.ref_category_id = ac.id)
              left join account_bank_accounts aba on(ad.accounting_number = aba.iban)

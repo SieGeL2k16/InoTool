@@ -1,0 +1,30 @@
+<h1>Kontoauszug für {{ ACCOUNT_NUMBER }}</h1>
+Kategorie: "{{ F_CATEGORY }}",
+ Zeitraum: {{ F_MONTH }} {{ F_YEAR }}
+<p>{{ DATA_COUNT|format_number }} Einträge | Einnahmen: <span class="{{ REVENUE['INCOME']|MoneyColor }}">{{ REVENUE['INCOME']|format_currency('EUR')}}</span> | Ausgaben: <span class="{{ REVENUE['OUTCOME']|MoneyColor }}">{{ REVENUE['OUTCOME']|format_currency('EUR') }}</span> | Diff.: <span class="{{ REVENUE['DIFF']|MoneyColor }}">{{ REVENUE['DIFF']|format_currency('EUR') }}</span></p>
+<p>&nbsp;</p>
+<table cellpadding=\"2\" cellspacing=\"1\">
+<thead>
+<tr>
+  <th style="border-bottom: 1px solid #000000;"><b>Datum</b></th>
+  <th style="border-bottom: 1px solid #000000;"><b>Kategorie</b></th>
+  <th style="border-bottom: 1px solid #000000;"><b>Buchungstext</b></th>
+  <th style="border-bottom: 1px solid #000000;text-align: right"><b>Summe</b></th>
+</tr>
+</thead>
+<tbody>
+{% for d in DATA %}
+  {% if loop.index0 % 2 %}
+    {% set row_color = '#ffffff' %}
+  {% else %}
+    {% set row_color = '#eeeeee' %}
+  {% endif %}
+<tr style="background-color: {{ row_color }};">
+  <td width="55" >{{ d['dt'] }}</td>
+  <td width="100">{% if d['catid'] %}{{ d['category_name'] }}{% else %}<b>Keine Kategorie</b>{% endif %}</td>
+  <td width="270">{{ d['description'] }}</td>
+  <td width="70" style="text-align: right; padding: 2px;">{{ d['amount']|format_currency('EUR') }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>

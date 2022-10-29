@@ -2,7 +2,7 @@ twig:
     default_path: '%kernel.project_dir%/templates'
 
     globals:
-        APP_VERSION:    '%env(APP_VERSION)%'
+        APP_VERSION:    '%APP_VERSION%'
         APP_LOGIN_LOGO: '%env(resolve:LOGIN_LOGO)%'
 
 when@test:
