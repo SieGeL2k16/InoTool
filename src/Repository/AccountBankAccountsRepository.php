@@ -30,6 +30,11 @@ class AccountBankAccountsRepository extends ServiceEntityRepository
   public function getCurrentBalance(User $user):array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("select aba.balance, aba.balance_date from account_bank_accounts aba where aba.ref_user_id=? and aba.balance_date = (select max(i.balance_date) from account_bank_accounts i where i.id = aba.id)",[$user->getId()]);
+    $res = $stmt->fetchAssociative();
+    if($res === false)
+      {
+      return [];
+      }
     return $stmt->fetchAssociative();
     }
   
