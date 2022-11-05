@@ -15,7 +15,7 @@
     <td id="C_{{ DATA['cat_map'][c] }}">{{ c }}</td>
   {% for m,mname in MONTHS %}
     {% if DATA['data'][c][m] is defined %}
-    <td class="text-end {{ DATA['data'][c][m]|MoneyColor }} mp_click" data-catid="{{ DATA['cat_map'][c] }}" data-month="{{ m }}">{{ DATA['data'][c][m]|format_currency('EUR') }}</td>
+    <td class="text-end {{ DATA['data'][c][m]|MoneyColor }} mp_click" data-catid="{{ DATA['cat_map'][c] }}" data-month="{{ m }}" title="{{ mname }}">{{ DATA['data'][c][m]|format_currency('EUR') }}</td>
     {% else %}
     <td class="text-end">---</td>
     {% endif %}
@@ -37,4 +37,3 @@
 </tr>
 </tfoot>
 </table>
-{{ dump() }}

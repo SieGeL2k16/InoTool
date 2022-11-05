@@ -44,6 +44,12 @@
             </div>
           </div>
           <div class="row">
+            <div class="col mb-3">
+              <label for="recipient_account" class="form-label">IBAN / Konto</label>
+              <input type="text" name="recipient_account" id="recipient_account" class="form-control" value="{{ ENTRY.recipientAccount }}">
+            </div>
+          </div>
+          <div class="row">
             <div class="col-12">
               <label for="description" class="form-label">Buchungstext</label>
               <textarea class="form-control" rows="5" name="description" id="description" required="required">{{ ENTRY.description }}</textarea>

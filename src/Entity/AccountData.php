@@ -50,6 +50,9 @@ class AccountData
     #[ORM\Column(type: 'boolean')]
     private $IsIncome;
 
+    #[ORM\Column(length: 60, nullable: true)]
+    private ?string $RecipientAccount = null;
+
     public function __construct()
       {
       $this->setCurrency('EUR')->setBankId(1);
@@ -186,4 +189,16 @@ class AccountData
     $this->IsIncome = $fl;
     return $this;
     }
+
+  public function getRecipientAccount(): ?string
+  {
+      return $this->RecipientAccount;
+  }
+
+  public function setRecipientAccount(?string $RecipientAccount): self
+  {
+      $this->RecipientAccount = $RecipientAccount;
+
+      return $this;
+  }
 }

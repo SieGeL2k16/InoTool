@@ -96,7 +96,7 @@ class ReportingController extends AbstractController
     }
   
   /**
-   * Calculates all values, renders HTML table and returns it as JSON object.
+   * Calculates all values, renders HTML table from template and returns it as JSON object.
    * @param Request $request
    * @param int $year
    * @return JsonResponse
@@ -127,7 +127,7 @@ class ReportingController extends AbstractController
     }
   
   /**
-   * Returns entries for a given Category ID + Month + year
+   * Returns entries for a given Category ID + Month + year as modal dialog
    * @param Request $request
    * @return JsonResponse
    */
@@ -142,9 +142,46 @@ class ReportingController extends AbstractController
     $data = $this->registry->getRepository(AccountData::class)->GetListByCatMonYear($user->getId(),$catid,$mon,$year);
     return new JsonResponse([
       'HTML' => $this->render('kontomanager/report_costs_month_modal.html.twig',[
-                  'DATA'    => $data,
-                  'CATLIST' => $this->registry->getRepository(AccountCategories::class)->getCategoryList($user),
-                ])->getContent(),
-      ]);
+      'DATA'    => $data,
+      'CATLIST' => $this->registry->getRepository(AccountCategories::class)->getCategoryList($user),
+      ])->getContent(),
+    ]);
+    }
+  
+  /**
+   * Saves changes from modal dialog
+   * @param Request $request
+   * @return Response
+   */
+  #[Route("/kontomanager/report/speichernKatMon",name: "km_report_listcat_save", methods: ["POST"])]
+  public function SaveFromCategoryAndMonth(Request $request):Response
+    {
+    $year = null;
+    foreach($request->get('cat') as $item)
+      {
+      $ids = explode("|",$item);    // 0 => AccId, 1 => CatId
+      $obj = $this->registry->getRepository(AccountData::class)->find((int)$ids[0]);
+      if($obj === null)
+        {
+        $this->logger->warning(__METHOD__.": Object with ID={$ids[0]} not found?!");
+        continue;
+        }
+      $year = $obj->getBookingDate()->format('Y');
+      // No good idea here, unnecessary query for categories. @todo Refactor!
+      $cat = $this->registry->getRepository(AccountCategories::class)->find((int)$ids[1]);
+      $obj->setRefCategory($cat);
+      $this->registry->getManager()->persist($obj);
+      if($cat !== null)
+        {
+        $this->logger->info("Set cat {$cat->getName()} on account data entry #{$obj->getId()}");
+        }
+      else
+        {
+        $this->logger->info("Set cat to NULL on account data entry #{$obj->getId()}");
+        }
+      }
+    $this->registry->getManager()->flush();
+    $this->addFlash("success","Daten wurden erfolgreich aktualisiert!");
+    return $this->redirectToRoute("km_report_costsMonth",['year' => $year]);
     }
   }

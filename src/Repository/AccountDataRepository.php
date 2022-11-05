@@ -29,7 +29,7 @@ class AccountDataRepository extends ServiceEntityRepository
   public function __construct(ManagerRegistry $registry)
     {
     parent::__construct($registry, AccountData::class);
-    $this->istmt = $this->getEntityManager()->getConnection()->prepare("insert into account_data(id, ref_category_id, ref_user_id, booking_date, description, amount, accounting_number, currency, bank_id, is_income) values(nextval('account_data_id_seq'),:catid,:uid,:bdate,:descr,:amount,:accnum,:currency,:bankid,:isin)");
+    $this->istmt = $this->getEntityManager()->getConnection()->prepare("insert into account_data(id, ref_category_id, ref_user_id, booking_date, description, amount, accounting_number, currency, bank_id, is_income,recipient_account) values(nextval('account_data_id_seq'),:catid,:uid,:bdate,:descr,:amount,:accnum,:currency,:bankid,:isin,:recpacc)");
     }
   
   /**
@@ -281,7 +281,7 @@ class AccountDataRepository extends ServiceEntityRepository
         WHERE to_char(d.booking_date ,'yyyy') = :y
           and d.ref_user_id = :uid
      GROUP BY d.ref_category_id , c.name , to_char(d.booking_date ,'MM')
-     ORDER BY 3,1,2",['y' => $year, 'uid' => $userid]);
+     ORDER BY 3,1,2 nulls first",['y' => $year, 'uid' => $userid]);
     while($d = $res->fetchAssociative())
       {
       if(!in_array($d['catname'],$all_cats))
@@ -317,13 +317,22 @@ class AccountDataRepository extends ServiceEntityRepository
    */
   public function GetListByCatMonYear(int $userid, int $catid,int $month, int $year):array
     {
+    $params = ['uid' => $userid, 'ym' => sprintf("%04d%02d",$year,$month)];
+    if($catid)
+      {
+      $wh = "and ref_category_id = :cid";
+      $params['cid'] = $catid;
+      }
+    else
+      {
+      $wh = "and ref_category_id is null";
+      }
     $SQL = "
       select * from account_data
        where ref_user_id = :uid
-         and ref_category_id = :cid
+         $wh
          and to_char(booking_date,'YYYYMM') = :ym
        order by booking_date desc, description";
-    $params = ['uid' => $userid, 'cid' => $catid, 'ym' => sprintf("%04d%02d",$year,$month)];
     $res = $this->getEntityManager()->getConnection()->executeQuery($SQL,$params);
     return $res->fetchAllAssociative();
     }

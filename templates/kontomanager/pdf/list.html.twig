@@ -6,10 +6,10 @@ Kategorie: "{{ F_CATEGORY }}",
 <table cellpadding=\"2\" cellspacing=\"1\">
 <thead>
 <tr>
-  <th style="border-bottom: 1px solid #000000;"><b>Datum</b></th>
-  <th style="border-bottom: 1px solid #000000;"><b>Kategorie</b></th>
-  <th style="border-bottom: 1px solid #000000;"><b>Buchungstext</b></th>
-  <th style="border-bottom: 1px solid #000000;text-align: right"><b>Summe</b></th>
+  <th width="55" style="border-bottom: 1px solid #000000;"><b>Datum</b></th>
+  <th width="100" style="border-bottom: 1px solid #000000;"><b>Kategorie</b></th>
+  <th width="270" style="border-bottom: 1px solid #000000;"><b>Buchungstext</b></th>
+  <th width="70" style="border-bottom: 1px solid #000000;text-align: right"><b>Summe</b></th>
 </tr>
 </thead>
 <tbody>
@@ -17,7 +17,7 @@ Kategorie: "{{ F_CATEGORY }}",
   {% if loop.index0 % 2 %}
     {% set row_color = '#ffffff' %}
   {% else %}
-    {% set row_color = '#eeeeee' %}
+    {% set row_color = '#dedede' %}
   {% endif %}
 <tr style="background-color: {{ row_color }};">
   <td width="55" >{{ d['dt'] }}</td>

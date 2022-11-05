@@ -35,7 +35,7 @@ class AccountBankAccountsRepository extends ServiceEntityRepository
       {
       return [];
       }
-    return $stmt->fetchAssociative();
+    return $res;
     }
   
   }

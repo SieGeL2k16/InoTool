@@ -1,41 +1,26 @@
 <table class="table table-sm table-striped table-hover">
-<thead>
-<tr>
-  <th>Datum</th>
-  <th>Kategorie</th>
-  <th>Buchungstext</th>
-  <th class="text-end">Summe</th>
-</tr>
-</thead>
-<tbody>
-{% for d in DATA %}
-<tr>
-  <td class="align-top" title="{{ d.booking_date|format_date('full') }}">{{ d.booking_date|format_date('medium') }}</td>
-  <td class="align-top">
-    <select name="cat_{{ d.id }}" id="cat_{{ d.id }}" class="form-select form-select-sm">
-      {% for c in CATLIST %}
-        <option value="{{ c['id'] }}"{% if d.ref_category_id is defined and c['id'] == d.ref_category_id  %} selected{% endif %}>{{ c['name'] }}</option>
-      {% endfor %}
-    </select>
-  </td>
-  <td class="align-top"><small>{{ d.description }}</small></td>
-  <td class="align-top text-end {{ d.amount|MoneyColor }}">{{ d.amount|format_currency('EUR') }}</td>
-</tr>
-{% endfor %}
-</tbody>
+  <thead>
+  <tr>
+    <th>Datum</th>
+    <th>Kategorie</th>
+    <th>Buchungstext</th>
+    <th class="text-end">Summe</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for d in DATA %}
+    <tr>
+      <td class="align-top" title="{{ d.booking_date|format_date('full') }}">{{ d.booking_date|format_date('medium') }}</td>
+      <td class="align-top">
+        <select name="cat[]" id="cat_{{ d.id }}" class="form-select form-select-sm">
+          {% for c in CATLIST %}
+            <option value="{{ d.id }}|{{ c['id'] }}"{% if d.ref_category_id is defined and c['id'] == d.ref_category_id  %} selected{% endif %}>{{ c['name'] }}</option>
+          {% endfor %}
+        </select>
+      </td>
+      <td class="align-top"><small>{{ d.description }}</small></td>
+      <td class="align-top text-end {{ d.amount|MoneyColor }}">{{ d.amount|format_currency('EUR') }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
 </table>
-{#
-0 => array:10 [▼
-"id" => 11526
-"ref_category_id" => 5
-"ref_user_id" => 1
-"booking_date" => "2022-01-17 00:00:00"
-"description" => "Kartenzahlung JET DANKT FUER IHREN KAUF//Berlin/DE 14-01-2022T14:02:36 Folgenr. 07 Verfalld. 1223"
-"amount" => "-76.34"
-"accounting_number" => "0115576"
-"currency" => "EUR"
-"bank_id" => 2
-"is_income" => false
-]
-
-*#}

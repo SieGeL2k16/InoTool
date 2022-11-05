@@ -34,6 +34,7 @@ class CsvImportController extends AbstractController
   private int $DB_ACC_HABEN;
   private int $DB_ACC_CURRENCY;
   private int $DB_OLD_FORMAT;
+  private int $DB_ACC_RECIPIENT_ACCOUNT;
 
   
   /**
@@ -201,6 +202,7 @@ class CsvImportController extends AbstractController
         'bankid'    => $bank->getId(),
         'uid'       => $this->getUser()->getId(),
         'catid'     => $importFilter->CheckFilter($acctext),
+        'recpacc'   => trim($csv[$this->DB_ACC_RECIPIENT_ACCOUNT]),
         ];
 
       $rc = $registry->getRepository(AccountData::class)->Insert($data);
@@ -276,6 +278,7 @@ class CsvImportController extends AbstractController
       $this->DB_ACC_HABEN     = 16;
       $this->DB_ACC_CURRENCY  = 17;
       $this->DB_OLD_FORMAT    = 2;
+      $this->DB_ACC_RECIPIENT_ACCOUNT = 5;
       }
     else
       {
@@ -360,3 +363,27 @@ class CsvImportController extends AbstractController
     return $result;
     }
   }
+
+/*
+ DB-Format=2:
+ array:18 [▼
+  0 => "Buchungstag"
+  1 => "Wert"
+  2 => "Umsatzart"
+  3 => b"Begünstigter / Auftraggeber"
+  4 => "Verwendungszweck"
+  5 => "IBAN"
+  6 => "BIC"
+  7 => "Kundenreferenz"
+  8 => "Mandatsreferenz "
+  9 => b"Gläubiger ID"
+  10 => b"Fremde Gebühren"
+  11 => "Betrag"
+  12 => b"Abweichender Empfänger"
+  13 => b"Anzahl der Aufträge"
+  14 => "Anzahl der Schecks"
+  15 => "Soll"
+  16 => "Haben"
+  17 => b"Währung"
+]
+ */

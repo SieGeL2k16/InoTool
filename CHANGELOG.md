@@ -1,3 +1,7 @@
+#### 05-Nov-2022
+
+- Report "Costs per Category & Month" finalized
+
 #### 29-Oct-2022
 
 - Added printing of account data lists by exporting selected list as PDF file

@@ -296,6 +296,7 @@ class OverviewController extends AbstractController
       ->setCurrency($request->get('currency'))
       ->setDescription($request->get('description'))
       ->setIsIncomeByAmount($amount)
+      ->setRecipientAccount($request->get('recipient_account'))
       ;
     $registry->getManager()->persist($obj);
     $registry->getManager()->flush();

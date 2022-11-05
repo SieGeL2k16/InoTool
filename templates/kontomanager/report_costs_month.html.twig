@@ -29,26 +29,26 @@
   
   </div>
 </div>
-<div class="modal fade" tabindex="-1" id="modal_list" data-ajax="{{ path("km_report_listCatMonAjax") }}">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_list_head"></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="post" action="#" id="frm_modal_list">
-          <div id="frm_body">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" form="frm_catchange"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Abbruch</button>
+<form method="post" action="{{ path("km_report_listcat_save") }}" id="frm_catchange">
+  <div class="modal fade" tabindex="-1" id="modal_list" data-ajax="{{ path("km_report_listCatMonAjax") }}">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal_list_head"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div id="frm_body">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i> Abbruch</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>
 {% endblock %}
 {% block javascripts %}
 <script>
@@ -94,8 +94,6 @@ $(document).ready(function() {
     }).fail(function(jqXHR, textStatus, errorThrown) {
       ajaxError(textStatus, errorThrown);
     });
-
-
 
     $("#modal_list_head").html("Zeige Einträge für \""+$("#C_"+c).html()+"\" in "+m.padZero()+"/"+$("#year").val());
     let myModal = new bootstrap.Modal(document.getElementById('modal_list'));
