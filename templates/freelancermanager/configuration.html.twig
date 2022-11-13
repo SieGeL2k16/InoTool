@@ -1,0 +1,112 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+  <div class="row">
+    <div class="col-12">
+      <h3><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</h3>
+    </div>
+  </div>
+  <form method="post" action="" id="frm_fl_config" class="needs-validation" novalidate>
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ihre Firma</h5>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Ihr Firmenname inkl. Rechtsform" required="required" value="{{ CONFIG.companyName }}">
+              <label for="companyName">Vollständiger Firmenname</label>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyOwner" name="companyOwner" placeholder="Name des Inhabers" required="required" value="{{ CONFIG.companyOwner }}">
+                  <label for="companyOwner">Name(n) des/der Inhaber</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="email" class="form-control" id="companyEmail" name="companyEmail" placeholder="E-Mail Adresse" value="{{ CONFIG.companyEmail }}">
+                  <label for="companyEmail">E-Mail Adresse</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="companyStreet" name="companyStreet" placeholder="Anschrift: Strasse" value="{{ CONFIG.companyStreet }}">
+              <label for="companyStreet">Strasse</label>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyPostal" name="companyPostal" placeholder="Postleitzahl" value="{{ CONFIG.companyPostal }}">
+                  <label for="companyPostal">PLZ</label>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyCity" name="companyCity" placeholder="Stadt/Ort" value="{{ CONFIG.companyCity }}">
+                  <label for="companyCity">Stadt/Ort</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyCountry" name="companyCountry" placeholder="Anschrift: Land" value="{{ CONFIG.companyCountry }}">
+                  <label for="companyCountry">Land</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyTaxNumber" name="companyTaxNumber" placeholder="Steuernummer" required="required" value="{{ CONFIG.companyTaxNumber }}">
+                  <label for="companyTaxNumber">Steuernummer / Vat-ID</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyPhone" name="companyPhone" placeholder="Rufnummer" value="{{ CONFIG.companyPhone }}">
+                  <label for="companyPhone">Telefonnummer</label>
+                </div>
+  
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="companyFax" name="companyFax" placeholder="Fax-Nummer ..." value="{{ CONFIG.companyFax }}">
+                  <label for="companyFax">Fax Nummer</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-4 col-md-6 col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Geschäftskonto</h5>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="bankName" name="bankName" placeholder="z.B. Deutsche Bank" value="{{ CONFIG.bankName }}">
+              <label for="bankName">Name der Bank</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="bankAccount" name="bankAccount" placeholder="Name des Kontoinhabers" value="{{ CONFIG.bankAccount }}">
+              <label for="bankAccount">Kontoinhaber</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="bankIban" name="bankIban" placeholder="IBAN Nummer" value="{{ CONFIG.bankIban }}">
+              <label for="bankIban">IBAN</label>
+            </div>
+            <div class="form-floating">
+              <input type="text" class="form-control" id="bankBic" name="bankBic" placeholder="BIC" value="{{ CONFIG.bankBic }}">
+              <label for="bankBic">BIC</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="mt-3 col-12">
+        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}
