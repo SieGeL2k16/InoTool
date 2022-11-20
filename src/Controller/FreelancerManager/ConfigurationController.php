@@ -9,9 +9,6 @@
 namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlConfiguration;
-use App\Repository\FlConfigurationRepository;
-use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;

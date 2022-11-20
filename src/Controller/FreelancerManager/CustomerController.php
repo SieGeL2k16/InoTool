@@ -10,6 +10,8 @@ namespace App\Controller\FreelancerManager;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -30,4 +32,15 @@ class CustomerController extends AbstractController
       'ACTNAV' => self::ACTNAV,
       ]);
     }
+
+  /**
+   * AJAX backend for customer list
+   * @param Request $request
+   * @return JsonResponse
+   */
+  public function list_ajax(Request $request):JsonResponse
+    {
+
+    }
+
   }

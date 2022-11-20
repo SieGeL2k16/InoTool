@@ -1,8 +1,33 @@
 {% extends 'InoFreelancerManager.html.twig' %}
 {% block body %}
-  <div class="row">
+  <div class="row mb-2">
     <div class="col-12">
       <h3><i class="fa-solid fa-user-group fa-fw"></i> Kunden</h3>
     </div>
   </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="table-responsive">
+        <table class="table" id="tbl_fl_customer">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Kunden-Nummer</th>
+          <th>Firma</th>
+          <th>Ansprechpartner</th>
+          <th>E-Mail Adresse</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+  var table = $("#tbl_fl_customer").DataTable();
+</script>
 {% endblock %}
