@@ -5,7 +5,7 @@
       <h3><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</h3>
     </div>
   </div>
-  <form method="post" action="" id="frm_fl_config" class="needs-validation" novalidate>
+  <form method="post" action="{{ path("fl_configuration_save") }}" id="frm_fl_config" class="needs-validation" novalidate enctype="multipart/form-data">
     <div class="row mb-3">
       <div class="col-12">
         <div class="card">
@@ -80,7 +80,7 @@
     </div>
     <div class="row">
       <div class="col-xl-4 col-md-6 col-12">
-        <div class="card">
+        <div class="card h-100">
           <div class="card-body">
             <h5 class="card-title">Geschäftskonto</h5>
             <div class="form-floating mb-3">
@@ -102,11 +102,49 @@
           </div>
         </div>
       </div>
+      <div class="col-xl-4 col-md-6 col-12">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Firmenlogo</h5>
+            <div class="mb-3">
+              <label for="companyLogo">&nbsp;</label>
+              <input type="file" class="form-control" id="companyLogo" name="companyLogo" placeholder="Firmenlogo (Jpeg/Png) hochladen" accept="image/jpeg,image/png">
+            </div>
+            <div class="">
+              {% if CONFIG.companyLogo is not null %}
+                <p>Vorhandenes Logo:</p>
+                <p>{{ CONFIG.companyLogoName }} ({{ CONFIG.companyLogoSize|format_number }} Bytes) <a href="#" title="Logo löschen" id="btn_del_logo"><i class="fa-solid fa-trash text-danger"></i></a></p>
+              {% else %}
+                <span class="text-muted">Kein Logo vorhanden.</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4 col-md-6 col-12">
+        <div class="card h-100">
+          <div class="card-body">
+            {% if CONFIG.companyLogo is not null %}
+            <img src="data:{{ CONFIG.companyLogoMimeType }};base64,{{CONFIG.companyLogo|Base64Encode }}" class="img-fluid" alt="{{ CONFIG.companyLogoName }}" title="{{ CONFIG.companyLogoName }} ({{ CONFIG.companyLogoSize|format_number }} bytes)">
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="mt-3 col-12">
-        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Einstellungen speichern</button>
       </div>
     </div>
   </form>
+  <form method="post" action="{{ path("fl_configuration_delete_logo") }}" id="frm_del">
+  </form>
+{% endblock %}
+{% block javascripts %}
+<script>
+$("#btn_del_logo").click(function(e) {
+  e.preventDefault();
+  SwalConfirmSubmit("Das Logo wirklich löschen?","frm_del");
+});
+</script>
 {% endblock %}

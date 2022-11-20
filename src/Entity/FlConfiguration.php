@@ -64,6 +64,15 @@ class FlConfiguration
     #[ORM\JoinColumn(nullable: false)]
     private ?User $RefUser = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $CompanyLogoName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $CompanyLogoSize = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $CompanyLogoMimeType = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -257,6 +266,42 @@ class FlConfiguration
     public function setRefUser(UserInterface|User $RefUser): self
     {
         $this->RefUser = $RefUser;
+
+        return $this;
+    }
+
+    public function getCompanyLogoName(): ?string
+    {
+        return $this->CompanyLogoName;
+    }
+
+    public function setCompanyLogoName(?string $CompanyLogoName): self
+    {
+        $this->CompanyLogoName = $CompanyLogoName;
+
+        return $this;
+    }
+
+    public function getCompanyLogoSize(): ?int
+    {
+        return $this->CompanyLogoSize;
+    }
+
+    public function setCompanyLogoSize(?int $CompanyLogoSize): self
+    {
+        $this->CompanyLogoSize = $CompanyLogoSize;
+
+        return $this;
+    }
+
+    public function getCompanyLogoMimeType(): ?string
+    {
+        return $this->CompanyLogoMimeType;
+    }
+
+    public function setCompanyLogoMimeType(?string $CompanyLogoMimeType): self
+    {
+        $this->CompanyLogoMimeType = $CompanyLogoMimeType;
 
         return $this;
     }

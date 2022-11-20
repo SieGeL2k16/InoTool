@@ -26,3 +26,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    monolog.formatter.user_email:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "[%%datetime%%] [%%extra.email%%] [%%extra.ipaddr%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
+
+    App\Logger\UserEmailProcessor:
+        tags:
+            - { name: monolog.processor, channel: app }
+

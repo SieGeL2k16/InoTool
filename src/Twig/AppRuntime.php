@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use phpDocumentor\Reflection\Types\Resource_;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -85,5 +86,19 @@ class AppRuntime implements RuntimeExtensionInterface
       return 'text-danger';
       }
     return 'text-success';
+    }
+
+  /**
+   * Wrapper for Base64Encode(), can be used with strings or stream resources
+   * @param string $raw
+   * @return string
+   */
+  public function Base64Encode(mixed $raw):string
+    {
+    if(is_string($raw) === true)
+      {
+      return base64_encode($raw);
+      }
+    return base64_encode(stream_get_contents($raw));
     }
   }

@@ -12,8 +12,8 @@
 </noscript>
 <div class="container h-100">
   <div class="row align-items-center h-100">
-    <div class="col-xl-4 col-10 mx-auto text-center">
-      <img src="{{ asset(APP_LOGIN_LOGO) }}" id="index_logo" class="pb-2 img-fluid">
+    <div class="col-xl-4 col-lg-6 cold-md-8 col-10 mx-auto text-center">
+      <img src="{{ asset(APP_LOGIN_LOGO) }}" id="index_logo" alt="Logo" class="pb-2 img-fluid">
       <h4>InoTool {{ APP_VERSION }}</h4>
       {% if error %}
         <div class="alert alert-danger mt-2 mb-2">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -23,11 +23,13 @@
     </div>
     <form method="post" action="#" id="frm_login" novalidate>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-      <div class="mb-2">
-        <input type="email" name="email" id="email" class="form-control" required="required" autofocus="autofocus" placeholder="E-Mail Adresse">
+      <div class="form-floating mb-3">
+        <input type="email" name="email" id="email" class="form-control" required="required" autofocus="autofocus">
+        <label for="email">Ihre E-Mail Adresse</label>
       </div>
-      <div class="mb-2">
-        <input type="password" name="password" id="password" class="form-control" required="required" placeholder="Ihr Passwort">
+      <div class="form-floating mb-3">
+        <input type="password" name="password" id="password" class="form-control" required="required">
+        <label for="password">Ihr Passwort</label>
       </div>
       <div class="mb-5">
         <button type="submit" class="btn btn-outline-dark"><i class="fas fa-sign-in-alt"></i> Einloggen</button>

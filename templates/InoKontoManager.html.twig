@@ -24,7 +24,7 @@
   {% endif %}
 <div class="container-fluid">
   <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-3 col-xl-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link {{ naventries['home'] }}" href="{{ path("km_index") }}"><i class="fa-solid fa-gauge-high fa-fw"></i> Dashboard</a></li>
@@ -45,7 +45,7 @@
     </nav>
 {% endblock %}
 {% block body_before %}
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-4">
+    <main class="col-md-9 col-lg-9 col-xl-10 ms-sm-auto px-md-4 mt-4">
 {% endblock %}
 {% block body_after %}
     </main>

@@ -6,23 +6,24 @@
   </div>
 </div>
 <form method="post" action="{{ path('km_list') }}" id="frm_acc_list_filter" class="row gx-1">
-  <div class="col-auto">
+<div class="row g-1">
+  <div class="col-xxl-2 col-3">
     <select name="f_cat" id="f_cat" class="form-select ino-select2" data-minimum-results-for-search="Infinity">
       <option value="-1">Alle Kategorien</option>
       {% for cid,cn in CATEGORYLIST %}
-       <option value="{{ cn['id'] }}"{% if F_CATEGORY == cn['id'] %} selected{% endif %}>{{ cn['name'] }}</option>
+        <option value="{{ cn['id'] }}"{% if F_CATEGORY == cn['id'] %} selected{% endif %}>{{ cn['name'] }}</option>
       {% endfor %}
     </select>
   </div>
-  <div class="col-auto">
+  <div class="col-xxl-2 col-2">
     <select name="f_month" id="f_month" class="form-select ino-select2" data-minimum-results-for-search="Infinity">
       <option value="-1">Alle Monate</option>
       {% for mid,mon in MONTHLIST %}
-      <option value="{{ mid }}"{% if F_MONTH == mid %} selected{% endif %}>{{ mon }}</option>
+        <option value="{{ mid }}"{% if F_MONTH == mid %} selected{% endif %}>{{ mon }}</option>
       {% endfor %}
     </select>
   </div>
-  <div class="col-auto">
+  <div class="col-xxl-2 col-2">
     <select name="f_year" id="f_year" class="form-select ino-select2" data-minimum-results-for-search="Infinity">
       <option value="-1">Alle Jahre</option>
       {% for y in YEARLIST %}
@@ -30,14 +31,15 @@
       {% endfor %}
     </select>
   </div>
-  <div class="col-auto">
+  <div class="col-xxl-2 col-2">
     <input type="text" name="f_srch" id="f_srch" class="form-control" value="" placeholder="Suchen nach...">
   </div>
-  <div class="col-auto">
-    <button type="submit" name="btn_filter" id="btn_filter" class="btn btn-outline-secondary"><i class="fa fa-filter"></i></button>
-    <button type="button" name="btn_pdf" id="btn_pdf" class="btn btn-outline-secondary"><i class="fa-solid fa-print"></i></button>
-    <button type="button" name="btn_delete" id="btn_delete" class="btn btn-outline-danger" disabled><i class="fa fa-trash"></i></button>
+  <div class="col-xxl-2 col-3">
+    <button type="submit" name="btn_filter" id="btn_filter" class="btn btn-outline-secondary g-0"><i class="fa fa-filter"></i></button>
+    <button type="button" name="btn_pdf" id="btn_pdf" class="btn btn-outline-secondary g-0"><i class="fa-solid fa-print"></i></button>
+    <button type="button" name="btn_delete" id="btn_delete" class="btn btn-outline-danger g-0" disabled><i class="fa fa-trash"></i></button>
   </div>
+</div>
 </form>
 <form method="post" action="{{ path("km_print") }}" id="frm_pdf">
   <input type="hidden" name="f_cat" id="pdf_cat" value="">
