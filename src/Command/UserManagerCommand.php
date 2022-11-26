@@ -4,17 +4,16 @@ namespace App\Command;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+#[AsCommand(name: 'app:user')]
 class UserManagerCommand extends Command
   {
-  // the name of the command (the part after "bin/console")
-  protected static $defaultName = 'app:user';
-
   /** @var string Name of user class to handle */
   private string $className = User::class;
 

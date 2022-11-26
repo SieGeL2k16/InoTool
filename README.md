@@ -33,7 +33,7 @@ so I've decided to port them both to Symfony using PostgreSQL as database backen
 
 Make sure to meet the requirements:
 
-- PHP 8.0 or newer - lower versions are not supported!
+- PHP 8.1 or newer - lower versions are not supported!
 - PostgreSQL 12.x or newer - tested with PgSql 14.5
 - Modern browser (see https://getbootstrap.com/docs/5.2/getting-started/browsers-devices/)
 
@@ -62,7 +62,7 @@ Create a new database user and database for InoTool, i.e.:
 #### Create `.env.local` file in Symfony root directory and takeover the following variables:
 ```
 APP_ENV=prod
-DATABASE_URL=postgresql://inotool:inotool2k21@127.0.0.1:5432/inotool?serverVersion=12&charset=utf8
+DATABASE_URL=postgresql://inotool:inotool2k21@127.0.0.1:5432/inotool?serverVersion=14&charset=utf8
 ```
 Please refer to the supplied `.env` file for a description of these variables.
 
