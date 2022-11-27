@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace App\Logger;
 
+use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
@@ -26,7 +27,7 @@ class UserEmailProcessor
   /**
    * this method is called for each log record; optimize it to not hurt performance
    */
-  public function __invoke(array $record): array
+  public function __invoke(array|LogRecord $record): array|LogRecord
     {
     try
       {
@@ -36,8 +37,16 @@ class UserEmailProcessor
       {
       return $record;
       }
-    $record['extra']['email'] = $user->getUserIdentifier();
-    $record['extra']['ipaddr'] = $this->requestStack->getMainRequest()->getClientIp();
+    if($record instanceof LogRecord)
+      {
+      $record->extra['email'] = $user->getUserIdentifier();
+      $record->extra['ipaddr'] = $this->requestStack->getMainRequest()->getClientIp();
+      }
+    else
+      {
+      $record['extra']['email'] = $user->getUserIdentifier();
+      $record['extra']['ipaddr'] = $this->requestStack->getMainRequest()->getClientIp();
+      }
     return $record;
     }
   }

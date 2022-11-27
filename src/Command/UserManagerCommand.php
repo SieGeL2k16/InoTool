@@ -17,13 +17,10 @@ class UserManagerCommand extends Command
   /** @var string Name of user class to handle */
   private string $className = User::class;
 
-  /**
-   * @var EntityManagerInterface
-   */
+  /** @var EntityManagerInterface */
   private EntityManagerInterface $em;
-  /**
-   * @var UserPasswordHasherInterface
-   */
+
+  /** @var UserPasswordHasherInterface */
   private UserPasswordHasherInterface $passwordEncoder;
 
   /** @var array|string[] Roles available in this application */
@@ -63,7 +60,7 @@ class UserManagerCommand extends Command
    * @param OutputInterface $output
    * @return int
    */
-  protected function execute(InputInterface $input, OutputInterface $output)
+  protected function execute(InputInterface $input, OutputInterface $output): int
     {
     $this->io = new SymfonyStyle($input, $output);
     $this->io->section('User Manager - Show existing users');

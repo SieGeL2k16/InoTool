@@ -1,0 +1,129 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item h3" aria-current="page"><a href="{{ path("fl_customer_list") }}"><i class="fa-solid fa-user-group fa-fw"></i> Kunden</a></li>
+          <li class="breadcrumb-item active h3" aria-current="page">{{ PAGE_TITLE }}</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <form method="post" action="{{ path("fl_customer_save") }}" class="needs-validation" novalidate >
+    <input type="hidden" name="CUSTID" value="{{ CUSTOMER.id|default(0) }}">
+    <div class="row">
+      <div class="col-xxl-6 col-md-12 mb-3">
+        <div class="card">
+          <div class="card-header">
+            <span>Kundendaten</span>
+            {% if CUSTOMER.createdOn != "" %}
+            <small class="text-muted"> (Erstellt am {{ CUSTOMER.createdOn|format_datetime }}{% if CUSTOMER.lastModifiedOn != "" %}, zuletzt geändert am {{ CUSTOMER.lastModifiedOn|format_datetime }}{% endif %})</small>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="customerNumber" name="customerNumber" placeholder="Kundennummer" required="required" value="{{ CUSTOMER.customerNumber }}">
+                  <label for="customerNumber">Kundennummer</label>
+                </div>
+              </div>
+              <div class="col pt-3">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="active" name="active" value="1"{% if CUSTOMER.active == true %} checked{% endif %}>
+                  <label class="form-check-label" for="active">Kunde ist aktiv?</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name der Firma" required="required" value="{{ CUSTOMER.name }}">
+              <label for="name">Name der Firma</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="street" name="street" placeholder="Strasse" value="{{ CUSTOMER.street }}">
+              <label for="street">Strasse</label>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Postleitzahl" value="{{ CUSTOMER.postalCode }}">
+                  <label for="postalCode">PLZ</label>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="city" name="city" placeholder="Stadt/Ort" value="{{ CUSTOMER.city }}">
+                  <label for="city">Stadt/Ort</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="country" name="country" placeholder="Land" value="{{ CUSTOMER.country }}">
+              <label for="country">Land</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="url" class="form-control" id="customerUrl" name="customerUrl" placeholder="Website" value="{{ CUSTOMER.customerUrl }}">
+              <label for="customerUrl">Website</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-3">
+          <div class="card-header">
+            Ansprechpartner
+          </div>
+          <div class="card-body">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Name" required="required" value="{{ CUSTOMER.contactName }}">
+              <label for="contactName">Name des Ansprechpartners</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="contactEmail" name="contactEmail" placeholder="E-Mail Adresse" required="required" value="{{ CUSTOMER.contactEmail }}">
+              <label for="contactEmail">E-Mail Adresse</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="contactPosition" name="contactPosition" placeholder="Position" value="{{ CUSTOMER.contactPosition }}">
+              <label for="contactPosition">Position</label>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="tel" class="form-control" id="phoneBusiness" name="phoneBusiness" placeholder="Telefonnummer: Geschäftlich" value="{{ CUSTOMER.phoneBusiness }}">
+                  <label for="phoneBusiness">Telefon: Geschäftlich</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="tel" class="form-control" id="phoneFax" name="phoneFax" placeholder="Telefonnummer: Fax" value="{{ CUSTOMER.phoneFax }}">
+                  <label for="phoneFax">Telefon: Faxnummer</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="tel" class="form-control" id="phoneMobile" name="phoneMobile" placeholder="Telefonnummer: Mobil" value="{{ CUSTOMER.phoneMobile }}">
+                  <label for="phoneMobile">Telefon: Handy</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-3">
+                  <input type="tel" class="form-control" id="phonePrivate" name="phonePrivate" placeholder="Telefonnummer: Privat" value="{{ CUSTOMER.phonePrivate }}">
+                  <label for="phoneBusiness">Telefon: Privat</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("fl_customer_list") }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

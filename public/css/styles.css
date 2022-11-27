@@ -68,7 +68,7 @@ a:hover {
   width: 150px !important;
 }
 
-#tbl_ah tbody td {
+#tbl_ah tbody td, .td_edit {
   cursor: pointer;
 }
 
@@ -183,4 +183,9 @@ a:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width:1px;
+}
+
+/* Overwrite active color for breadcrumb to black */
+.breadcrumb-item.active {
+  color: #212529;
 }

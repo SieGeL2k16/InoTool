@@ -1,6 +1,19 @@
+#### 26-Nov-2022
+
+- Implemented Freelancer->Customer list + form
+- Updated Fontawesome to 6.2.1
+- Updated Bootstrap to 5.2.3
+- Updated Datatables to 1.13.1
+- Updated symfony to 6.1.7, now requires PHP Version 8.1.x or newer
+
+#### 20-Nov-2022
+
+- Preferences for Freelancer integrated
+
 #### 05-Nov-2022
 
 - Report "Costs per Category & Month" finalized
+- Started with Freelancer implementation
 
 #### 29-Oct-2022
 

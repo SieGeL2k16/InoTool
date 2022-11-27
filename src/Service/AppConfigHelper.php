@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
  * Service for AppConfig functionality.
- * @package p-man
+ * @package InoTool
  * @author Sascha 'SieGeL' Pfalz <webmaster@in-ovation.de>
  * @version 1.0.0 (13-Nov-2021)
  */
@@ -58,7 +58,7 @@ class AppConfigHelper
    * @param string $val
    * @param User|null $user
    */
-  public function Set(string $key, string $val, User $user = null)
+  public function Set(string $key, string $val, User $user = null): void
     {
     $obj = $this->GetObject($key,$user);
     if($obj === null)
@@ -72,11 +72,11 @@ class AppConfigHelper
     }
   
   /**
-   * Removes an config item.
+   * Removes a config item.
    * @param string $key Config item to remove
    * @param User|null $user Opt. user
    */
-  public function Del(string $key, User $user = null)
+  public function Del(string $key, User $user = null): void
     {
     $obj = $this->GetObject($key, $user);
     if($obj === null)

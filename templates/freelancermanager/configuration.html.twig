@@ -2,15 +2,21 @@
 {% block body %}
   <div class="row">
     <div class="col-12">
-      <h3><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</h3>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active h3" aria-current="page"><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</li>
+        </ol>
+      </nav>
     </div>
   </div>
   <form method="post" action="{{ path("fl_configuration_save") }}" id="frm_fl_config" class="needs-validation" novalidate enctype="multipart/form-data">
     <div class="row mb-3">
       <div class="col-12">
         <div class="card">
+          <div class="card-header">
+            Ihre Firma
+          </div>
           <div class="card-body">
-            <h5 class="card-title">Ihre Firma</h5>
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Ihr Firmenname inkl. Rechtsform" required="required" value="{{ CONFIG.companyName }}">
               <label for="companyName">Vollständiger Firmenname</label>
@@ -81,8 +87,10 @@
     <div class="row">
       <div class="col-xl-4 col-md-6 col-12">
         <div class="card h-100">
+          <div class="card-header">
+            Geschäftskonto
+          </div>
           <div class="card-body">
-            <h5 class="card-title">Geschäftskonto</h5>
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="bankName" name="bankName" placeholder="z.B. Deutsche Bank" value="{{ CONFIG.bankName }}">
               <label for="bankName">Name der Bank</label>
@@ -104,8 +112,10 @@
       </div>
       <div class="col-xl-4 col-md-6 col-12">
         <div class="card h-100">
+          <div class="card-header">
+            Firmenlogo
+          </div>
           <div class="card-body">
-            <h5 class="card-title">Firmenlogo</h5>
             <div class="mb-3">
               <label for="companyLogo">&nbsp;</label>
               <input type="file" class="form-control" id="companyLogo" name="companyLogo" placeholder="Firmenlogo (Jpeg/Png) hochladen" accept="image/jpeg,image/png">

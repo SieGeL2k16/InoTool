@@ -8,6 +8,13 @@
 
 namespace App\Controller\FreelancerManager;
 
+use App\Entity\FlCustomer;
+use App\Repository\FlCustomerRepository;
+use App\Service\globalHelper;
+use DateTime;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +27,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class CustomerController extends AbstractController
   {
   const ACTNAV = 'customer';
+
+  /** @var LoggerInterface $logger */
+  private LoggerInterface $logger;
+  
+  /**
+   * @param LoggerInterface $logger
+   */
+  public function __construct(LoggerInterface $logger)
+    {
+    $this->logger = $logger;
+    }
   
   /**
    * Lists all customer currently registered for current user.
@@ -32,15 +50,123 @@ class CustomerController extends AbstractController
       'ACTNAV' => self::ACTNAV,
       ]);
     }
-
+  
   /**
    * AJAX backend for customer list
    * @param Request $request
+   * @param FlCustomerRepository $customerRepository
    * @return JsonResponse
+   * @throws Exception
    */
-  public function list_ajax(Request $request):JsonResponse
+  #[Route("ajax",name: "fl_customer_ajax")]
+  public function list_ajax(Request $request,FlCustomerRepository $customerRepository):JsonResponse
     {
-
+    $user     = $this->getUser();
+    $colcount = count($request->get('columns'));
+    $draw     = $request->get('draw');      // Draw counter for datatable rendering
+    $params   = [
+      'START'   => (int)$request->get('start'),
+      'LIMIT'   => (int)$request->get('length'),
+      'SEARCH'  => $request->get('search')['value'] ?? '',
+      'ORDER'   => globalHelper::parseDtOrder($request->get('order'),$colcount),
+      ];
+    $data     = $customerRepository->GetDataTablesValues($params,$user->getId(),$colcount);
+    $total    = $customerRepository->count(['RefUser' => $user]);
+    return new JsonResponse([
+      'draw'            => (int)$draw,
+      'recordsTotal'    => $total,
+      'recordsFiltered' => $data['TOTAL'],
+      'data'            => $data['DATA'],
+      ]);
+    }
+  
+  /**
+   * HTML formular to add or modify customer data.
+   * @param FlCustomerRepository $customerRepository
+   * @param int $id 0 => New customer, else customer id to modify
+   * @return Response
+   * @throws Exception
+   */
+  #[Route("form/{id}",name: "fl_customer_form")]
+  public function form(FlCustomerRepository $customerRepository, int $id = 0):Response
+    {
+    $user = $this->getUser();
+    if($id)
+      {
+      $customer = $customerRepository->findOneBy(['RefUser' => $user,'id' => $id]);
+      if($customer === null)
+        {
+        $this->addFlash('warning',"Kunde mit ID = $id nicht gefunden?");
+        $this->logger->warning(__METHOD__.": Customer with ID=$id not found - cannot edit?!");
+        return $this->redirectToRoute('fl_customer_list');
+        }
+      $page_title = 'Bearbeite "'.$customer->getName().'"';
+      }
+    else
+      {
+      $customer = (new FlCustomer())
+        ->setRefUser($user)
+        ->setCustomerNumber(sprintf("%s",$customerRepository->GetNextCustomerNumber($user)))
+        ->setActive(true)
+        ;
+      $page_title = "Neuen Kunden anlegen";
+      }
+    return $this->render('freelancermanager/customer_form.html.twig',[
+      'ACTNAV'      => self::ACTNAV,
+      'CUSTOMER'    => $customer,
+      'PAGE_TITLE'  => $page_title,
+      ]);
+    }
+  
+  /**
+   * Saves form data.
+   * @param Request $request
+   * @param EntityManagerInterface $entity
+   * @return Response
+   */
+  #[Route("save",name: "fl_customer_save",methods: ['POST'])]
+  public function save(Request $request, EntityManagerInterface $entity):Response
+    {
+    $user= $this->getUser();
+    $id = $request->get('CUSTID',0);
+    if($id)
+      {
+      $customer = $entity->getRepository(FlCustomer::class)->findOneBy(['RefUser' => $user,'id' => $id]);
+      if($customer === null)
+        {
+        $this->addFlash('warning',"Kunde mit ID = $id nicht gefunden?");
+        $this->logger->warning(__METHOD__.": Customer with ID=$id not found - cannot save?!");
+        return $this->redirectToRoute('fl_customer_list');
+        }
+      $customer->setLastModifiedOn(new DateTime());
+      $logsuffix = 'updated.';
+      }
+    else
+      {
+      $customer = (new FlCustomer())->setRefUser($user);
+      $logsuffix = 'created.';
+      }
+    $customer->setCustomerNumber($request->get('customerNumber'))
+      ->setActive((bool)$request->get('active'))
+      ->setName($request->get('name'))
+      ->setStreet($request->get('street'))
+      ->setPostalCode($request->get('postalCode'))
+      ->setCity($request->get('city'))
+      ->setCountry($request->get('country'))
+      ->setCustomerUrl($request->get('customerUrl'))
+      ->setContactName($request->get('contactName'))
+      ->setContactEmail($request->get('contactEmail'))
+      ->setContactPosition($request->get('contactPosition'))
+      ->setPhoneBusiness($request->get('phoneBusiness'))
+      ->setPhoneFax($request->get('phoneFax'))
+      ->setPhoneMobile($request->get('phoneMobile'))
+      ->setPhonePrivate($request->get('phonePrivate'))
+      ;
+    $entity->persist($customer);
+    $entity->flush();
+    $this->addFlash('success',"Kunde {$customer->getName()} gespeichert.");
+    $this->logger->info("Customer {$customer->getName()} successfully $logsuffix");
+    return $this->redirectToRoute('fl_customer_list');
     }
 
   }

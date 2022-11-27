@@ -1,33 +1,70 @@
 {% extends 'InoFreelancerManager.html.twig' %}
 {% block body %}
-  <div class="row mb-2">
+  <div class="row">
     <div class="col-12">
-      <h3><i class="fa-solid fa-user-group fa-fw"></i> Kunden</h3>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active h3" aria-current="page"><i class="fa-solid fa-user-group fa-fw"></i> Kunden</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <button type="button" class="btn btn-primary" onclick="window.location.href='{{ path("fl_customer_form") }}'"><i class="fa-solid fa-user-plus"></i> Neuen Kunden anlegen</button>
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
-      <div class="table-responsive">
-        <table class="table" id="tbl_fl_customer">
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Kunden-Nummer</th>
-          <th>Firma</th>
-          <th>Ansprechpartner</th>
-          <th>E-Mail Adresse</th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
+    <div class="col-sm-12 table-responsive">
+      <table class="table table-sm table-striped table-hover" id="tbl_fl_customer">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Kunden-Nummer</th>
+        <th>Firma</th>
+        <th>Ansprechpartner</th>
+        <th>E-Mail Adresse</th>
+        <th class="text-center">Aktiv?</th>
+      </tr>
+      </thead>
+      <tbody class="table-group-divider">
 
-        </tbody>
-        </table>
-      </div>
+      </tbody>
+      </table>
     </div>
   </div>
 {% endblock %}
 {% block javascripts %}
 <script>
-  var table = $("#tbl_fl_customer").DataTable();
+  var formurl = "{{ path("fl_customer_form") }}";
+  var dtable  = $("#tbl_fl_customer").DataTable({
+    columnDefs: [
+      {className: "td_edit", targets: [0,1,2,3,4]},
+      {className: "td_edit text-center", targets: [5]}
+      ],
+    "processing": true,
+    'serverSide': true,
+    ajax: {
+      url: '{{ path("fl_customer_ajax") }}',
+    },
+    "stateSave": true,
+    "stateDuration": 0,
+    "fnInitComplete": function() {
+      this.fnAdjustColumnSizing(true);
+    },
+  });
+
+  // Handle click on table entry
+  $('#tbl_fl_customer tbody').on('click', 'td', function () {
+    var data = dtable.cell(this).data();
+    if (Array.isArray(data) === true)
+      {
+      return;
+      }
+    var row = dtable.row(dtable.cell(this).index().row).data();
+    window.location.href=formurl+"/"+row[0];
+    console.log(row);
+  });
+
 </script>
 {% endblock %}
