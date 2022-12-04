@@ -1,35 +1,6 @@
 /** Global javascript */
 
 /**
- * Asks for confirmation when deleting.
- * @param confirm_url URL to process if user confirms removal.
- */
-function AskForDelete(confirm_url, add_text)
-  {
-  if(add_text === "")
-    {
-    add_text = "Das Löschen kann nicht rückgängig gemacht werden!";
-    }
-  Swal.fire({
-    title: 'Wirklich löschen?',
-    html: add_text,
-    type: 'warning',
-    showCancelButton: true,
-    cancelButtonColor: '#3085d6',
-    confirmButtonColor: '#d33',
-    confirmButtonText: '<i class="bx bx-trash"></i> Löschen',
-    cancelButtonClass: 'btn btn-primary ml-2',
-    confirmButtonClass: 'btn btn-danger',
-    cancelButtonText: '<i class="bx bx-window-close"></i> Abbruch',
-    buttonsStyling: false,
-    }).then(function (result) {
-    if (result.value) {
-      window.location.href=confirm_url;
-      }
-    });
-  }
-
-/**
  * Confirm dialog which submits a given form id
  * @param confirm_text
  * @param form_id
@@ -42,9 +13,8 @@ function SwalConfirmSubmit(confirm_text, form_id)
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Löschen',
-      cancelButtonText: 'Abbruch'
+      confirmButtonText: '<i class="fa-solid fa-trash"></i> Löschen',
+      cancelButtonText: '<i class="fa-solid fa-xmark"></i> Abbruch',
     }).then((result) => {
       if (result.isConfirmed) {
         $("#"+form_id).submit();

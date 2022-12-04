@@ -122,8 +122,21 @@
     <div class="row">
       <div class="col">
         <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+        {% if CUSTOMER.id|default(0) %}
+        <button type="button" class="btn btn-danger" id="btn_cust_delete"><i class="fa-solid fa-trash"></i> Löschen</button>
+        {% endif %}
         <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("fl_customer_list") }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
       </div>
     </div>
   </form>
+  <form method="post" action="{{ path("fl_customer_delete") }}" id="frm_cust_delete">
+    <input type="hidden" name="CUSTID" value="{{ CUSTOMER.id }}">
+  </form>
+{% endblock %}
+{% block javascripts %}
+<script>
+$("#btn_cust_delete").on('click', function() {
+  SwalConfirmSubmit("Diesen Kunden wirklich löschen?<br>Alle diesem Kunden zugeordnete Daten werden ebenfalls gelöscht!",'frm_cust_delete');
+});
+</script>
 {% endblock %}

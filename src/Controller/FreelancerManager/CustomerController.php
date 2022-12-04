@@ -12,6 +12,7 @@ use App\Entity\FlCustomer;
 use App\Repository\FlCustomerRepository;
 use App\Service\globalHelper;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -143,7 +144,7 @@ class CustomerController extends AbstractController
       }
     else
       {
-      $customer = (new FlCustomer())->setRefUser($user);
+      $customer = (new FlCustomer())->setRefUser($user)->setCreatedOn(new DateTimeImmutable());
       $logsuffix = 'created.';
       }
     $customer->setCustomerNumber($request->get('customerNumber'))
@@ -168,5 +169,29 @@ class CustomerController extends AbstractController
     $this->logger->info("Customer {$customer->getName()} successfully $logsuffix");
     return $this->redirectToRoute('fl_customer_list');
     }
-
+  
+  /**
+   * Removes a customer from database.
+   * @param Request $request
+   * @param EntityManagerInterface $em
+   * @return Response
+   */
+  #[Route("delete",name: "fl_customer_delete",methods: ['POST'])]
+  public function RemoveCustomer(Request $request,EntityManagerInterface $em):Response
+    {
+    $custid = (int)$request->get('CUSTID');
+    $customer = $em->getRepository(FlCustomer::class)->findOneBy(['id' => $custid, 'RefUser' => $this->getUser()]);
+    if($customer === null)
+      {
+      $this->logger->warning(__METHOD__.": No customer found with ID=$custid - delete not possible!");
+      $this->addFlash('warning',"Kunde nicht gefunden - Löschen nicht möglich!");
+      return $this->redirectToRoute('fl_customer_list');
+      }
+    $em->remove($customer);
+    $em->flush();
+    $this->logger->info("Customer {$customer->getName()} successfully removed");
+    $this->addFlash('success',"Kunde {$customer->getName()} erfolgreich gelöscht.");
+    return $this->redirectToRoute('fl_customer_list');
+    }
+  
   }
