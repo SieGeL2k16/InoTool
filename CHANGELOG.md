@@ -1,3 +1,7 @@
+#### 04-Dec-2022
+
+- Upgraded Symfony to 6.2.0
+
 #### 26-Nov-2022
 
 - Implemented Freelancer->Customer list + form

@@ -4,8 +4,7 @@ namespace App\Logger;
 use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Security;
-
+use Symfony\Bundle\SecurityBundle\Security;
 /**
  * Writes E-Mail and Ip Adress of user to logfile
  */
