@@ -56,7 +56,14 @@ class FlCustomerRepository extends ServiceEntityRepository
       $SEARCH_SQL.= " AND (c.customer_number LIKE :srch OR lower(c.name) LIKE :srch OR lower(c.contact_name) LIKE :srch or lower(c.contact_email) like :srch)";
       $par['srch'] = '%'.mb_strtolower($params['SEARCH']).'%';
       }
-    $SQL  = "SELECT c.id,c.customer_number,c.name,c.contact_name,c.contact_email,case when c.active = true then '<i class=\"fa-solid fa-check text-success\"></i>' else '<i class=\"fa-solid fa-xmark text-danger\"></i>' end as active,count(*) OVER() AS total_count
+    if($params['F_ACTIVE'] !== "")
+      {
+      $SEARCH_SQL.=" AND c.active=:act";
+      $par['act'] = ($params['F_ACTIVE'] === '0') ? 'false' : 'true';
+      }
+    $SQL  = "SELECT c.id,c.customer_number,c.name,c.contact_name,c.contact_email,c.phone_business,
+                    case when c.active = true then '<i class=\"fa-solid fa-check text-success\"></i>' else '<i class=\"fa-solid fa-xmark text-danger\"></i>' end as active,
+                    count(*) OVER() AS total_count
                FROM fl_customer c
                WHERE c.ref_user_id=:uid $SEARCH_SQL
               ORDER BY {$params['ORDER']}, c.id desc

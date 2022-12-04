@@ -15,7 +15,7 @@ class FlCustomer
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'cascade')]
     private ?User $RefUser = null;
 
     #[ORM\Column(length: 38)]

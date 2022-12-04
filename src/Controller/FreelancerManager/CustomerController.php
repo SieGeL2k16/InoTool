@@ -10,6 +10,7 @@ namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlCustomer;
 use App\Repository\FlCustomerRepository;
+use App\Service\AppConfigHelper;
 use App\Service\globalHelper;
 use DateTime;
 use DateTimeImmutable;
@@ -29,15 +30,23 @@ class CustomerController extends AbstractController
   {
   const ACTNAV = 'customer';
 
+  /** @var string Key for filter configuration */
+  const CFG_FILTER_ACTIVE = 'fl.customer.active';
+  
   /** @var LoggerInterface $logger */
   private LoggerInterface $logger;
+
+  /** @var AppConfigHelper $configHelper */
+  private AppConfigHelper $configHelper;
   
   /**
    * @param LoggerInterface $logger
+   * @param AppConfigHelper $configHelper
    */
-  public function __construct(LoggerInterface $logger)
+  public function __construct(LoggerInterface $logger,AppConfigHelper $configHelper)
     {
     $this->logger = $logger;
+    $this->configHelper = $configHelper;
     }
   
   /**
@@ -48,7 +57,8 @@ class CustomerController extends AbstractController
   public function list():Response
     {
     return $this->render('freelancermanager/customer_list.html.twig',[
-      'ACTNAV' => self::ACTNAV,
+      'ACTNAV'    => self::ACTNAV,
+      'F_ACTIVE'  => $this->configHelper->Get(self::CFG_FILTER_ACTIVE,'',$this->getUser()),
       ]);
     }
   
@@ -65,11 +75,14 @@ class CustomerController extends AbstractController
     $user     = $this->getUser();
     $colcount = count($request->get('columns'));
     $draw     = $request->get('draw');      // Draw counter for datatable rendering
+    $f_active = $request->get('F_ACTIVE');
+    $this->configHelper->Set(self::CFG_FILTER_ACTIVE,$f_active,$user);
     $params   = [
-      'START'   => (int)$request->get('start'),
-      'LIMIT'   => (int)$request->get('length'),
-      'SEARCH'  => $request->get('search')['value'] ?? '',
-      'ORDER'   => globalHelper::parseDtOrder($request->get('order'),$colcount),
+      'START'     => (int)$request->get('start'),
+      'LIMIT'     => (int)$request->get('length'),
+      'SEARCH'    => $request->get('search')['value'] ?? '',
+      'ORDER'     => globalHelper::parseDtOrder($request->get('order'),$colcount),
+      'F_ACTIVE'  => $f_active,
       ];
     $data     = $customerRepository->GetDataTablesValues($params,$user->getId(),$colcount);
     $total    = $customerRepository->count(['RefUser' => $user]);

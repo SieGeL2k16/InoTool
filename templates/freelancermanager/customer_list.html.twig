@@ -10,8 +10,15 @@
     </div>
   </div>
   <div class="row mb-2">
-    <div class="col">
-      <button type="button" class="btn btn-primary" onclick="window.location.href='{{ path("fl_customer_form") }}'"><i class="fa-solid fa-user-plus"></i> Neuen Kunden anlegen</button>
+    <div class="col-auto">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ path("fl_customer_form") }}'"><i class="fa-solid fa-user-plus"></i> Neuen Kunden anlegen</button>
+    </div>
+    <div class="col-auto">
+      <select name="F_ACTIVE" id="f_active" class="form-select">
+        <option value="">Alle anzeigen</option>
+        <option value="1"{% if F_ACTIVE == "1" %}selected{% endif %}>Nur aktive Kunden</option>
+        <option value="0"{% if F_ACTIVE == "0" %}selected{% endif %}>Nur inaktive Kunden</option>
+      </select>
     </div>
   </div>
   <div class="row">
@@ -24,6 +31,7 @@
         <th>Firma</th>
         <th>Ansprechpartner</th>
         <th>E-Mail Adresse</th>
+        <th>Telefonnr.</th>
         <th class="text-center">Aktiv?</th>
       </tr>
       </thead>
@@ -40,13 +48,17 @@
   var dtable  = $("#tbl_fl_customer").DataTable({
     columnDefs: [
       {className: "td_edit", targets: [0,1,2,3,4]},
-      {className: "td_edit text-center", targets: [5]}
+      {className: "td_edit text-center", targets: [6]}
       ],
     "processing": true,
     'serverSide': true,
     ajax: {
       url: '{{ path("fl_customer_ajax") }}',
-    },
+      "data": function (d)
+        {
+        d.F_ACTIVE = $('#f_active').val();
+        }
+      },
     "stateSave": true,
     "stateDuration": 0,
     "fnInitComplete": function() {
@@ -63,8 +75,11 @@
       }
     var row = dtable.row(dtable.cell(this).index().row).data();
     window.location.href=formurl+"/"+row[0];
-    console.log(row);
   });
 
+  /** React on Alarm level adjustment */
+  $("#f_active").on('change', function() {
+    dtable.ajax.reload(null,false);
+  });
 </script>
 {% endblock %}
