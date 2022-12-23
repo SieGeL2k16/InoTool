@@ -25,6 +25,9 @@ class ProjectsController extends AbstractController
   {
   const ACTNAV = 'projects';
   
+  /** @var string Key for filter configuration */
+  const CFG_FILTER_STATUS = 'fl.projects.status';
+  
   /** @var LoggerInterface $logger */
   private LoggerInterface $logger;
   
@@ -46,12 +49,12 @@ class ProjectsController extends AbstractController
     {
     return $this->render('freelancermanager/projects_list.html.twig',[
       'ACTNAV'    => self::ACTNAV,
-      //'F_ACTIVE'  => $this->configHelper->Get(self::CFG_FILTER_ACTIVE,'',$this->getUser()),
+      'F_STATUS'  => $this->configHelper->Get(self::CFG_FILTER_STATUS,'',$this->getUser()),
     ]);
     }
   
   /**
-   * AJAX backend for customer list
+   * AJAX backend for projects list
    * @param Request $request
    * @param FlProjectsRepository $flProjectsRepository
    * @return JsonResponse
@@ -62,17 +65,17 @@ class ProjectsController extends AbstractController
     $user     = $this->getUser();
     $colcount = count($request->get('columns'));
     $draw     = $request->get('draw');      // Draw counter for datatable rendering
-    $f_active = $request->get('F_ACTIVE');
-    //$this->configHelper->Set(self::CFG_FILTER_ACTIVE,$f_active,$user);
+    $f_status = $request->get('F_STATUS');
+    $this->configHelper->Set(self::CFG_FILTER_STATUS,$f_status,$user);
     $params   = [
       'START'     => (int)$request->get('start'),
       'LIMIT'     => (int)$request->get('length'),
       'SEARCH'    => $request->get('search')['value'] ?? '',
       'ORDER'     => globalHelper::parseDtOrder($request->get('order'),$colcount),
-      'F_ACTIVE'  => $f_active,
+      'F_STATUS'  => $f_status,
       ];
-    $data     = ['TOTAL' => 0,'DATA' => []];//$customerRepository->GetDataTablesValues($params,$user->getId(),$colcount);
-    $total    = 0;//$customerRepository->count(['RefUser' => $user]);
+    $data     = $flProjectsRepository->GetDataTablesValues($params,$user->getId(),$colcount);
+    $total    = $flProjectsRepository->count(['RefUser' => $user]);
     return new JsonResponse([
       'draw'            => (int)$draw,
       'recordsTotal'    => $total,

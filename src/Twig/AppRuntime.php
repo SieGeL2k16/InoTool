@@ -2,7 +2,6 @@
 
 namespace App\Twig;
 
-use phpDocumentor\Reflection\Types\Resource_;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -100,5 +99,19 @@ class AppRuntime implements RuntimeExtensionInterface
       return base64_encode($raw);
       }
     return base64_encode(stream_get_contents($raw));
+    }
+  
+  /**
+   * Returns fontawesome icons for postgres bool return "true" and "false"
+   * @param string $bool
+   * @return string
+   */
+  public function YesNoPgBool(string $bool):string
+    {
+    if(mb_strtolower($bool) === 'true')
+      {
+      return $this->YesNo(true);
+      }
+    return $this->YesNo(false);
     }
   }

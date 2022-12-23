@@ -13,10 +13,56 @@
   <div class="col-auto">
     <button type="button" class="btn btn-primary" onclick="window.location.href='#'"><i class="fa-solid fa-plus"></i> Neues Projekt anlegen</button>
   </div>
+  <div class="col-auto">
+    <select name="F_ACTIVE" id="f_active" class="form-select">
+      <option value="">Alle anzeigen</option>
+      <option value="1"{% if F_STATUS == "1" %}selected{% endif %}>Nur aktive</option>
+      <option value="0"{% if F_STATUS == "0" %}selected{% endif %}>Nur inaktive</option>
+    </select>
+  </div>
 </div>
-
-
-
-
-
+<div class="row">
+  <div class="col-sm-12 table-responsive">
+    <table class="table table-sm table-striped table-hover" id="tbl_fl_projects">
+      <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Projektname</th>
+        <th>Kunde</th>
+        <th>Status</th>
+        <th class="text-center">In Report?</th>
+      </tr>
+      </thead>
+      <tbody class="table-group-divider">
+      
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+  <script>
+    var formurl = "#";
+    var dtable  = $("#tbl_fl_projects").DataTable({
+      columnDefs: [
+        {className: "td_edit", targets: [0,1,2,3,4]},
+        {className: "td_edit text-center", targets: [3,4]}
+      ],
+      order: [[2, 'desc']],
+      "processing": true,
+      'serverSide': true,
+      ajax: {
+        url: '{{ path("fl_projects_ajax") }}',
+        "data": function (d)
+          {
+          d.F_STATUS = $('#f_active').val();
+          }
+      },
+      "stateSave": true,
+      "stateDuration": 0,
+      "fnInitComplete": function() {
+        this.fnAdjustColumnSizing(true);
+      },
+    });
+  </script>
 {% endblock %}
