@@ -1,3 +1,8 @@
+#### 24-Dec-2022
+
+- Upgraded jQuery to 3.6.3
+- Upgraded Symfony to 6.2.2
+
 #### 04-Dec-2022
 
 - Upgraded Symfony to 6.2.0

@@ -11,13 +11,20 @@
 </div>
 <div class="row mb-2">
   <div class="col-auto">
-    <button type="button" class="btn btn-primary" onclick="window.location.href='#'"><i class="fa-solid fa-plus"></i> Neues Projekt anlegen</button>
+    <button type="button" class="btn btn-primary" onclick="window.location.href='{{ path("fl_projects_form") }}'"><i class="fa-solid fa-plus"></i> Neues Projekt anlegen</button>
   </div>
   <div class="col-auto">
-    <select name="F_ACTIVE" id="f_active" class="form-select">
+    <select name="F_ACTIVE" id="f_active" class="form-select fl_filter">
       <option value="">Alle anzeigen</option>
-      <option value="1"{% if F_STATUS == "1" %}selected{% endif %}>Nur aktive</option>
-      <option value="0"{% if F_STATUS == "0" %}selected{% endif %}>Nur inaktive</option>
+      <option value="0"{% if F_STATUS == "0" %} selected{% endif %}>Nur aktive</option>
+      <option value="1"{% if F_STATUS == "1" %} selected{% endif %}>Nur inaktive</option>
+    </select>
+  </div>
+  <div class="col-auto">
+    <select name="F_REPORTING" id="f_reporting" class="form-select fl_filter">
+      <option value="">Alle anzeigen</option>
+      <option value="false"{% if F_REPORTING == "false" %} selected{% endif %}>berechnet</option>
+      <option value="true"{% if F_REPORTING == "true" %} selected{% endif %}>nicht berechnet</option>
     </select>
   </div>
 </div>
@@ -30,7 +37,7 @@
         <th>Projektname</th>
         <th>Kunde</th>
         <th>Status</th>
-        <th class="text-center">In Report?</th>
+        <th class="text-center">Berechnet?</th>
       </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -42,7 +49,7 @@
 {% endblock %}
 {% block javascripts %}
   <script>
-    var formurl = "#";
+    var formurl = "{{ path("fl_projects_form") }}";
     var dtable  = $("#tbl_fl_projects").DataTable({
       columnDefs: [
         {className: "td_edit", targets: [0,1,2,3,4]},
@@ -56,6 +63,7 @@
         "data": function (d)
           {
           d.F_STATUS = $('#f_active').val();
+          d.F_REPORTING = $('#f_reporting').val();
           }
       },
       "stateSave": true,
@@ -63,6 +71,21 @@
       "fnInitComplete": function() {
         this.fnAdjustColumnSizing(true);
       },
+    });
+    // Handle click on table entry
+    $('#tbl_fl_projects tbody').on('click', 'td', function () {
+      var data = dtable.cell(this).data();
+      if (Array.isArray(data) === true)
+        {
+          return;
+        }
+      var row = dtable.row(dtable.cell(this).index().row).data();
+      window.location.href=formurl+"/"+row[0];
+    });
+
+    /** React on active flag adjustment */
+    $(".fl_filter").on('change', function() {
+      dtable.ajax.reload(null,false);
     });
   </script>
 {% endblock %}

@@ -8,9 +8,13 @@
 
 namespace App\Controller\FreelancerManager;
 
+use App\Entity\FlProjects;
+use App\Repository\FlCustomerRepository;
 use App\Repository\FlProjectsRepository;
 use App\Service\AppConfigHelper;
 use App\Service\globalHelper;
+use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,8 +29,8 @@ class ProjectsController extends AbstractController
   {
   const ACTNAV = 'projects';
   
-  /** @var string Key for filter configuration */
-  const CFG_FILTER_STATUS = 'fl.projects.status';
+  const CFG_FILTER_STATUS     = 'fl.projects.status';
+  const CFG_FILTER_REPORTING  = 'fl.projects.reporting';
   
   /** @var LoggerInterface $logger */
   private LoggerInterface $logger;
@@ -48,9 +52,10 @@ class ProjectsController extends AbstractController
   public function list():Response
     {
     return $this->render('freelancermanager/projects_list.html.twig',[
-      'ACTNAV'    => self::ACTNAV,
-      'F_STATUS'  => $this->configHelper->Get(self::CFG_FILTER_STATUS,'',$this->getUser()),
-    ]);
+      'ACTNAV'        => self::ACTNAV,
+      'F_STATUS'      => $this->configHelper->Get(self::CFG_FILTER_STATUS,'',$this->getUser()),
+      'F_REPORTING'   => $this->configHelper->Get(self::CFG_FILTER_REPORTING,'',$this->getUser()),
+      ]);
     }
   
   /**
@@ -58,6 +63,7 @@ class ProjectsController extends AbstractController
    * @param Request $request
    * @param FlProjectsRepository $flProjectsRepository
    * @return JsonResponse
+   * @throws Exception
    */
   #[Route("ajax",name: "fl_projects_ajax")]
   public function list_ajax(Request $request,FlProjectsRepository $flProjectsRepository):JsonResponse
@@ -66,13 +72,16 @@ class ProjectsController extends AbstractController
     $colcount = count($request->get('columns'));
     $draw     = $request->get('draw');      // Draw counter for datatable rendering
     $f_status = $request->get('F_STATUS');
+    $f_reporting = $request->get('F_REPORTING');
     $this->configHelper->Set(self::CFG_FILTER_STATUS,$f_status,$user);
+    $this->configHelper->Set(self::CFG_FILTER_REPORTING,$f_reporting,$user);
     $params   = [
-      'START'     => (int)$request->get('start'),
-      'LIMIT'     => (int)$request->get('length'),
-      'SEARCH'    => $request->get('search')['value'] ?? '',
-      'ORDER'     => globalHelper::parseDtOrder($request->get('order'),$colcount),
-      'F_STATUS'  => $f_status,
+      'START'       => (int)$request->get('start'),
+      'LIMIT'       => (int)$request->get('length'),
+      'SEARCH'      => $request->get('search')['value'] ?? '',
+      'ORDER'       => globalHelper::parseDtOrder($request->get('order'),$colcount),
+      'F_STATUS'    => $f_status,
+      'F_REPORTING' => $f_reporting,
       ];
     $data     = $flProjectsRepository->GetDataTablesValues($params,$user->getId(),$colcount);
     $total    = $flProjectsRepository->count(['RefUser' => $user]);
@@ -83,4 +92,42 @@ class ProjectsController extends AbstractController
       'data'            => $data['DATA'],
       ]);
     }
+  
+  /**
+   * Add/modify project entry
+   * @param FlProjectsRepository $flProjectsRepository
+   * @param FlCustomerRepository $customerRepository
+   * @param int $id
+   * @return Response
+   */
+  #[Route("form/{id}",name: "fl_projects_form")]
+  public function form(FlProjectsRepository $flProjectsRepository,
+                       FlCustomerRepository $customerRepository, int $id = 0):Response
+    {
+    $user = $this->getUser();
+    if($id)
+      {
+      $project = $flProjectsRepository->findOneBy(['RefUser' => $user,'id' => $id]);
+      if($project === null)
+        {
+        $this->addFlash('warning',"Projekt mit ID = $id nicht gefunden?");
+        $this->logger->warning(__METHOD__.": Project with ID=$id not found - cannot edit?!");
+        return $this->redirectToRoute('fl_projects_list');
+        }
+        $page_title = 'Bearbeite "'.$project->getProjectName().'"';
+        }
+      else
+        {
+        $project = (new FlProjects())->setRefUser($user);
+        $page_title = "Neues Projekt anlegen";
+        }
+      return $this->render('freelancermanager/projects_form.html.twig',[
+        'ACTNAV'        => self::ACTNAV,
+        'PROJECT'       => $project,
+        'PAGE_TITLE'    => $page_title,
+        'CUSTOMER_LIST' => $customerRepository->findBy(['RefUser' => $user,'Active' => true],['Name' => 'asc'])
+        ]);
+    
+    }
+  
   }

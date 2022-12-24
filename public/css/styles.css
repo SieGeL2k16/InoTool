@@ -189,3 +189,7 @@ a:hover {
 .breadcrumb-item.active {
   color: #212529;
 }
+
+.def_height_textarea {
+  height: 100px !important;
+}

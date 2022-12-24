@@ -58,13 +58,25 @@ class FlProjectsRepository extends ServiceEntityRepository
     $par = ['uid' => $userid];
     if($params['SEARCH'] !== "")
       {
-      $SEARCH_SQL.= " AND (c.name LIKE :srch OR lower(p.project_name) LIKE :srch)";
+      $SEARCH_SQL.= " AND (lower(c.name) LIKE :srch OR lower(p.project_name) LIKE :srch)";
       $par['srch'] = '%'.mb_strtolower($params['SEARCH']).'%';
       }
     if($params['F_STATUS'] !== "")
       {
       $SEARCH_SQL.=" AND p.status=:st";
       $par['st'] = (int)$params['F_STATUS'];
+      }
+    if($params['F_REPORTING'] !== "")
+      {
+      if(mb_strtolower($params['F_REPORTING']) === 'true')
+        {
+        $par['nr'] = 'true';
+        }
+      else
+        {
+        $par['nr'] = 'false';
+        }
+      $SEARCH_SQL.=" AND p.no_reporting = :nr";
       }
     $SQL = "select p.id,p.project_name,c.name as customer_name,p.status,case when p.no_reporting = false then 0 else 1 end as no_reporting,
                    count(*) OVER() AS total_count
@@ -86,7 +98,7 @@ class FlProjectsRepository extends ServiceEntityRepository
         {
         $total  = $d[$columncount];      // total_count column
         }
-      if(!(int)$d[3])
+      if((int)$d[3])
         {
         $cl   = 'text-danger';
         $txt  = 'Inaktiv';
@@ -97,7 +109,7 @@ class FlProjectsRepository extends ServiceEntityRepository
         $txt  = 'Aktiv';
         }
       $d[3] = "<span class='$cl'>$txt</span>";
-      $d[4] = $this->appRuntime->FormatCheckbox((int)$d[4]);
+      $d[4] = $this->appRuntime->FormatCheckbox(!(int)$d[4]);
       $data[] = $d;
       }
     return [

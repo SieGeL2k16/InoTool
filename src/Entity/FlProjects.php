@@ -9,7 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FlProjectsRepository::class)]
 class FlProjects
-{
+  {
+  /** @var int Project Status values */
+  const PROJ_STATUS_ACTIVE    = 0;
+  const PROJ_STATUS_INACTIVE  = 1;
+  
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -56,9 +60,9 @@ class FlProjects
     public function __construct() {
       $this->Currency       = 'EUR';
       $this->CreatedOn      = new DateTimeImmutable();
-      $this->Status         = 0;      // Active
-      $this->WorkUnit       = 60;     // 60 Minutes
-      $this->PayPerWorkUnit = 70;     // 70 EUR / Hour
+      $this->Status         = self::PROJ_STATUS_ACTIVE;       // Active
+      $this->WorkUnit       = 60;                             // 60 Minutes
+      $this->PayPerWorkUnit = 70;                             // 70 EUR / Hour
       $this->TimeBudget     = 0;
     }
     

@@ -1,0 +1,120 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item h3" aria-current="page"><a href="{{ path("fl_projects_list") }}"><i class="fa-solid fa-user-group fa-fw"></i> Projekte</a></li>
+        <li class="breadcrumb-item active h3" aria-current="page">{{ PAGE_TITLE }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<form method="post" action="#" class="needs-validation" novalidate >
+  <input type="hidden" name="PID" value="{{ PROJECT.id|default(0) }}">
+  <div class="row">
+    <div class="col-xxl-6 col-md-12 mb-3">
+      <div class="card">
+        <div class="card-header">
+          <span>Projektdetails</span>
+          {% if PROJECT.createdOn != "" %}
+            <small class="text-muted"> (Erstellt am {{ PROJECT.createdOn|format_datetime }}{% if PROJECT.lastModifiedOn != "" %}, zuletzt geändert am {{ PROJECT.lastModifiedOn|format_datetime }}{% endif %})</small>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-floating">
+                <select class="form-select" id="RefCustomerId" aria-label="Kundenliste" required="required">
+                <option value="">--- Bitte wählen ---</option>
+                {% for c in CUSTOMER_LIST %}
+                  <option value="{{ c.id }}"{% if c.id == PROJECT.refCustomer.id|default(0) %} selected{% endif %}>{{ c.name }}</option>
+                {% endfor %}
+                </select>
+                <label for="RefCustomerId">Projekt gehört zu Kunde</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating mt-3">
+                <input type="text" class="form-control" id="projectName" name="projectName" placeholder="Name des Projects" required="required" value="{{ PROJECT.projectName }}">
+                <label for="projectName">Name des Projekts</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating mt-3">
+                <textarea class="form-control def_height_textarea" placeholder="Projektbeschreibung" id="description" name="description">{{ PROJECT.description }}</textarea>
+                <label for="description">Projekt Beschreibung</label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-floating mt-3">
+                <select name="status" id="status" class="form-select">
+                  <option value="{{ constant('App\\Entity\\FlProjects::PROJ_STATUS_ACTIVE') }}"{% if PROJECT.status == constant('App\\Entity\\FlProjects::PROJ_STATUS_ACTIVE') %} selected{% endif %}>Aktiv</option>
+                  <option value="{{ constant('App\\Entity\\FlProjects::PROJ_STATUS_INACTIVE') }}"{% if PROJECT.status == constant('App\\Entity\\FlProjects::PROJ_STATUS_INACTIVE') %} selected{% endif %}>Inaktiv</option>
+                </select>
+                <label for="status">Projektstatus</label>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" value="1" id="noReporting" name="noReporting"{% if PROJECT.noReporting == true%} checked{% endif %} data-bs-toggle="tooltip" title="Anwählen, wenn dieses Projekt nicht in den Umsatz-Statistiken angezeigt werden soll. Eine Auswertung ist dann nur über das Reporting möglich!">
+                <label class="form-check-label" for="noReporting">Nicht berechnen</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="workUnit" name="workUnit" placeholder="Anz. Minuten/Arbeitseinheit" required="required" value="{{ PROJECT.workUnit }}" data-bs-toggle="tooltip" title="Anzahl Minuten / Arbeitseinheit. Üblicherweise eine Stunde, also 60 Minuten">
+                <label for="workUnit">Arbeitseinheit (min)</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="payPerWorkUnit" name="payPerWorkUnit" placeholder="Preis/Einheit" required="required" value="{{ PROJECT.payPerWorkUnit }}" data-bs-toggle="tooltip" title="Hier den Preis pro Währungseinheit eintragen (Stundenlohn)">
+                <label for="payPerWorkUnit">Preis/Einheit</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="currency" name="currency" placeholder="Währung" required="required" value="{{ PROJECT.currency }}" data-bs-toggle="tooltip" title="Hier die gewünschte Währung eintragen (z.B. EUR, USD, GBP etc.)">
+                <label for="currency">Währung</label>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-floating">
+                <input type="text" class="form-control" id="timeBudget" name="timeBudget" placeholder="Zeitbudget" required="required" value="{{ PROJECT.timeBudget }}" data-bs-toggle="tooltip" title="Max. erlaubte Dauer des Projekts in Stunden. 0 => Kein Limit">
+                <label for="timeBudget">Zeitbudget</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+      {% if PROJECT.id|default(0) %}
+        <button type="button" class="btn btn-danger" id="btn_cust_delete"><i class="fa-solid fa-trash"></i> Löschen</button>
+      {% endif %}
+      <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("fl_projects_list") }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+    </div>
+  </div>
+</form>
+<form method="post" action="#" id="frm_cust_delete">
+  <input type="hidden" name="PID" value="{{ PROJECT.id }}">
+</form>
+{% endblock %}
+{% block javascripts %}
+<script>
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+{% endblock %}
