@@ -78,6 +78,11 @@ class FlProjectsRepository extends ServiceEntityRepository
         }
       $SEARCH_SQL.=" AND p.no_reporting = :nr";
       }
+    if($params['F_CUSTOMER'] !== "")
+      {
+      $SEARCH_SQL.=" and p.ref_customer_id = :cid";
+      $par['cid'] = (int)$params['F_CUSTOMER'];
+      }
     $SQL = "select p.id,p.project_name,c.name as customer_name,p.status,case when p.no_reporting = false then 0 else 1 end as no_reporting,
                    count(*) OVER() AS total_count
               from fl_projects p, fl_customer c

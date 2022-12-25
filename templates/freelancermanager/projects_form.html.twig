@@ -10,7 +10,7 @@
     </nav>
   </div>
 </div>
-<form method="post" action="#" class="needs-validation" novalidate >
+<form method="post" action="{{ path("fl_projects_save") }}" class="needs-validation" novalidate >
   <input type="hidden" name="PID" value="{{ PROJECT.id|default(0) }}">
   <div class="row">
     <div class="col-xxl-6 col-md-12 mb-3">
@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col">
               <div class="form-floating">
-                <select class="form-select" id="RefCustomerId" aria-label="Kundenliste" required="required">
+                <select class="form-select" id="RefCustomerId" name="RefCustomerId" aria-label="Kundenliste" required="required">
                 <option value="">--- Bitte wählen ---</option>
                 {% for c in CUSTOMER_LIST %}
                   <option value="{{ c.id }}"{% if c.id == PROJECT.refCustomer.id|default(0) %} selected{% endif %}>{{ c.name }}</option>
@@ -102,13 +102,13 @@
     <div class="col">
       <button type="submit" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
       {% if PROJECT.id|default(0) %}
-        <button type="button" class="btn btn-danger" id="btn_cust_delete"><i class="fa-solid fa-trash"></i> Löschen</button>
+        <button type="button" class="btn btn-danger" id="btn_project_delete"><i class="fa-solid fa-trash"></i> Löschen</button>
       {% endif %}
       <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("fl_projects_list") }}'"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
     </div>
   </div>
 </form>
-<form method="post" action="#" id="frm_cust_delete">
+<form method="post" action="{{ path("fl_projects_delete") }}" id="frm_project_delete">
   <input type="hidden" name="PID" value="{{ PROJECT.id }}">
 </form>
 {% endblock %}
@@ -116,5 +116,8 @@
 <script>
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+$("#btn_project_delete").on('click', function() {
+  SwalConfirmSubmit("Diese Projekt wirklich löschen?<br>Alle diesem Projekt zugeordnete Daten werden ebenfalls gelöscht!",'frm_project_delete');
+});
 </script>
 {% endblock %}

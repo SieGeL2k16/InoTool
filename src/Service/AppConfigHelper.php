@@ -11,6 +11,7 @@ namespace App\Service;
 use App\Entity\AppConfig;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AppConfigHelper
   {
@@ -85,6 +86,27 @@ class AppConfigHelper
       }
     $this->entity->remove($obj);
     $this->entity->flush();
+    }
+  
+  /**
+   * Returns configuration values as associative array for the given key names.
+   * @param array $fields
+   * @param UserInterface|null $user
+   * @return array
+   */
+  public function xGet(array $fields,UserInterface $user = null):array
+    {
+    $ret = [];
+    foreach($fields as $f)
+      {
+      $ret[$f] = null;
+      }
+    /** @var AppConfig $item */
+    foreach($this->entity->getRepository(AppConfig::class)->getListByKeys($fields,$user) as $item)
+      {
+      $ret[$item->getKeyName()] = $item->getValue();
+      }
+    return $ret;
     }
   
   }

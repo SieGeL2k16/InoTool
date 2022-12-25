@@ -27,6 +27,14 @@
       <option value="true"{% if F_REPORTING == "true" %} selected{% endif %}>nicht berechnet</option>
     </select>
   </div>
+  <div class="col-auto">
+    <select name="F_CUSTOMER" id="f_customer" class="form-select fl_filter">
+      <option value="">Alle Kunden</option>
+      {% for c in CUSTOMER_LIST %}
+      <option value="{{ c.id }}"{% if F_CUSTOMER == c.id %} selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
 </div>
 <div class="row">
   <div class="col-sm-12 table-responsive">
@@ -62,8 +70,9 @@
         url: '{{ path("fl_projects_ajax") }}',
         "data": function (d)
           {
-          d.F_STATUS = $('#f_active').val();
+          d.F_STATUS    = $('#f_active').val();
           d.F_REPORTING = $('#f_reporting').val();
+          d.F_CUSTOMER  = $('#f_customer').val();
           }
       },
       "stateSave": true,
