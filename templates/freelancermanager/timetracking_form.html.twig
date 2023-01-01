@@ -1,0 +1,49 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item h3" aria-current="page"><a href="{{ path("fl_projects_list") }}"><i class="fa-solid fa-clock fa-fw"></i> Zeiterfassung</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    {{ dump() }}
+  </div>
+  <div class="col-3">
+    {% for year,m in CALENDAR %}
+      {% for mon,cal in m %}
+        <table class="table table-sm table-bordered">
+        <caption>{{ "%02d"|format(mon) }} / {{ year }}</caption>
+        <thead>
+        <tr>
+          <th class="text-center">Wo</th>
+          <th class="text-center">Mo</th>
+          <th class="text-center">Di</th>
+          <th class="text-center">Mi</th>
+          <th class="text-center">Do</th>
+          <th class="text-center">Fr</th>
+          <th class="text-center">Sa</th>
+          <th class="text-center">So</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for r in cal %}
+        <tr>
+        {% for i,d in r %}
+          <td class="text-center {% if d != "" and i > 0 %}bg-light{% endif %}">{{ d }}</td>
+        {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+        {% endfor %}
+        
+    
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

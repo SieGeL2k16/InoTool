@@ -2,31 +2,27 @@
 
 ## What is this?
 
-This a port of two very old projects I've coded for my private usage:
+If you are working as freelancer you have to manage your customer, invoices and other stuff.
+Of course there are plenty of tools out there to help you managing your daily business, however I always
+prefer to have my own software in place, so here it is: InoTool
 
-### Accounting Manager (handles my bank account)
+## Features
 
-Used to gather statistics and general overview of my private banking account.
+### Freelancer Manager
 
-- Developed in 2007
-- MySQL based
-- Multi-Bank account support
-- No frameworks except JPGraph for graph support
-- CSV Importer for DB and TargoBank
+- Manage your customer
+- Manage your projects
+- Manage your time sheets
+- Extensive reporting
+- Supports service contracts
+- PDF reporting
 
-### Freelancer Manager (manages my Freelancer projects/customer)
+### Bank Accounting Manager 
 
-Used to handle my freelancer activity including invoices/customer/project management.
-
-- Developed in 2011 as successor of my even older OraOffice Project from 2001
-- Oracle 8i+ based
-- Multi-tenant
-- Uses jQueryUI as framework
-- Smarty for templating
-- TCPDF for PDF reporting
-
-Both tools are working with PHP8, however the codebase needs a complete rewrite,
-so I've decided to port them both to Symfony using PostgreSQL as database backend.
+- Supports multiple banking accounts
+- Imports Deutsche Bank and Targobank CSV files
+- Auto-assignment of repetive accounting data
+- Extensive reporting
 
 
 ## Installation
