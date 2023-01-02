@@ -12,6 +12,7 @@ use App\Service\timeTrackingHelper;
 use DateInterval;
 use DateTime;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,26 +27,60 @@ class TimeTrackingController extends AbstractController
   {
   const ACTNAV = 'time';
 
+  const CAL_CNT = 3;    // How many calendars should be shown - defaults to 3
+  
   /** @var timeTrackingHelper $timeTrackingHelper */
   private timeTrackingHelper $timeTrackingHelper;
   
-  public function __construct(timeTrackingHelper $timeTrackingHelper)
+  /** @var LoggerInterface $logger */
+  private LoggerInterface $logger;
+  
+  /**
+   * Constructor
+   * @param timeTrackingHelper $timeTrackingHelper
+   * @param LoggerInterface $logger
+   */
+  public function __construct(timeTrackingHelper $timeTrackingHelper,LoggerInterface $logger)
     {
     $this->timeTrackingHelper = $timeTrackingHelper;
+    $this->logger = $logger;
     }
   
   /**
+   * Renders Time tracking form for a given date.
+   * @param string|null $date
    * @return Response
    * @throws Exception
    */
-  #[Route("form",name: "fl_time_form")]
-  public function form():Response
+  #[Route("form/{date}",name: "fl_time_form")]
+  public function form(string $date = null):Response
     {
-    $dt = new DateTime(date("Ym")."01");
-    $dt->sub(new DateInterval("P1M"));
+    if($date === null)
+      {
+      $dt = new DateTime();
+      }
+    else
+      {
+      try
+        {
+        $dt = new DateTime($date);
+        }
+      catch(Exception $e)
+        {
+        $this->logger->warning(__METHOD__.": Invalid date: ".$e->getMessage());
+        $this->addFlash('warning',"Ungültiges Datum!");
+        $dt = new DateTime();
+        }
+      }
+    $ym = $dt->format('Ym');
+    $st = new DateTime("{$ym}01 00:00:00");
+    $st->sub(new DateInterval("P1M"));
+    $et = clone $st;
+    $et->add(new DateInterval("P".(self::CAL_CNT-1)."M"));  // Startedate is already set!
     return $this->render('freelancermanager/timetracking_form.html.twig',[
-      'ACTNAV'    => self::ACTNAV,
-      'CALENDAR'  => $this->timeTrackingHelper->createCalendar((int)$dt->format("m"),(int)$dt->format("Y"),3),
+      'ACTNAV'        => self::ACTNAV,
+      'CURRENT_DATE'  => $dt,
+      'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$st->format("m"),(int)$st->format("Y"),self::CAL_CNT),
       ]);
       
     }

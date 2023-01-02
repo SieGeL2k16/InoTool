@@ -6,6 +6,7 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
+ * Additional twig filter and functions - definition.
  * Class AppExtension
  * @package App\Twig
  */
@@ -29,6 +30,8 @@ class AppExtension extends AbstractExtension
       new TwigFilter('MoneyColor'             , [AppRuntime::class, 'MoneyColor']),
       new TwigFilter('Base64Encode'           , [AppRuntime::class, 'Base64Encode']),
       new TwigFilter('YesNoPgBool'            , [AppRuntime::class, 'YesNoPgBool']),
+      new TwigFilter('calcClasses'            , [AppRuntime::class, 'calcClasses']),
+   
       ];
     }
 

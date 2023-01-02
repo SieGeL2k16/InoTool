@@ -5,12 +5,12 @@ namespace App\Twig;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
+ * Additional twig filter and functions - implementation.
  * Class AppRuntime
  * @package App\Twig
  */
 class AppRuntime implements RuntimeExtensionInterface
   {
-  
   /**
    * AppRuntime constructor.
    */
@@ -113,5 +113,29 @@ class AppRuntime implements RuntimeExtensionInterface
       return $this->YesNo(true);
       }
     return $this->YesNo(false);
+    }
+  
+  /**
+   * Adds classes based on given date.
+   * Current date i.e. will add classes "text-success fw-bold"
+   * @param mixed $day Day (01 - 31)
+   * @param mixed $year Year
+   * @param mixed $mon Month
+   * @param array|null $entries Pass in an associative array with key in format "Ymd" and value the number of entries.
+   * @return string
+   */
+  public function calcClasses(mixed $day,mixed $year,mixed $mon, array $entries = null):string
+    {
+    $cl = "";
+    if($day === null)
+      {
+      return "";
+      }
+    if(date('Ymd') === sprintf("%04d%02d%02d",$year,$mon,$day))
+      {
+      $cl.=" text-success fw-bold";
+      }
+    $cl.=" bg-light";
+    return $cl;
     }
   }

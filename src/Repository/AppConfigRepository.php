@@ -26,7 +26,7 @@ class AppConfigRepository extends ServiceEntityRepository
    * @param UserInterface|null $user
    * @return float|int|mixed|string
    */
-  public function getListByKeys(array $keys,?UserInterface $user)
+  public function getListByKeys(array $keys,?UserInterface $user): mixed
     {
     $qb = $this->createQueryBuilder('c')
             ->andWhere('c.KeyName in (:val)')
@@ -39,33 +39,4 @@ class AppConfigRepository extends ServiceEntityRepository
     $query = $qb->getQuery();
     return $query->getResult();
     }
-  
-    // /**
-    //  * @return AppConfig[] Returns an array of AppConfig objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?AppConfig
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-}
+  }

@@ -8,8 +8,21 @@
 
 namespace App\Service;
 
+use App\Entity\FlProjectEntries;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 class timeTrackingHelper
   {
+  private EntityManagerInterface $entity;
+  
+  public function __construct(EntityManagerInterface $entity)
+    {
+  
+      $this->entity = $entity;
+    }
+    
   /**
    * Returns array with date representation of $month / $year, with optional $cnt month following
    * @param int $month
@@ -44,7 +57,7 @@ class timeTrackingHelper
   public function createCalArray(int $month, int $year):array
     {
     $cal = [];
-    $maxdays = (int)date("t",mktime(2,0,0,$month,1,$year));
+    $maxdays = (int)date("t",mktime(0,0,0,$month,1,$year));
     // Wo Mo Di Mi Do Fr Sa So
     $week_line = [];
     for($d = 1; $d < $maxdays + 1; $d++)
@@ -70,4 +83,20 @@ class timeTrackingHelper
     return $cal;
     }
   
+  /**
+   * Checks for entries for given daterange and returns assoc. array with dates and number of events per date
+   * @param UserInterface $user
+   * @param DateTime $st
+   * @param DateTime $et
+   * @return array
+   */
+  public function GetEventsForDateRange(UserInterface $user,DateTime $st, DateTime $et):array
+    {
+    $arr = [];
+    foreach($this->entity->getRepository(FlProjectEntries::class)->getEventListByDateRange($user,$st,$et) as $item)
+      {
+      $arr[$item['entry_date']] = $item['cnt'];
+      }
+    return $arr;
+    }
   }

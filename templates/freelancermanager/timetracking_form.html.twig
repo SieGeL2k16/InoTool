@@ -11,38 +11,43 @@
 </div>
 <div class="row">
   <div class="col">
-    {{ dump() }}
+    <div class="card">
+      <div class="card-header">
+        {{ CURRENT_DATE|format_datetime('full','none') }}
+      </div>
+    </div>
   </div>
   <div class="col-3">
     {% for year,m in CALENDAR %}
       {% for mon,cal in m %}
-        <table class="table table-sm table-bordered">
-        <caption>{{ "%02d"|format(mon) }} / {{ year }}</caption>
-        <thead>
-        <tr>
-          <th class="text-center">Wo</th>
-          <th class="text-center">Mo</th>
-          <th class="text-center">Di</th>
-          <th class="text-center">Mi</th>
-          <th class="text-center">Do</th>
-          <th class="text-center">Fr</th>
-          <th class="text-center">Sa</th>
-          <th class="text-center">So</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for r in cal %}
-        <tr>
-        {% for i,d in r %}
-          <td class="text-center {% if d != "" and i > 0 %}bg-light{% endif %}">{{ d }}</td>
-        {% endfor %}
-        </tr>
-        {% endfor %}
-        </tbody>
-        </table>
-        {% endfor %}
-        
-    
+      <table class="table table-sm table-bordered">
+      <caption class="pt-0 mt-0 pb-1">{{ "%04d-%02d-01"|format(year,mon)|format_date(pattern='MMMM Y') }} </caption>
+      <thead>
+      <tr>
+        <th class="text-center">Wo</th>
+        <th class="text-center">Mo</th>
+        <th class="text-center">Di</th>
+        <th class="text-center">Mi</th>
+        <th class="text-center">Do</th>
+        <th class="text-center">Fr</th>
+        <th class="text-center">Sa</th>
+        <th class="text-center">So</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for r in cal %}
+      <tr>
+      {% for i,d in r %}
+{#
+        <td class="text-center{% if d != "" and i > 0 %} bg-light{% endif %}">{{ d }}</td>
+#}
+        <td class="text-center{% if i > 0 %}{{ d|calcClasses(year,mon) }}{% endif %}">{{ d }}</td>
+      {% endfor %}
+      </tr>
+      {% endfor %}
+      </tbody>
+      </table>
+      {% endfor %}
     {% endfor %}
   </div>
 </div>
