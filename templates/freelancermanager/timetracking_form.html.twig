@@ -13,7 +13,60 @@
   <div class="col">
     <div class="card">
       <div class="card-header">
-        {{ CURRENT_DATE|format_datetime('full','none') }}
+        <div class="row">
+          <div class="col d-flex align-items-center fw-bold">
+            {{ CURRENT_DATE|format_datetime('full','none') }}
+          </div>
+          <div class="col text-end">
+            <a href="{{ path("fl_time_form") }}" class="btn btn-outline-secondary" title="Zu Heute wechseln"><i class="fa-solid fa-calendar-xmark"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form method="post" action="#">
+          <div class="form-floating">
+            <select class="form-select" id="RefProjectId" name="RefProjectId" aria-label="Projektliste" required="required">
+              <option value="">--- Bitte wählen ---</option>
+              {% for p in PROJECTS_LIST %}
+                <option value="{{ p.id }}">{{ p.projectName }} ({{ p.refCustomer.name }})</option>
+              {% endfor %}
+            </select>
+            <label for="RefProjectId">Eintrag für Projekt</label>
+          </div>
+          <div class="row mt-3">
+            <div class="col-xxl-3 col-md-6 col-12">
+              <div class="input-group">
+                <span class="input-group-text" id="basic-addon3">Dauer:</span>
+                <input type="text" class="form-control text-end" placeholder="Std." name="HH" id="hh" aria-label="Stunden" title="Anzahl gearbeiteter Stunden">
+                <span class="input-group-text">:</span>
+                <input type="text" class="form-control" placeholder="Min." name="MM" id="mm" aria-label="Minuten" title="Anzahl gearbeiteter Minuten">
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center">
+              alternativ:
+            </div>
+            <div class="col-auto">
+              <label for="st" class="col-auto col-form-label">Startzeit:</label>
+            </div>
+            <div class="col-auto">
+              <input type="time" class="form-control" placeholder="Starzeit" name="ST" id="st">
+            </div>
+            <div class="col-auto">
+              <label for="et" class="col-auto col-form-label">Endzeit:</label>
+            </div>
+            <div class="col-auto">
+              <input type="time" class="form-control" placeholder="Endzeit" name="ET" id="et">
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">
+              <div class="form-floating">
+                <textarea class="form-control" placeholder="Tätigkeit" id="description" style="height:100px;"></textarea>
+                <label for="description">Beschreibung der Tätigkeit(en)</label>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -38,10 +91,19 @@
       {% for r in cal %}
       <tr>
       {% for i,d in r %}
-{#
-        <td class="text-center{% if d != "" and i > 0 %} bg-light{% endif %}">{{ d }}</td>
-#}
-        <td class="text-center{% if i > 0 %}{{ d|calcClasses(year,mon) }}{% endif %}">{{ d }}</td>
+        {% if i > 0 %}
+          {% set day = d|calcClasses(year,mon,EVENTS) %}
+        {% else %}
+          {% set day = {"CSS_CLASSES":"","DAY":""} %}
+        {% endif %}
+        <td class="text-center{{ day['CSS_CLASSES'] }}">
+          {# Add links only for date, not for weeknumber! #}
+          {% if i > 0 %}
+          <a href="{{ path("fl_time_form",{'date':day['DAY']}) }}" class="{{ day['CSS_CLASSES'] }}" title="Zum {{ day['DAY']|format_date }} wechseln">{{ d }}</a>
+          {% else %}
+            {{ d }}
+          {% endif %}
+        </td>
       {% endfor %}
       </tr>
       {% endfor %}

@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use DateTime;
 use Twig\Extension\RuntimeExtensionInterface;
 
 /**
@@ -11,6 +12,7 @@ use Twig\Extension\RuntimeExtensionInterface;
  */
 class AppRuntime implements RuntimeExtensionInterface
   {
+  
   /**
    * AppRuntime constructor.
    */
@@ -121,21 +123,25 @@ class AppRuntime implements RuntimeExtensionInterface
    * @param mixed $day Day (01 - 31)
    * @param mixed $year Year
    * @param mixed $mon Month
-   * @param array|null $entries Pass in an associative array with key in format "Ymd" and value the number of entries.
+   * @param array $entries Pass in an associative array with key in format "Ymd" and value the number of entries.
    * @return string
    */
-  public function calcClasses(mixed $day,mixed $year,mixed $mon, array $entries = null):string
+  public function calcClasses(mixed $day,mixed $year,mixed $mon, array $entries = []):array
     {
-    $cl = "";
     if($day === null)
       {
-      return "";
+      return ['CSS_CLASSES' => '', 'DAY' => ''];
       }
-    if(date('Ymd') === sprintf("%04d%02d%02d",$year,$mon,$day))
+    $fmtday = sprintf("%04d-%02d-%02d",$year,$mon,$day);
+    $cl = " bg-light";
+    if(isset($entries[$fmtday]) === true)
+      {
+      $cl.=" text-danger fw-bold";
+      }
+    elseif(date('Y-m-d') === $fmtday)
       {
       $cl.=" text-success fw-bold";
       }
-    $cl.=" bg-light";
-    return $cl;
+    return ['CSS_CLASSES' => $cl, 'DAY' => $fmtday];
     }
   }

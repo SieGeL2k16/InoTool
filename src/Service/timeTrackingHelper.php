@@ -95,7 +95,7 @@ class timeTrackingHelper
     $arr = [];
     foreach($this->entity->getRepository(FlProjectEntries::class)->getEventListByDateRange($user,$st,$et) as $item)
       {
-      $arr[$item['entry_date']] = $item['cnt'];
+      $arr[$item['edate']] = $item['cnt'];
       }
     return $arr;
     }

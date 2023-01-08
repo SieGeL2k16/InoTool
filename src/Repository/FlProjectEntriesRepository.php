@@ -49,7 +49,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
    */
   public function getEventListByDateRange(UserInterface $user, DateTime $start, DateTime $end): array
     {
-    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select fpe.entry_date,count(*) as cnt from fl_project_entries fpe where fpe.entry_date between :sd and :ed and fpe.ref_user_id=:uid group by fpe.entry_date order by fpe.entry_date",[
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("select to_char(fpe.entry_date,'YYYY-MM-DD') as edate,count(*) as cnt from fl_project_entries fpe where fpe.entry_date between :sd and :ed and fpe.ref_user_id=:uid group by 1 order by 1",[
       'sd'  => $start->format('Y-m-d').' 00:00:00',
       'ed'  => $end->format('Y-m-d').' 23:59:59',
       'uid' => $user->getId(),

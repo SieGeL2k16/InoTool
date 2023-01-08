@@ -8,6 +8,9 @@
 
 namespace App\Controller\FreelancerManager;
 
+use App\Entity\FlProjects;
+use App\Repository\FlCustomerRepository;
+use App\Repository\FlProjectsRepository;
 use App\Service\timeTrackingHelper;
 use DateInterval;
 use DateTime;
@@ -48,13 +51,15 @@ class TimeTrackingController extends AbstractController
   
   /**
    * Renders Time tracking form for a given date.
+   * @param FlProjectsRepository $projectsRepository
    * @param string|null $date
    * @return Response
    * @throws Exception
    */
   #[Route("form/{date}",name: "fl_time_form")]
-  public function form(string $date = null):Response
+  public function form(FlProjectsRepository $projectsRepository, string $date = null):Response
     {
+    $user= $this->getUser();
     if($date === null)
       {
       $dt = new DateTime();
@@ -81,6 +86,8 @@ class TimeTrackingController extends AbstractController
       'ACTNAV'        => self::ACTNAV,
       'CURRENT_DATE'  => $dt,
       'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$st->format("m"),(int)$st->format("Y"),self::CAL_CNT),
+      'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$st,$et),
+      'PROJECTS_LIST' =>  $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
       ]);
       
     }
