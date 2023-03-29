@@ -99,4 +99,27 @@ class timeTrackingHelper
       }
     return $arr;
     }
+  
+  /**
+   * Returns given seconds in HH:MM format.
+   * @param $seconds int The number of seconds to convert
+   * @return string The formatted time in format HH:MM
+   */
+  public function formatWorkTime(int $seconds):string
+    {
+    return sprintf("%02.2d:%02.2d",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60));
+    }
+  
+  /**
+   * Returns the hours and minutes from given seconds as array.
+   * @param $seconds int The number of seconds
+   * @return array Associative array with keys "H" (for hours) and "M" (for minutes)
+   */
+  public function getWorkTimeFromSeconds(int $seconds): array
+    {
+    return [
+      'H' => ($seconds / 3600),
+      'M' => (($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)
+      ];
+    }
   }

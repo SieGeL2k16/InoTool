@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class FlProjectEntriesRepository extends ServiceEntityRepository
   {
+  const CACHE_EXPIRES = 600;
+  
   public function __construct(ManagerRegistry $registry)
     {
     parent::__construct($registry, FlProjectEntries::class);
@@ -53,6 +55,28 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
       'sd'  => $start->format('Y-m-d').' 00:00:00',
       'ed'  => $end->format('Y-m-d').' 23:59:59',
       'uid' => $user->getId(),
+      ]);
+    return $stmt->fetchAllAssociative();
+    }
+  
+  /**
+   * Returns list of entries for a given date in format YYYY-MM-DD
+   * @param UserInterface $user
+   * @param string $date
+   * @return array[]
+   * @throws Exception
+   */
+  public function getEntriesForDate(UserInterface $user,string $date): array
+    {
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("
+      select fpe.*,fp.project_name
+        from fl_project_entries fpe,fl_projects fp
+       where to_char(entry_date,'YYYY-MM-DD') = :ymd
+         and fpe.ref_project_id = fp.id
+         and fpe.ref_user_id = :uid
+       order by id",[
+        'ymd' => $date,
+        'uid' => $user->getId(),
       ]);
     return $stmt->fetchAllAssociative();
     }

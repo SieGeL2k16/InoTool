@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Service\timeTrackingHelper;
 use DateTime;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -12,12 +13,14 @@ use Twig\Extension\RuntimeExtensionInterface;
  */
 class AppRuntime implements RuntimeExtensionInterface
   {
+  private timeTrackingHelper $timeTrackingHelper;
   
   /**
    * AppRuntime constructor.
    */
-  public function __construct()
+  public function __construct(timeTrackingHelper $timeTrackingHelper)
     {
+    $this->timeTrackingHelper = $timeTrackingHelper;
     }
 
   /**
@@ -124,7 +127,7 @@ class AppRuntime implements RuntimeExtensionInterface
    * @param mixed $year Year
    * @param mixed $mon Month
    * @param array $entries Pass in an associative array with key in format "Ymd" and value the number of entries.
-   * @return string
+   * @return array
    */
   public function calcClasses(mixed $day,mixed $year,mixed $mon, array $entries = []):array
     {
@@ -144,4 +147,26 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return ['CSS_CLASSES' => $cl, 'DAY' => $fmtday];
     }
+  
+  /**
+   * Wrapper method.
+   * @param int $seconds
+   * @return string
+   */
+  public function formatWorkTime(int $seconds):string
+    {
+    return $this->timeTrackingHelper->formatWorkTime($seconds);
+    }
+  
+  /**
+   * Wrapper method.
+   * @param int $seconds
+   * @return array
+   */
+  public function getWorkTimeFromSeconds(int $seconds): array
+    {
+    return $this->timeTrackingHelper->getWorkTimeFromSeconds($seconds);
+    }
+
   }
+

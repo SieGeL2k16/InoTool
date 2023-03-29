@@ -31,7 +31,8 @@ class AppExtension extends AbstractExtension
       new TwigFilter('Base64Encode'           , [AppRuntime::class, 'Base64Encode']),
       new TwigFilter('YesNoPgBool'            , [AppRuntime::class, 'YesNoPgBool']),
       new TwigFilter('calcClasses'            , [AppRuntime::class, 'calcClasses']),
-   
+      new TwigFilter('formatWorkTime'         , [AppRuntime::class, 'formatWorkTime']),
+      new TwigFilter('getWorkTimeFromSeconds' , [AppRuntime::class, 'getWorkTimeFromSeconds']),
       ];
     }
 
