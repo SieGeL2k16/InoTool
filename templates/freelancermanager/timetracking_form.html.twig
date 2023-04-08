@@ -24,11 +24,12 @@
       </div>
       <div class="card-body">
         <form method="post" action="#">
+          <input type="hidden" name="entryid" id="entryid" value="{{ ENTRY.id|default(0) }}">
           <div class="form-floating">
             <select class="form-select" id="RefProjectId" name="RefProjectId" aria-label="Projektliste" required="required">
               <option value="">--- Bitte wählen ---</option>
               {% for p in PROJECTS_LIST %}
-                <option value="{{ p.id }}">{{ p.projectName }} ({{ p.refCustomer.name }})</option>
+                <option value="{{ p.id }}"{% if ENTRY.refProject.id is defined and p.id == ENTRY.refProject.id %} selected{% endif %}>{{ p.projectName }} ({{ p.refCustomer.name }})</option>
               {% endfor %}
             </select>
             <label for="RefProjectId">Eintrag für Projekt</label>
@@ -42,7 +43,7 @@
                 <input type="text" class="form-control" placeholder="Min." name="MM" id="mm" aria-label="Minuten" title="Anzahl gearbeiteter Minuten" value="{{ DURATION_MM }}">
               </div>
             </div>
-            <div class="col-auto d-flex align-items-center">
+            <div class="col-auto d-flex align-items-center text-muted">
               alternativ:
             </div>
             <div class="col-auto">
@@ -69,6 +70,10 @@
           <div class="row mt-3">
             <div class="col">
               <button type="button" class="btn btn-primary"><i class="far fa-save"></i> Speichern</button>
+              {% if ENTRY.id|default(0) %}
+              <button type="button" class="btn btn-primary" onclick="window.location.href='{{ path("fl_time_form",{'date':CURRENT_DATE|date('Y-m-d')}) }}'"><i class="far fa-plus"></i> Neuer Eintrag</button>
+              <button type="button" class="btn btn-danger ml-1"><i class="fas fa-trash"></i> Löschen</button>
+              {% endif %}
             </div>
           </div>
         </form>
@@ -95,9 +100,9 @@
         <tbody>
         {% for t in TODAY_ENTRIES %}
         <tr>
-          <td>{{ t.project_name }}</td>
-          <td>{{ t.work_time_in_secs|formatWorkTime }}</td>
-          <td>{{ t.work_description }}</td>
+          <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.project_name }}</a></td>
+          <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.work_time_in_secs|formatWorkTime }}</a></td>
+          <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.work_description }}</a></td>
         </tr>
         {% endfor %}
         </tbody>

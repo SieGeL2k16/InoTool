@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Helper methods for Time tracking module.
  * @package InoTool
@@ -118,7 +118,7 @@ class timeTrackingHelper
   public function getWorkTimeFromSeconds(int $seconds): array
     {
     return [
-      'H' => ($seconds / 3600),
+      'H' => floor($seconds / 3600),
       'M' => (($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)
       ];
     }
