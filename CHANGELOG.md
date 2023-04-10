@@ -1,3 +1,11 @@
+#### 10-Apr-2023
+
+- Time tracking implemented
+
+#### 07-Apr-2023
+
+- Upgraded  Symfony to 6.2.8
+
 #### 24-Dec-2022
 
 - Upgraded jQuery to 3.6.3

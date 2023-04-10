@@ -28,6 +28,7 @@ class FlProjectEntries
     #[ORM\JoinColumn(nullable: false)]
     private ?User $RefUser = null;
 
+    /** @var int|null '0 = active, 1 = inactive, 2 = archive' */
     #[ORM\Column]
     private ?int $Status = null;
 

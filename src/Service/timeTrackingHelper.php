@@ -11,16 +11,25 @@ namespace App\Service;
 use App\Entity\FlProjectEntries;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class timeTrackingHelper
   {
+  /** @var int Statusflags for FlProjectEntries.Status field */
+  const ENTRY_STATUS_ACTIVE   = 0;
+  const ENTRY_STATUS_INACTIVE = 1;
+  const ENTRY_STATUS_ARCHIVED = 2;
+
+  /** @var EntityManagerInterface $entity */
   private EntityManagerInterface $entity;
   
+  /**
+   * @param EntityManagerInterface $entity
+   */
   public function __construct(EntityManagerInterface $entity)
     {
-  
-      $this->entity = $entity;
+    $this->entity = $entity;
     }
     
   /**
@@ -107,7 +116,16 @@ class timeTrackingHelper
    */
   public function formatWorkTime(int $seconds):string
     {
-    return sprintf("%02.2d:%02.2d",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60));
+    if(($seconds / 86400) > 1)
+      {
+      $mydays = intval($seconds / 86400);
+      $seconds-= $mydays * 86400;
+      return(sprintf("%d:%02.2d:%02.2d",$mydays,($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)));
+      }
+    else
+      {
+      return(sprintf("%02.2d:%02.2d",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)));
+      }
     }
   
   /**
@@ -122,4 +140,44 @@ class timeTrackingHelper
       'M' => (($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)
       ];
     }
+  
+  /**
+   * Returns seconds as localized string in format xx days, yyH etc.
+   * @param int $seconds
+   * @param string $locale
+   * @return string
+   * @todo This is 1:1 copy of the old code - should be refactorized...
+   */
+  public function formatWorkTimeLoc(int $seconds,string $locale = 'de'):string
+    {
+    if(($seconds / 86400) > 1)
+      {
+      if($locale == 'de')
+        {
+        $day  = 'Tag';
+        $days = 'Tage';
+        }
+      else
+        {
+        $day  = 'Day';
+        $days = 'Days';
+        }
+      $mydays = intval($seconds / 86400);
+      $seconds-= $mydays * 86400;
+      if($mydays == 1)
+        {
+        $md = $day;
+        }
+      else
+        {
+        $md = $days;
+        }
+      return(sprintf("%d %s, %02.2dh %02.2dmin %02.2ds",$mydays,$md,($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60),($seconds % 60)));
+      }
+    else
+      {
+      return(sprintf("%02.2dh %02.2dmin %02.2ds",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60),($seconds % 60)));
+      }
+    }
+  
   }

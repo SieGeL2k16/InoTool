@@ -69,11 +69,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   public function getEntriesForDate(UserInterface $user,string $date): array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
-      select fpe.*,fp.project_name
-        from fl_project_entries fpe,fl_projects fp
+      select fpe.*,fp.project_name,c.name as customer_name
+        from fl_project_entries fpe,fl_projects fp,fl_customer c
        where to_char(entry_date,'YYYY-MM-DD') = :ymd
          and fpe.ref_project_id = fp.id
          and fpe.ref_user_id = :uid
+         and fp.ref_customer_id = c.id
        order by id",[
         'ymd' => $date,
         'uid' => $user->getId(),

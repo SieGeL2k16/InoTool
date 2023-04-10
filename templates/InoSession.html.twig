@@ -38,7 +38,7 @@
     {% set toast_title = 'Information' %}
     {% endif %}
     $.toast({
-      text:'{{ message }}',
+      text:'{{ message|json_encode }}',
       position : 'bottom-right',
       'icon': '{{ toast_type }}',
       'heading': '{{ toast_title }}',

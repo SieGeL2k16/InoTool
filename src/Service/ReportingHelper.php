@@ -1,0 +1,104 @@
+<?php declare(strict_types=1);
+/**
+ * Helper service for all reporting
+ */
+namespace App\Service;
+
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
+
+class ReportingHelper
+  {
+  private EntityManagerInterface $entity;
+  
+  /**
+   * @param EntityManagerInterface $entity
+   */
+  public function __construct(EntityManagerInterface $entity)
+    {
+    $this->entity = $entity;
+    }
+  
+  /**
+   * Returns Top-<n> projects grouped by time
+   * @param int $uid
+   * @param int $limit
+   * @return array
+   * @throws Exception
+   */
+  public function getTopWorkingTime(int $uid, int $limit = 10):array
+    {
+    $SQL = "SELECT  i.TOTSECS,i.PROJECT_NAME,i.CUSTOMER_NAME,calculateProjectEntry(i.TOTSECS,i.WORK_UNIT, i.PAY_PER_WORK_UNIT) AS SALARY
+              FROM (
+              SELECT 	SUM(pe.WORK_TIME_IN_SECS) AS TOTSECS,
+               		    p.PROJECT_NAME,
+              		    c.NAME AS CUSTOMER_NAME,
+		                  p.work_UNIT,
+		                  p.PAY_PER_WORK_UNIT
+                FROM	fl_customer c, fl_projects p, fl_project_entries pe
+               WHERE	c.ID = p.REF_CUSTOMER_ID
+                 AND  p.ID  = pe.REF_PROJECT_ID
+                 and  c.REF_USER_ID = :uid
+               GROUP BY p.PROJECT_NAME,c.NAME,p.WORK_UNIT,p.PAY_PER_WORK_UNIT
+               ORDER BY 1 DESC
+                   ) i
+             limit :l";
+    $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid, 'l' => $limit]);
+    return $stmt->fetchAllAssociative();
+    }
+  
+  /**
+   * Returns Top-<n> projects ordered by money earned
+   * @param int $uid
+   * @param int $limit
+   * @return array
+   * @throws Exception
+   */
+  public function getTopPaidProjects(int $uid, int $limit = 10):array
+    {
+    $SQL = "SELECT  i.TOTSECS,i.SALARY,i.PROJECT_NAME,i.CUSTOMER_NAME
+              FROM (
+                SELECT 	SUM(pe.WORK_TIME_IN_SECS) AS TOTSECS,
+      		              calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT) AS SALARY,
+      		              p.PROJECT_NAME,
+      		              c.NAME AS CUSTOMER_NAME
+                FROM	fl_customer c , fl_projects p, fl_project_entries pe
+                WHERE	c.ID = p.REF_CUSTOMER_ID
+                AND  p.ID  = pe.REF_PROJECT_ID
+                AND  c.REF_USER_ID = :uid
+                GROUP BY p.PROJECT_NAME,c.NAME,p.WORK_UNIT,p.PAY_PER_WORK_UNIT
+                ORDER BY 2 DESC NULLS LAST
+                ) i
+	          limit :l";
+    $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid, 'l' => $limit]);
+    return $stmt->fetchAllAssociative();
+    }
+  
+  /**
+   * Returns overview data for given userid
+   * @param int $uid
+   * @return array
+   * @throws Exception
+   * @todo Combine min/max queries into one!
+   */
+  public function getOverview(int $uid):array
+    {
+    $SQL = "SELECT  i.PROJECTS AS PROJECTS,
+                    i.CUSTOMERS AS CUSTOMERS,
+                    i.ENTRIES AS ENTRIES,
+                    TO_CHAR(i.FIRSTENTRY,'DD.MM.YYYY') AS FIRSTENTRY,
+                    TO_CHAR(i.LASTENTRY,'DD.MM.YYYY') AS LASTENTRY,
+                    i.LASTENTRY-i.FIRSTENTRY AS MYRANGE
+            FROM (
+              SELECT  (SELECT COUNT(*) FROM fl_projects p WHERE p.REF_USER_ID=:uid) AS PROJECTS,
+                      (SELECT COUNT(*) FROM fl_customer c WHERE c.REF_USER_ID=:uid) AS CUSTOMERS,
+                      (SELECT COUNT(*) FROM fl_project_entries pe WHERE pe.REF_USER_ID=:uid) AS ENTRIES,
+                      (SELECT MIN(ENTRY_DATE) FROM fl_project_entries WHERE REF_USER_ID=:uid) AS FIRSTENTRY,
+                      (SELECT MAX(ENTRY_DATE) FROM fl_project_entries WHERE REF_USER_ID=:uid) AS LASTENTRY
+                 ) i";
+    $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
+    return $stmt->fetchAssociative();
+    }
+
+
+  }

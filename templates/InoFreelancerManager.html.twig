@@ -31,7 +31,7 @@
           <li class="nav-item"><a class="nav-link {{ naventries['time'] }}" href="{{ path("fl_time_form") }}"><i class="fa-solid fa-clock fa-fw"></i> Zeiterfassung</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['customer'] }}" href="{{ path("fl_customer_list") }}"><i class="fa-solid fa-user-group fa-fw"></i> Kunden</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['projects'] }}" href="{{ path("fl_projects_list") }}"><i class="fa-solid fa-diagram-project fa-fw"></i> Projekte</a></li>
-          <li class="nav-item"><a class="nav-link {{ naventries['reports'] }}" href="#"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
+          <li class="nav-item"><a class="nav-link {{ naventries['reports'] }}" href="{{ path("fl_reporting_index") }}"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['invoices'] }}" href="#"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> Rechnungen</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['contracts'] }}" href="#"><i class="fa-solid fa-file-signature fa-fw"></i> Service Verträge</a></li>
           <li class="nav-item"><a class="nav-link {{ naventries['config'] }}" href="{{ path("fl_configuration_form") }}"><i class="fa-solid fa-gear fa-fw"></i> Einstellungen</a></li>

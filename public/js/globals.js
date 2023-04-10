@@ -108,6 +108,36 @@ function ajaxError(textStatus,errorThrown)
   });
   }
 
+/**
+ * Replacement for standard javascript "alert" box
+ * @param alerttext
+ * @param title Optional a different title (default is "Info!")
+ * @param focus Selector recieving focus once the modal is closed (optional)
+ */
+function swAlert(alerttext, title, focus="")
+  {
+  if(title === undefined || title === "")
+    {
+    title = "Info!";
+    }
+  Swal.fire({
+    title: title,
+    html: alerttext,
+    icon: "warning",
+    customClass: {
+      confirmButton: 'btn btn-primary',
+    },
+    confirmButtonText: 'Okay',
+    buttonsStyling: false,
+    didClose: () => {
+      if(focus !== "")
+        {
+        setTimeout(() => $(focus).focus(), 100);
+        }
+      }
+    });
+  }
+
 $(document).ready(function () {
   $.validator.setDefaults({
     errorElement: "em",

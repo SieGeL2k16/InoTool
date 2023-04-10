@@ -1,8 +1,64 @@
 {% extends 'InoFreelancerManager.html.twig' %}
 {% block body %}
-  <div class="row">
-    <div class="col-12">
-      <h3><i class="fa-solid fa-gauge fa-fw"></i> Dashboard</h3>
+<div class="row">
+  <div class="col-12">
+    <h3><i class="fa-solid fa-gauge fa-fw"></i> Dashboard</h3>
+  </div>
+</div>
+{% if NO_CONFIG == true %}
+<div class="row">
+  <div class="col-12">
+    <div class="alert alert-warning" role="alert">
+      Keine Konfiguration vorhanden - Bitte zuerst die Anwendung <a href="{{ path("fl_configuration_form") }}" class="alert-link">konfigurieren</a>!
     </div>
   </div>
+</div>
+{% else %}
+<div class="row">
+  <div class="col-xl-7 col-md-9 col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row align-items-center">
+          {% if CONFIG.companyLogo is not null %}
+            <div class="col-3">
+              <img src="data:{{ CONFIG.companyLogoMimeType }};base64,{{CONFIG.companyLogo|Base64Encode }}" class="img-fluid" alt="{{ CONFIG.companyLogoName }}" title="{{ CONFIG.companyLogoName }} ({{ CONFIG.companyLogoSize|format_number }} bytes)">
+            </div>
+          {% endif %}
+          <div class="col border-end">
+            <h4>{{ CONFIG.companyName }}</h4>
+            {{ CONFIG.companyStreet }}<br>
+            {{ CONFIG.companyPostal }} {{ CONFIG.companyCity }}<br>
+            {{ CONFIG.companyCountry }}<br>
+            {{ CONFIG.companyPhone }}<br>
+          </div>
+          <div class="col">
+            <table class="table table-sm">
+            <tr>
+              <td>Kunden (Aktiv):</td>
+              <td class="text-end">{{ CUSTOMER_STATS['TOTAL']|format_number }} ({{ CUSTOMER_STATS['ACTIVE']|format_number }})</td>
+            </tr>
+            <tr>
+              <td>Projekte:</td>
+              <td class="text-end">{{ PROJECT_COUNT|format_number }}</td>
+            </tr>
+            <tr>
+              <td>Projekt Einträge:</td>
+              <td class="text-end">{{ PRJ_ENTRY_COUNT|format_number }}</td>
+            </tr>
+            <tr>
+              <td>Service Verträge:</td>
+              <td class="text-end"></td>
+            </tr>
+            <tr>
+              <td>Rechnungen:</td>
+              <td class="text-end">{{ INVOICE_COUNT|format_number }}</td>
+            </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}

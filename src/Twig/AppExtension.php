@@ -23,16 +23,17 @@ class AppExtension extends AbstractExtension
   public function getFilters(): array
     {
     return [
-      new TwigFilter('YesNo'                  , [AppRuntime::class, 'YesNo']),
-      new TwigFilter('EmptyString'            , [AppRuntime::class, 'EmptyString']),
-      new TwigFilter('FormatCheckbox'         , [AppRuntime::class, 'FormatCheckbox']),
-      new TwigFilter('YesNoText'              , [AppRuntime::class, 'YesNoText']),
-      new TwigFilter('MoneyColor'             , [AppRuntime::class, 'MoneyColor']),
-      new TwigFilter('Base64Encode'           , [AppRuntime::class, 'Base64Encode']),
-      new TwigFilter('YesNoPgBool'            , [AppRuntime::class, 'YesNoPgBool']),
-      new TwigFilter('calcClasses'            , [AppRuntime::class, 'calcClasses']),
-      new TwigFilter('formatWorkTime'         , [AppRuntime::class, 'formatWorkTime']),
-      new TwigFilter('getWorkTimeFromSeconds' , [AppRuntime::class, 'getWorkTimeFromSeconds']),
+      new TwigFilter('YesNo'                    , [AppRuntime::class, 'YesNo']),
+      new TwigFilter('EmptyString'              , [AppRuntime::class, 'EmptyString']),
+      new TwigFilter('FormatCheckbox'           , [AppRuntime::class, 'FormatCheckbox']),
+      new TwigFilter('YesNoText'                , [AppRuntime::class, 'YesNoText']),
+      new TwigFilter('MoneyColor'               , [AppRuntime::class, 'MoneyColor']),
+      new TwigFilter('Base64Encode'             , [AppRuntime::class, 'Base64Encode']),
+      new TwigFilter('YesNoPgBool'              , [AppRuntime::class, 'YesNoPgBool']),
+      new TwigFilter('calcClasses'              , [AppRuntime::class, 'calcClasses']),
+      new TwigFilter('formatWorkTime'           , [AppRuntime::class, 'formatWorkTime']),
+      new TwigFilter('getWorkTimeFromSeconds'   , [AppRuntime::class, 'getWorkTimeFromSeconds']),
+      new TwigFilter('formatWorkTimeLocalized'  , [AppRuntime::class, 'formatWorkTimeLocalized'])
       ];
     }
 

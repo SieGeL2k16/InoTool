@@ -81,3 +81,4 @@ Please refer to the supplied `.env` file for a description of these variables.
 - jQuery 3.6.x (https://jquery.com/)
 - Chart.js (https://www.chartjs.org)
 - TCPDF 6.5.0 (http://www.tcpdf.org)
+- Luxon (https://moment.github.io/luxon/)

@@ -8,8 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FlCustomerRepository::class)]
 class FlCustomer
-{
-    #[ORM\Id]
+  {
+   const USER_STATUS_ACTIVE    = 1;
+   const USER_STATUS_INACTIVE  = 0;
+   const USER_STATUS_LOCKED    = 2;
+  
+  #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;

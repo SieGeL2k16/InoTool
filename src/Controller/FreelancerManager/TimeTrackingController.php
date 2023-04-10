@@ -16,6 +16,7 @@ use App\Service\timeTrackingHelper;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -80,13 +81,20 @@ class TimeTrackingController extends AbstractController
       }
     $dates = $this->getCalendarRange($dt);
     $tentry = new FlProjectEntries();
+    $todays_entries = $entriesRepository->getEntriesForDate($user,$dt->format('Y-m-d'));
+    $todays_time = 0;
+    foreach($todays_entries as $te)
+      {
+      $todays_time+=(int)$te['work_time_in_secs'];
+      }
     return $this->render('freelancermanager/timetracking_form.html.twig',[
       'ACTNAV'        => self::ACTNAV,
       'CURRENT_DATE'  => $dt,
       'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$dates['ST']->format("m"),(int)$dates['ST']->format("Y"),self::CAL_CNT),
       'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET']),
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
-      'TODAY_ENTRIES' => $entriesRepository->getEntriesForDate($user,$dt->format('Y-m-d')),
+      'TODAY_ENTRIES' => $todays_entries,
+      'TODAY_TIME'    => $todays_time,
       'ENTRY'         => $tentry,
       'START_TIME'    => '00:00',
       'END_TIME'      => '00:00',
@@ -137,13 +145,20 @@ class TimeTrackingController extends AbstractController
     $wtime  = $this->timeTrackingHelper->getWorkTimeFromSeconds($entry->getWorkTimeInSecs());
     $enddt  = clone $edate;
     $enddt->add(new DateInterval("PT".$entry->getWorkTimeInSecs()."S"));
+    $todays_entries = $entriesRepository->getEntriesForDate($user,$entry->getEntryDate()->format('Y-m-d'));
+    $todays_time = 0;
+    foreach($todays_entries as $te)
+      {
+      $todays_time+=(int)$te['work_time_in_secs'];
+      }
     return $this->render('freelancermanager/timetracking_form.html.twig',[
       'ACTNAV'        => self::ACTNAV,
       'CURRENT_DATE'  => $entry->getEntryDate(),
       'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$dates['ST']->format("m"),(int)$dates['ST']->format("Y"),self::CAL_CNT),
       'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET']),
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
-      'TODAY_ENTRIES' => $entriesRepository->getEntriesForDate($user,$entry->getEntryDate()->format('Y-m-d')),
+      'TODAY_ENTRIES' => $todays_entries,
+      'TODAY_TIME'    => $todays_time,
       'ENTRY'         => $entry,
       'START_TIME'    => sprintf("%s:%s",$edate->format('H'),$edate->format('i')),
       'END_TIME'      => sprintf("%s:%s",$enddt->format('H'),$enddt->format('i')),
@@ -156,34 +171,109 @@ class TimeTrackingController extends AbstractController
    * Saves form
    * @param Request $request
    * @param FlProjectEntriesRepository $entriesRepository
+   * @param FlProjectsRepository $projectsRepository
+   * @param EntityManagerInterface $em
    * @return Response
    */
   #[Route("save", name: "fl_time_save",methods: ["POST"])]
-  public function save(Request $request,FlProjectEntriesRepository $entriesRepository):Response
+  public function save(Request $request,FlProjectEntriesRepository $entriesRepository,FlProjectsRepository $projectsRepository,EntityManagerInterface $em):Response
     {
     $user= $this->getUser();
-    $tid = $request->get('entryid');
-    if($tid === null)
+    $tid = (int)$request->get('entryid',0);
+    if($tid === 0)
       {
       $fle = new FlProjectEntries();
       $fle->setCreatedOn(new DateTimeImmutable())->setRefUser($user);
+      $lmsg = "Adding new project entry";
+      $imsg = "Neuen Eintrag hinzugefügt";
       }
     else
       {
-      $fle = $entriesRepository->find((int)$tid);
+      $fle = $entriesRepository->findOneBy(['id' => $tid, 'RefUser' => $user]);
       if($fle === null)
         {
-        $this->logger->warning(__METHOD__.": No projectEntry found with ID={$tid} - creating new one");
+        $this->logger->warning(__METHOD__.": No projectEntry found with ID=$tid - creating new one");
+        $lmsg = "Force creation of new entry (TID=$tid)";
+        $imsg = "Neuen Eintrag erzwungen, da bestehender nicht gefunden wurde?";
+        $tid = null;
         $fle = new FlProjectEntries();
         $fle->setCreatedOn(new DateTimeImmutable())->setRefUser($user);
         }
       else
         {
         $fle->setLastModifiedOn(new DateTime());
+        $lmsg = "Updating project entry #$tid";
+        $imsg = "Eintrag #$tid aktualisiert";
         }
       }
-
-    dd($fle);
+    $st = $request->get('ST');
+    $hh = $request->get('HH');
+    $mm = $request->get('MM');
+    $cd = $request->get('cdate');
+    try
+      {
+      if($st !== null)
+        {
+        $dt = new DateTime($cd."T".$st);
+        }
+      else
+        {
+        $dt = new DateTime($cd);
+        }
+      $prj = $projectsRepository->findOneBy(['id' => $request->get('RefProjectId'),'RefUser' => $user]);
+      if($prj === null)
+        {
+        throw new Exception("Invalid Project ID!");
+        }
+      $worktime = intval($hh) * 3600 + intval($mm) * 60;
+      $fle->setEntryDate($dt)->setRefProject($prj)->setWorkDescription($request->get('wdesc'))->setWorkTimeInSecs($worktime)->setStatus(timeTrackingHelper::ENTRY_STATUS_ACTIVE);
+      $em->persist($fle);
+      $em->flush();
+      $this->logger->info($lmsg);
+      $this->addFlash('success',$imsg);
+      return $this->redirectToRoute('fl_time_form',['date' => $cd]);
+      }
+    catch(Exception $e)
+      {
+      $this->logger->warning(__METHOD__.": Unable to validate data: ".$e->getMessage());
+      $this->addFlash('warning',"Es ist ein Problem mit der Verarbeitung der Daten aufgetreten: ".$e->getMessage());
+      if($tid === null)
+        {
+        return $this->redirectToRoute("fl_time_form",['date' => $cd]);
+        }
+      else
+        {
+        return $this->redirectToRoute('fl_time_edit',['id' => $tid]);
+        }
+      }
+    }
+  
+  /**
+   * Removes an entry from database.
+   * @param FlProjectEntriesRepository $entriesRepository
+   * @param EntityManagerInterface $em
+   * @param int $id
+   * @return Response
+   */
+  #[Route("delete",name: "fl_time_delete", methods: ["POST"])]
+  public function delete(Request $request, FlProjectEntriesRepository $entriesRepository,
+                         EntityManagerInterface $em, int $id = 0):Response
+    {
+    $id = (int)$request->get('ENTRYID',0);
+    $user = $this->getUser();
+    $entry = $entriesRepository->findOneBy(['id' => $id,'RefUser' => $user]);
+    if($entry === null)
+      {
+      $this->logger->warning(__METHOD__.": No project_entry found with ID=$id - delete not possible!");
+      $this->addFlash('warning',"Löschen nicht möglich - Datensatz nicht vorhanden!");
+      return $this->redirectToRoute("fl_time_form");
+      }
+    $edate = $entry->getEntryDate()->format('Y-m-d');
+    $em->remove($entry);
+    $em->flush();
+    $this->logger->info("Successfully removed project entry #$id");
+    $this->addFlash('success',"Datensatz wurde gelöscht.");
+    return $this->redirectToRoute("fl_time_form",['date' => $edate]);
     }
   
   }

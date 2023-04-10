@@ -61,7 +61,7 @@ class FlConfiguration
     private ?string $BankBic = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'cascade')]
     private ?User $RefUser = null;
 
     #[ORM\Column(length: 255, nullable: true)]

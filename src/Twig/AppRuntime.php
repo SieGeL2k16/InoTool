@@ -167,6 +167,16 @@ class AppRuntime implements RuntimeExtensionInterface
     {
     return $this->timeTrackingHelper->getWorkTimeFromSeconds($seconds);
     }
-
+  
+  /**
+   * Wrapper method.
+   * @param int $seconds
+   * @return string
+   */
+  public function formatWorkTimeLocalized(int $seconds):string
+    {
+    return $this->timeTrackingHelper->formatWorkTimeLoc($seconds);
+    }
+  
   }
 
