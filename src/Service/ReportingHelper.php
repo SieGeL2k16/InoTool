@@ -99,6 +99,39 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
     return $stmt->fetchAssociative();
     }
-
-
+  
+  /**
+   * Returns totals for given userid
+   * @param int $uid
+   * @return array
+   * @throws Exception
+   */
+  public function getTotals(int $uid):array
+    {
+    $SQL = "SELECT  SUM(final.TOTAL_SECONDS) AS TOTAL_SECONDS,
+                    SUM(final.TOTAL_SALARY) AS TOTAL_SALARY
+              FROM  (SELECT SUM(i.TOTSECS) AS TOTAL_SECONDS,SUM(i.SALARY) AS TOTAL_SALARY
+                       FROM (SELECT SUM(pe.WORK_TIME_IN_SECS) AS TOTSECS,
+          		                      calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT) AS SALARY
+                               FROM fl_customer c, fl_projects  p, fl_project_entries pe
+                              WHERE c.ID = p.REF_CUSTOMER_ID
+                                AND p.ID  = pe.REF_PROJECT_ID
+                                AND c.REF_USER_ID = :uid
+                              GROUP BY p.WORK_UNIT,p.PAY_PER_WORK_UNIT
+                            ) i
+                         UNION
+                          SELECT 0 AS TOTS,
+                                 SUM(case when inv.NO_TAX = false then inv.SUM_BRUTTO else inv.SUM_NETTO end) AS TOTSAL
+                            FROM fl_invoices inv
+                           WHERE inv.REF_USER_ID  = :uid
+                             AND inv.INVOICE_TYPE = 0
+--                         UNION
+--                         SELECT 0,
+--                                 SUM(sco.CONTRACT_VALUE) AS SCO_SALARY
+--                            FROM SCO_ENTRIES sco
+--                           WHERE sco.REF_USER_ID = :uid
+                         ) final";
+    $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
+    return $stmt->fetchAssociative();
+    }
   }

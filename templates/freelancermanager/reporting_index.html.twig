@@ -10,11 +10,17 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-3 mb-3">
-      <div class="card">
+    <div class="col-4 mb-3">
+      <div class="card h-100">
+        <div class="card-body">
+        </div>
+      </div>
+    </div>
+    <div class="col-4 mb-3">
+      <div class="card h-100">
         <div class="card-body">
           <table class="table table-sm table-striped table-hover">
-            <caption>Globale Übersicht</caption>
+            <caption>Übersicht</caption>
             <tbody>
             <tr>
               <td>Benutzer:</td>
@@ -49,6 +55,29 @@
             <tr>
               <td>Erfassungszeitraum:</td>
               <td class="text-end">{{ OVERVIEW['myrange'] }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 mb-3">
+      <div class="card  h-100">
+        <div class="card-body">
+          <table class="table table-sm table-striped table-hover">
+            <caption>Globale Statistiken</caption>
+            <tbody>
+            <tr>
+              <td>Arbeitszeit insgesamt:</td>
+              <td class="text-end">{{ TOTALS['total_seconds']|formatWorkTimeLocalized }}</td>
+            </tr>
+            <tr>
+              <td>Gesamteinnahmen:</td>
+              <td class="text-end">{{ TOTALS['total_salary']|format_currency('EUR') }}</td>
+            </tr>
+            <tr>
+              <td>Durchschn. Stundenlohn:</td>
+              <td class="text-end">{{ TOTALS['AVG_HOURLY_RATE']|format_currency('EUR') }}</td>
             </tr>
             </tbody>
           </table>
@@ -122,6 +151,4 @@
       </div>
     </div>
   </div>
-  {{ dump() }}
-
 {% endblock %}

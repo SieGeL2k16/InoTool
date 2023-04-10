@@ -44,12 +44,15 @@ class ReportingController extends AbstractController
   public function index():Response
     {
     $user = $this->getUser();
+    $TOTALS = $this->reportingHelper->getTotals($user->getId());
+    $TOTALS['AVG_HOURLY_RATE'] = round($TOTALS['total_salary'] / ($TOTALS['total_seconds'] / 3600),2);
     return $this->render('freelancermanager/reporting_index.html.twig',[
       'ACTNAV'    => self::ACTNAV,
       'TOP_TIME'  => $this->reportingHelper->getTopWorkingTime($user->getId()),
       'TOP_PAYED' => $this->reportingHelper->getTopPaidProjects($user->getId()),
       'CONFIG'    => $this->entity->getRepository(FlConfiguration::class)->findOneBy(['RefUser' => $user]),
       'OVERVIEW'  => $this->reportingHelper->getOverview($user->getId()),
+      'TOTALS'    => $TOTALS,
       ]);
     }
   
