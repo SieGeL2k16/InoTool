@@ -1,6 +1,11 @@
+#### 16-Apr-2023
+
+- Freelancer Dashboard implemented
+
 #### 10-Apr-2023
 
 - Time tracking implemented
+- Added luxon.js as date lib
 
 #### 07-Apr-2023
 

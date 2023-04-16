@@ -1,0 +1,46 @@
+{#
+"id" => 10894
+"salary" => "80.00"
+"ymd" => "2023-01-31"
+"project_name" => "NagView Erweiterungen"
+"customer_name" => "IVZ"
+#}
+<table class="table table-sm table-striped">
+<thead>
+<tr>
+  <th>Datum</th>
+  <th>Kunde</th>
+  <th>Projekt</th>
+  <th class="text-end">Zeit</th>
+  <th class="text-end">Verdienst</th>
+</tr>
+</thead>
+<tbody>
+{% for d in DATA %}
+<tr data-id="{{ d.id }}">
+  <td>{{ d.ymd|format_date }}</td>
+  <td>{{ d.customer_name }}</td>
+  <td>{{ d.project_name }}</td>
+  <td class="text-end">{{ d.work_time_in_secs|formatWorkTime }}</td>
+  <td class="text-end">
+    {% if d.no_reporting == false %}
+    {{ d.salary|format_currency('EUR') }}
+    {% else %}
+    -/-
+    {% endif %}
+  </td>
+</tr>
+{% else %}
+<tr>
+  <td colspan="5" class="text-bg-info text-center">Keine Einträge vorhanden!</td>
+</tr>
+{% endfor %}
+</tbody>
+<tfoot>
+<tr>
+  <td class="fw-bold" colspan="3">Total: </td>
+  <td class="fw-bold text-end">{{ TOTAL_TIME|formatWorkTime}}</td>
+  <td class="fw-bold text-end">{{ TOTAL_SALARY|format_currency('EUR')}}</td>
+</tr>
+</tfoot>
+</table>

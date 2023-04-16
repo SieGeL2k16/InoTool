@@ -250,14 +250,14 @@ class TimeTrackingController extends AbstractController
   
   /**
    * Removes an entry from database.
+   * @param Request $request
    * @param FlProjectEntriesRepository $entriesRepository
    * @param EntityManagerInterface $em
-   * @param int $id
    * @return Response
    */
   #[Route("delete",name: "fl_time_delete", methods: ["POST"])]
   public function delete(Request $request, FlProjectEntriesRepository $entriesRepository,
-                         EntityManagerInterface $em, int $id = 0):Response
+                         EntityManagerInterface $em):Response
     {
     $id = (int)$request->get('ENTRYID',0);
     $user = $this->getUser();

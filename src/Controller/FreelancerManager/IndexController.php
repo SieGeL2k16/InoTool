@@ -13,8 +13,10 @@ use App\Entity\FlCustomer;
 use App\Entity\FlInvoices;
 use App\Entity\FlProjectEntries;
 use App\Entity\FlProjects;
+use App\Service\globalHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -32,13 +34,15 @@ class IndexController extends AbstractController
     {
     $this->entity = $entity;
     }
-
+  
   /**
    * Dashboard page.
+   * @param globalHelper $globalHelper
+   * @param Request $request
    * @return Response
    */
   #[Route('/freelancer',name: 'fl_index')]
-  public function index():Response
+  public function index(globalHelper $globalHelper,Request $request):Response
     {
     $user= $this->getUser();
     $noConfig = false;
@@ -62,7 +66,19 @@ class IndexController extends AbstractController
         }
       $cust_stats['TOTAL']++;
       }
+    $labels = $values = [];
+    foreach($this->entity->getRepository(FlProjectEntries::class)->getYearlyProfit($user) as $d)
+      {
+      $labels[] = $d['y'];
+      $values[] = $d['sum'];
+      }
     $prjcnt = $this->entity->getRepository(FlProjects::class)->count(['RefUser' => $user]);
+    $mons = $globalHelper->getLocalizedMonths($request->getLocale());
+    $this_year = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+    foreach($this->entity->getRepository(FlProjectEntries::class)->getYearProfitByMonth($user) as $ym)
+      {
+      $this_year[(int)$ym['m']] = $ym['sum'];
+      }
     return $this->render('freelancermanager/index.html.twig',[
       'NO_CONFIG'       => $noConfig,
       'CONFIG'          => $config,
@@ -70,6 +86,12 @@ class IndexController extends AbstractController
       'PROJECT_COUNT'   => $prjcnt,
       'INVOICE_COUNT'   => $this->entity->getRepository(FlInvoices::class)->count(['RefUser' => $user]),
       'PRJ_ENTRY_COUNT' => $this->entity->getRepository(FlProjectEntries::class)->count(['RefUser' => $user]),
+      'LAST_ENTRIES'    => $this->entity->getRepository(FlProjectEntries::class)->getLastEntries($user,4),
+      'LABELS'          => $labels,
+      'VALUES'          => $values,
+      'THIS_YEAR_MONTH' => $mons,
+      'THIS_YEAR_SUM'   => $this_year,
+      'CURRENT_YEAR'    => date('Y'),
       ]);
     }
   }

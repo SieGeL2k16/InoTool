@@ -8,6 +8,9 @@
 
 namespace App\Service;
 
+use DateTime;
+use IntlDateFormatter;
+
 class globalHelper
   {
   /**
@@ -43,4 +46,34 @@ class globalHelper
     return rtrim($ostring,",");
     }
   
+  /**
+   * Returns timezone string, falls back to Europe/Berlin if nothing can be found
+   * @return string
+   */
+  public static function getTZ():string
+    {
+    $tz = ini_get("date.timezone");
+    if(empty($tz) === true)
+      {
+      $tz = "Europe/Berlin";    // Fallback
+      }
+    return $tz;
+    }
+  
+  /**
+   * Returns list of localized names for the given locale
+   * @param string $locale
+   * @return array
+   */
+  public function getLocalizedMonths(string $locale):array
+    {
+    $arr = [];
+    $fmt = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL, self::getTZ(), IntlDateFormatter::GREGORIAN, 'MMM');
+    for($sm = 1; $sm < 13; $sm++)
+      {
+      $dt = new DateTime("01-$sm-2023 00:00:00");
+      $arr[$sm] = $fmt->format($dt);
+      }
+    return $arr;
+    }
   }

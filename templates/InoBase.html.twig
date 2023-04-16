@@ -41,5 +41,21 @@
 {% block js_refresh %}{% endblock %}
 {% block toasts %}{% endblock %}
 <div class="mt-5">&nbsp;</div>
+{# Global modal dialog #}
+<div class="modal fade" id="globalModal" tabindex="-1" aria-labelledby="globalModalLabel" aria-hidden="true" data-entriesyyyymm="{{ path("fl_report_ajax_entries_yyyymm") }}">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="globalModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="globalModalBody">
+      </div>
+      <div class="modal-footer" id="globalModalFooter">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

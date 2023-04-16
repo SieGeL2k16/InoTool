@@ -92,7 +92,6 @@ Number.prototype.padZero= function(len){
 
 /**
  * Handle Ajax error (write to console + use toast)
- * @param jqXHR
  * @param textStatus
  * @param errorThrown
  * @constructor
@@ -138,6 +137,43 @@ function swAlert(alerttext, title, focus="")
     });
   }
 
+/**
+ * Converts a YYYYMM string to readable and localized string
+ * @param yyyymm
+ */
+function convertYYYYMMToText(yyyymm)
+  {
+  var DateTime = luxon.DateTime;
+  var dt = DateTime.fromISO(yyyymm+"01");
+  return dt.toLocaleString({ month: 'long', year: 'numeric' });
+  }
+
+
+
+/**
+ * Shows FLProjectEntries for a given year/month combo
+ * URL is saved in InoBase.html.twig
+ * @param yyyymm
+ */
+function fl_showEntriesFromMonth(yyyymm)
+  {
+  $.ajax($("#globalModal").data('entriesyyyymm'), {
+    'method':'post',
+    'dataType': 'json',
+    'data': {'YM':yyyymm}
+    }).done(function(json) {
+      $("#globalModalLabel").html("Zeige Einträge für "+convertYYYYMMToText(yyyymm));
+      $("#globalModalBody").html(json['HTML']);
+      let myModal = new bootstrap.Modal(document.getElementById('globalModal'));
+      myModal.show();
+    }).fail(function(jqxhr,textStatus,errorThrown) {
+      ajaxError(textStatus,errorThrown);
+    });
+  }
+
+/**
+ * Configure javascript components select2
+ */
 $(document).ready(function () {
   $.validator.setDefaults({
     errorElement: "em",
@@ -193,7 +229,6 @@ $.extend( $.fn.dataTable.defaults, {
         event.preventDefault()
         event.stopPropagation()
       }
-
       form.classList.add('was-validated')
     }, false)
   })

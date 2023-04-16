@@ -15,8 +15,8 @@
 </div>
 {% else %}
 <div class="row">
-  <div class="col-xl-7 col-md-9 col-12">
-    <div class="card">
+  <div class="col-xl-6 col-md-9 col-12">
+    <div class="card h-100">
       <div class="card-body">
         <div class="row align-items-center">
           {% if CONFIG.companyLogo is not null %}
@@ -47,7 +47,7 @@
             </tr>
             <tr>
               <td>Service Verträge:</td>
-              <td class="text-end"></td>
+              <td class="text-end">-/-</td>
             </tr>
             <tr>
               <td>Rechnungen:</td>
@@ -59,6 +59,117 @@
       </div>
     </div>
   </div>
+  <div class="col">
+    <div class="card h-100">
+      <div class="card-body align-items-center">
+        <table class="table table-sm table-striped">
+          <caption>Letzte 4 Einträge</caption>
+          <tbody>
+          {% for l in LAST_ENTRIES %}
+            <tr>
+              <td>{{ l.entry_date|format_date }}</td>
+              <td>{{ l.customer_name }}</td>
+              <td>{{ l.project_name }}</td>
+              <td class="text-end">{{ l.work_time_in_secs|formatWorkTime }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <table class="table talbe-sm table-bordered pb-0 mb-0">
+        <thead>
+        <tr>
+          {% for mi,mmm in THIS_YEAR_MONTH %}
+            <th class="text-center showyyyymm mp_click{% if mi == "now"|date('m') %} bg-light{% endif %}" data-ym="{{ CURRENT_YEAR }}{{ mi|format_number({min_integer_digit:2})}}">{{ mmm }}</th>
+          {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          {% for mi,mmm in THIS_YEAR_MONTH %}
+            <td class="text-center showyyyymm mp_click{% if mi == "now"|date('m') %} bg-light{% endif %}" data-ym="{{ CURRENT_YEAR }}{{ mi|format_number({min_integer_digit:2})}}">{{ THIS_YEAR_SUM[mi]|format_currency('EUR') }}</td>
+          {% endfor %}
+        </tr>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="card-title h3 text-center">Jahresumsatz</div>
+        <canvas id="myChart" width="100%" height="20"></canvas>
+      </div>
+    </div>
+  </div>
 </div>
 {% endif %}
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/vendor/chart.umd.js') }}"></script>
+<script>
+// Handle click on month to show entries for this month
+$(".showyyyymm").on('click', function() {
+  var ym = $(this).data('ym');
+  fl_showEntriesFromMonth(ym);
+});
+
+$(document).ready(function() {
+  const ctx = $('#myChart');
+  const labels = {{ LABELS|json_encode|raw }};
+  const values = {{ VALUES|json_encode|raw }};
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Umsatz in EUR',
+        data: values,
+        borderColor: 'rgb(50, 61, 83)',
+        borderWidth: 1,
+      }]
+    },
+    options: {
+      locale: 'de-DE',
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context)
+              {
+                let label = context.dataset.label || '';
+                if (label)
+                  {
+                    label += ': ';
+                  }
+                if (context.parsed.y !== null)
+                  {
+                    label += new Intl.NumberFormat('de-DE', {
+                      style: 'currency',
+                      currency: 'EUR'
+                    }).format(context.parsed.y);
+                  }
+                return label;
+              }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
+</script>
 {% endblock %}

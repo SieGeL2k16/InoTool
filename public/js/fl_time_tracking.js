@@ -11,14 +11,14 @@ function CalculateTimeDiff()
     // Proceed only if start/endtime is given, else we use the HH:MM field
     if(mystart === "00:00" || myend === "00:00")
       {
-        return false;
+      return false;
       }
     var mystartdate = DateTime.fromISO(cdstr+"T"+mystart);
     var myenddate   = DateTime.fromISO(cdstr+"T"+myend);
     if(myenddate < mystartdate)
       {
-        swAlert("Endzeit kann nicht vor der Startzeit liegen!","Achtung!","#et");
-        return false;
+      swAlert("Endzeit kann nicht vor der Startzeit liegen!","Achtung!","#et");
+      return false;
       }
     var diff  = myenddate.diff(mystartdate,["hours","minutes"]);
     $("#hh").val(diff.toObject()['hours']);
