@@ -130,9 +130,15 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
                   FROM fl_invoices inv
                  WHERE inv.ref_user_id  = :uid
                    AND inv.invoice_type = 0
+                union all
+                select sco.billing_fee as salary,
+                       to_char(sco.billing_date , 'YYYY') as y,
+                       0
+                  from fl_service_contract_entries sco
+                 where sco.ref_user_id = :uid
                ) i
         group by i.y
-        order by 2",['uid' => $user->getId()]);
+        order by 3",['uid' => $user->getId()]);
     return $stmt->fetchAllAssociative();
     }
   
@@ -166,6 +172,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
                  WHERE inv.ref_user_id  = :uid
                    AND inv.invoice_type = 0
                    AND TO_CHAR(inv.INVOICE_DATE,'YYYY') = :y
+                union all
+                select sco.billing_fee,
+                       to_char(sco.billing_date , 'MM') as m
+                  from fl_service_contract_entries sco
+                 where sco.ref_user_id = :uid
+                   and to_char(sco.billing_date,'YYYY') = :y
                ) i
         group by i.m
         order by 2",['uid' => $user->getId(),'y' => $year]);

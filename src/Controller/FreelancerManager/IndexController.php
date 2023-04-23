@@ -13,6 +13,7 @@ use App\Entity\FlCustomer;
 use App\Entity\FlInvoices;
 use App\Entity\FlProjectEntries;
 use App\Entity\FlProjects;
+use App\Entity\FlServiceContracts;
 use App\Service\globalHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -86,6 +87,7 @@ class IndexController extends AbstractController
       'PROJECT_COUNT'   => $prjcnt,
       'INVOICE_COUNT'   => $this->entity->getRepository(FlInvoices::class)->count(['RefUser' => $user]),
       'PRJ_ENTRY_COUNT' => $this->entity->getRepository(FlProjectEntries::class)->count(['RefUser' => $user]),
+      'CONTRACT_COUNT'  => $this->entity->getRepository(FlServiceContracts::class)->count(['RefUser' => $user]),
       'LAST_ENTRIES'    => $this->entity->getRepository(FlProjectEntries::class)->getLastEntries($user,4),
       'LABELS'          => $labels,
       'VALUES'          => $values,

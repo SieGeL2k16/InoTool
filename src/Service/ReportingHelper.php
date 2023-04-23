@@ -125,11 +125,11 @@ class ReportingHelper
                             FROM fl_invoices inv
                            WHERE inv.REF_USER_ID  = :uid
                              AND inv.INVOICE_TYPE = 0
---                         UNION
---                         SELECT 0,
---                                 SUM(sco.CONTRACT_VALUE) AS SCO_SALARY
---                            FROM SCO_ENTRIES sco
---                           WHERE sco.REF_USER_ID = :uid
+                         UNION
+                         SELECT 0,
+                                SUM(sco.billing_fee) AS SCO_SALARY
+                           FROM fl_service_contract_entries sco
+                           WHERE sco.REF_USER_ID = :uid
                          ) final";
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
     return $stmt->fetchAssociative();
