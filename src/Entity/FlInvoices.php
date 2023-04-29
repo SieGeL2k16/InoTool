@@ -11,7 +11,13 @@ class FlInvoices
   {
   const INVOICE_TYPE_INCOME   = 0;
   const INVOICE_TYPE_EXPENSE  = 1;
-    #[ORM\Id]
+
+  public static array $_INVOICE_TYPE_LIST = [
+    self::INVOICE_TYPE_INCOME   => 'Einnahmen',
+    self::INVOICE_TYPE_EXPENSE  => 'Ausgaben'
+    ];
+    
+  #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;

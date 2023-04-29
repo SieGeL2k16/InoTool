@@ -13,6 +13,21 @@
   <div class="col-auto">
     <button type="button" class="btn btn-primary" onclick="window.location.href='#'"><i class="fa-solid fa-plus"></i> Neue Rechnung erstellen</button>
   </div>
+  <div class="col-auto">
+    <select name="F_TYPE" id="f_type" class="form-select fl_filter">
+      <option value="">Alle anzeigen</option>
+      {% for i,it in INVOICE_TYPES %}
+      <option value="{{ i }}"{% if F_TYPE|default(-1) == i %} selected{% endif %}>Nur {{ it }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <select name="F_PAID" id="f_paid" class="form-select fl_filter">
+      <option value="">Alle anzeigen</option>
+      <option value="0"{% if F_PAID=="0" %} selected{% endif %}>Nur unbezahlte</option>
+      <option value="1"{% if F_PAID=="1" %} selected{% endif %}>Nur bezahlte</option>
+    </select>
+  </div>
 </div>
 <div class="row">
   <div class="col-sm-12 table-responsive">
@@ -26,7 +41,7 @@
         <th>Rech. Art</th>
         <th>Betrag</th>
         <th class="text-center">Bezahlt?</th>
-        <th class="text-center">PDF Dl.</th>
+        <th class="text-center">PDF</th>
       </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -37,44 +52,9 @@
 </div>
 {% endblock %}
 {% block javascripts %}
-  <script>
-    var dtable  = $("#tbl_fl_invoices").DataTable({
-      columnDefs: [
-        {className: "td_edit", targets: [0,1,2,3,4,5,6]},
-        //{className: "td_edit text-center", targets: [6]}
-      ],
-      "processing": true,
-      'serverSide': true,
-      ajax: {
-        url: '{{ path("fl_invoices_ajax") }}',
-/*
-        "data": function (d)
-          {
-            d.F_ACTIVE = $('#f_active').val();
-          }
-*/
-      },
-      "stateSave": true,
-      "stateDuration": 0,
-      "fnInitComplete": function() {
-        this.fnAdjustColumnSizing(true);
-      },
-    });
-
-    // Handle click on table entry
-    $('#tbl_fl_invoices tbody').on('click', 'td', function () {
-      var data = dtable.cell(this).data();
-      if (Array.isArray(data) === true)
-        {
-          return;
-        }
-      var row = dtable.row(dtable.cell(this).index().row).data();
-      window.location.href=formurl+"/"+row[0];
-    });
-
-    /** React on active flag adjustment */
-    $("#f_active").on('change', function() {
-      dtable.ajax.reload(null,false);
-    });
-  </script>
+<script>
+  var ajaxUrl = "{{ path("fl_invoices_ajax") }}";
+  var blobUrl = "{{ path("fl_invoices_dl") }}";
+</script>
+<script src="{{ asset("js/inotool/invoices_list.js") }}"></script>
 {% endblock %}

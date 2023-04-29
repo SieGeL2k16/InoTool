@@ -10,6 +10,7 @@ namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlCustomer;
 use App\Entity\FlProjects;
+use App\Entity\User;
 use App\Repository\FlCustomerRepository;
 use App\Repository\FlProjectsRepository;
 use App\Service\AppConfigHelper;
@@ -77,6 +78,7 @@ class ProjectsController extends AbstractController
   #[Route("ajax",name: "fl_projects_ajax")]
   public function list_ajax(Request $request,FlProjectsRepository $flProjectsRepository):JsonResponse
     {
+    /** @var User $user */
     $user         = $this->getUser();
     $colcount     = count($request->get('columns'));
     $draw         = $request->get('draw');      // Draw counter for datatable rendering

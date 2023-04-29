@@ -9,6 +9,8 @@
 namespace App\Service;
 
 use App\Entity\FlConfiguration;
+use App\Entity\FlInvoices;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -52,6 +54,34 @@ class BlobSupport
     $response->setContent($data);
     return $response;
     }
-
+  
+  /**
+   * Returns invoice PDF stored with given ID for the given user.
+   * @param int $id
+   * @param UserInterface|User $user
+   * @return Response
+   */
+  public function downloadInvoice(int $id,UserInterface|User $user):Response
+    {
+    $invoice = $this->em->getRepository(FlInvoices::class)->findOneBy(['id' => $id, 'RefUser' => $user]);
+    if($invoice === null)
+      {
+      return new Response();
+      }
+    rewind($invoice->getPdfData());
+    $content = (string)stream_get_contents($invoice->getPdfData());
+    $response = new Response();
+    $response->headers->set('Cache-Control', 'private');
+    if($invoice->getPdfMimeType() !== null)
+      {
+      $response->headers->set('Content-type', $invoice->getPdfMimeType());
+      }
+    $response->headers->set('Content-Disposition', 'attachment; filename="' . $invoice->getPdfFilename() . '";');
+    $response->headers->set('Content-length',  $invoice->getPdfFilesize());
+    $response->sendHeaders();
+    $response->setContent($content);
+    return $response;
+    }
+  
 
   }

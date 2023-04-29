@@ -82,6 +82,24 @@ class FlInvoicesRepository extends ServiceEntityRepository
       $SEARCH_SQL.= " AND (i.invoice_number LIKE :srch OR lower(i.comment) LIKE :srch OR lower(i.pdf_filename) LIKE :srch or i.invoice_date::text like :srch)";
       $par['srch'] = '%'.mb_strtolower($params['SEARCH']).'%';
       }
+    if($params['F_TYPE'] !== "")
+      {
+      $SEARCH_SQL.=" and i.invoice_type = :it";
+      $par['it'] = $params['F_TYPE'];
+      }
+    if($params['F_PAID'] !== "")
+      {
+      $SEARCH_SQL.= " and i.is_paid = :ip";
+      if($params['F_PAID'] === "0")
+        {
+        $ip = "false";
+        }
+      else
+        {
+        $ip = "true";
+        }
+      $par['ip'] = $ip;
+      }
     $SQL  = "SELECT i.id,i.invoice_number,i.invoice_date,c.name as customer_name,i.invoice_type,
                     case when i.sum_brutto is null then i.sum_netto else i.sum_brutto end as invoice_fee,
                     i.is_paid,i.pdf_filename
