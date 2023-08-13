@@ -9,6 +9,9 @@ namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlInvoices;
 use App\Entity\User;
+use App\Repository\FlCustomerRepository;
+use App\Repository\FlInvoicesRepository;
+use App\Repository\FlProjectsRepository;
 use App\Service\AppConfigHelper;
 use App\Service\BlobSupport;
 use App\Service\globalHelper;
@@ -136,5 +139,40 @@ class InvoicesController extends AbstractController
     {
     $user = $this->getUser();
     return $blobSupport->downloadInvoice($id,$user);
+    }
+  
+  /**
+   * Either Add or edit an invoice
+   * @param int $id
+   * @return Response
+   */
+  #[Route("form/{id}",name: "fl_invoices_form")]
+  public function form(FlInvoicesRepository $flInvoicesRepository,FlCustomerRepository $customerRepository,int $id = 0):Response
+    {
+    $user = $this->getUser();
+    if($id)
+      {
+      $PAGE_TITLE = "Rechnung #$id bearbeiten";
+      $invoice = $flInvoicesRepository->findOneBy(['id' => $id,'RefUser' => $user]);
+      if($invoice === null)
+        {
+        $this->logger->warning(__METHOD__.": No entry found with ID=$id - cannot edit!");
+        $this->addFlash("warning","Keinen Eintrag zum Bearbeiten gefunden?!");
+        return $this->redirectToRoute("fl_invoices_list");
+        }
+      }
+    else
+      {
+      $PAGE_TITLE = "Neue Rechnung erstellen";
+      $invoice = new FlInvoices();
+      }
+    $customer_list = $customerRepository->findBy(['RefUser' => $user],['Name' => 'asc']);
+    return $this->render("freelancermanager/invoices_form.html.twig", [
+      'ACTNAV'        => self::ACTNAV,
+      'PAGE_TITLE'    => $PAGE_TITLE,
+      'INVOICE'       => $invoice,
+      'CUSTOMER_LIST' => $customer_list,
+      'INVOICE_TYPES' => FlInvoices::$_INVOICE_TYPE_LIST,
+      ]);
     }
   }

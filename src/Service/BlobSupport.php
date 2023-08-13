@@ -76,7 +76,7 @@ class BlobSupport
       {
       $response->headers->set('Content-type', $invoice->getPdfMimeType());
       }
-    $response->headers->set('Content-Disposition', 'attachment; filename="' . $invoice->getPdfFilename() . '";');
+    $response->headers->set('Content-Disposition', 'attachment; filename="'.$invoice->getPdfFilename().'";');
     $response->headers->set('Content-length',  $invoice->getPdfFilesize());
     $response->sendHeaders();
     $response->setContent($content);

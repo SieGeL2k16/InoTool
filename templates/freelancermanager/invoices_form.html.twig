@@ -1,0 +1,214 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item  h3" aria-current="page"><a href="{{ path("fl_invoices_list") }}"><i class="fa-solid fa-file-invoice-dollar fa-fw"></i> Rechnungen</a></li>
+        <li class="breadcrumb-item active h3" aria-current="page">{{ PAGE_TITLE }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<form method="post" action="#" class="needs-validation" novalidate id="frm_invoice" data-blob="{{ path("fl_invoices_dl") }}" enctype="multipart/form-data">
+<input type="hidden" name="PID" value="{{ INVOICE.id|default(0) }}">
+<div class="row">
+  <div class="col-xl-6 col-12">
+    <div class="card h-100">
+      <div class="card-header">
+        <span>Kundeninformationen</span>
+        {% if INVOICE.createdOn != "" %}
+          <small class="text-muted"> (Erstellt am {{ INVOICE.createdOn|format_datetime }}{% if INVOICE.lastModifiedOn != "" %}, zuletzt geändert am {{ INVOICE.lastModifiedOn|format_datetime }}{% endif %})</small>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div class="form-floating mb-3">
+          <select class="form-select" id="RefCustomerId" name="RefCustomerId" aria-label="Kundenliste" required="required">
+            <option value="">--- Bitte Kunde wählen ---</option>
+            {% for c in CUSTOMER_LIST %}
+              <option value="{{ c.id }}"{% if c.id == INVOICE.refCustomer.id|default(0) %} selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+          </select>
+          <label for="RefCustomerId">Rechnung gehört zu Kunde</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="customerNumber" name="customerNumber" placeholder="Kundennummer" required="required" value="{{ INVOICE.refCustomer.customerNumber|default("") }}">
+          <label for="customerNumber">Kundennummer</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" name="name" placeholder="Name der Firma" required="required" value="{{ INVOICE.refCustomer.name|default('') }}">
+          <label for="name">Name der Firma</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="street" name="street" placeholder="Strasse" value="{{ INVOICE.refCustomer.street|default('') }}">
+          <label for="street">Strasse</label>
+        </div>
+        <div class="row">
+          <div class="col-3">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Postleitzahl" value="{{ INVOICE.refCustomer.postalCode|default('') }}">
+              <label for="postalCode">PLZ</label>
+            </div>
+          </div>
+          <div class="col-9">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="city" name="city" placeholder="Stadt/Ort" value="{{ INVOICE.refCustomer.city|default('') }}">
+              <label for="city">Stadt/Ort</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="country" name="country" placeholder="Land" value="{{ INVOICE.refCustomer.country|default('') }}">
+          <label for="country">Land</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-12">
+    <div class="card h-100">
+      <div class="card-header">
+        <span>Rechnungsdaten</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <div class="form-floating mb-3">
+              <input type="date" class="form-control" id="inv_date" name="inv_date" placeholder="Rechnungsdatum" value="{{ INVOICE.invoiceDate }}" required="required">
+              <label for="inv_date">Rechnungsdatum</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="inv_nr" name="inv_nr" placeholder="Rechnungsnummer" value="{{ INVOICE.invoiceNumber }}" required="required">
+              <label for="inv_nr">Rechnungsnummer</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-floating mb-3">
+              <select class="form-select" id="inv_type" name="inv_type" aria-label="Rechungsart" required="required">
+                <option value="">--- Bitte wählen ---</option>
+                {% for id,name in INVOICE_TYPES %}
+                  <option value="{{ id }}"{% if id == INVOICE.invoiceType|default(0) %} selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+              </select>
+              <label for="inv_type">Rechnungsart</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-floating mb-3">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="ispaid">
+                <label class="form-check-label" for="ispaid">Bezahlt?</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mb-3">
+            <div class="input-group has-validation">
+              <div class="form-floating">
+                <input type="text" class="form-control text-end" id="inv_netto" placeholder="Netto Betrag" value="{{ INVOICE.sumNetto }}" required>
+                <label for="inv_netto">Betrag Netto</label>
+              </div>
+              <span class="input-group-text">&euro;</span>
+              <div class="invalid-feedback">
+                Gültigen Euro Betrag eingeben!
+              </div>
+            </div>
+          </div>
+          <div class="col mb-3">
+            <div class="input-group has-validation">
+              <div class="form-floating">
+                <input type="text" class="form-control text-end" id="inv_brutto" placeholder="Brutto Betrag" value="{{ INVOICE.sumBrutto }}" required>
+                <label for="inv_brutto">Betrag Brutto</label>
+              </div>
+              <span class="input-group-text">&euro;</span>
+              <div class="invalid-feedback">
+                Gültigen Euro Betrag eingeben!
+              </div>
+            </div>
+          </div>
+          <div class="col mb-3">
+            <div class="input-group has-validation">
+              <div class="form-floating">
+                <input type="text" class="form-control text-end" id="inv_tax" placeholder="UmSt" value="{{ INVOICE.taxPct|default("19") }}" required>
+                <label for="inv_netto">Umsatzsteuer</label>
+              </div>
+              <span class="input-group-text">%</span>
+              <div class="invalid-feedback">
+                Gültigen Euro Betrag eingeben!
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="1" id="inv_notax"{% if INVOICE.noTax == true %} checked{% endif %}>
+              <label class="form-check-label" for="inv_notax">
+                Ohne Umsatzsteuer (§19 UmStG)
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="form-floating">
+              <textarea class="form-control" placeholder="Optionaler Kommentar" id="inv_comment" style="height:80px"></textarea>
+              <label for="inv_comment">Opt. Kommentar</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="">
+              <label for="inv_pdf" class="form-label">Rechnung hochladen (PDF)</label>
+              <input class="form-control" type="file" id="inv_pdf" accept="application/pdf">
+            </div>
+          </div>
+          <div class="col d-flex align-items-end">
+            {% if INVOICE.pdfFilename != "" %}
+            <button type="button" class="btn btn-secondary me-1" title="{{ INVOICE.pdfFilename }} ({{ INVOICE.pdfFilesize|format_number }} bytes)"><i class="fa-solid fa-download"></i> Download</button>
+            <button type="button" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button>
+            {% else %}
+              <label for="inv_nofile"></label>
+              <input type="text" readonly class="form-control-plaintext text-muted" id="inv_nofile" value="Keine Rechnungsdatei vorhanden">
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <button type="submit" class="btn btn-primary"><i class="far fa-save"></i>  Rechnung speichern</button>
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ path("fl_invoices_list") }}'"><i class="fa-solid fa-arrow-left"></i> Zurück zur Übersicht</button>
+  </div>
+</div>
+</form>
+{% endblock %}
+{#
+"INVOICE" => App\Entity\FlInvoices {#579 ▼
+  -id: null
+  -RefUser: null
+  -RefCustomer: null
+  -InvoiceType: 0
+  -IsPaid: false
+  -InvoiceDate: null
+  -InvoiceNumber: null
+  -SumNetto: null
+  -SumBrutto: null
+  -TaxPct: null
+  -NoTax: null
+  -Comment: null
+  -PdfFilename: null
+  -PdfFilesize: null
+  -PdfMimeType: null
+  -CreatedOn: null
+  -LastModifiedOn: null
+  -PdfData: null
+}
+#}

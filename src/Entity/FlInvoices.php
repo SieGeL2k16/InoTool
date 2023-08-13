@@ -13,8 +13,8 @@ class FlInvoices
   const INVOICE_TYPE_EXPENSE  = 1;
 
   public static array $_INVOICE_TYPE_LIST = [
-    self::INVOICE_TYPE_INCOME   => 'Einnahmen',
-    self::INVOICE_TYPE_EXPENSE  => 'Ausgaben'
+    self::INVOICE_TYPE_INCOME   => 'Umsatz',
+    self::INVOICE_TYPE_EXPENSE  => 'Ausgabe'
     ];
     
   #[ORM\Id]

@@ -53,7 +53,6 @@ $('#tbl_fl_invoices tbody').on('click', '.td_edit', function () {
 
 /** Handle download of invoice */
 $("body").on('click', ".dl_invoice",function() {
-  console.log("HALLO");
   window.location.href=blobUrl+"/"+$(this).data('id');
 });
 

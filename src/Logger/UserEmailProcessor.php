@@ -31,6 +31,10 @@ class UserEmailProcessor
     try
       {
       $user = $this->security->getUser();
+      if($user === null)
+        {
+        throw new SessionNotFoundException("No user found!");
+        }
       }
     catch (SessionNotFoundException $e)
       {
