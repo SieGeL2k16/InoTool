@@ -46,6 +46,8 @@
         <th>Kunde</th>
         <th>Status</th>
         <th class="text-center">Berechnet?</th>
+        <th class="text-end">Stundensatz</th>
+        <th>Währung</th>
       </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -61,7 +63,8 @@
     var dtable  = $("#tbl_fl_projects").DataTable({
       columnDefs: [
         {className: "td_edit", targets: [0,1,2,3,4]},
-        {className: "td_edit text-center", targets: [3,4]}
+        {className: "td_edit text-center", targets: [3,4]},
+        {className: "td_edit text-end", targets: [5]}
       ],
       order: [[2, 'desc']],
       "processing": true,
