@@ -135,7 +135,7 @@ class CsvImportController extends AbstractController
       $csv = str_getcsv($item,";");
       if(!preg_match("/^\d{2}\.\d{2}\.\d{4}$/",$csv[0]))
         {
-        if($csvheadFound == FALSE && preg_match("/^Buchungstag.*/",$csv[0]))
+        if($csvheadFound === FALSE && preg_match("/^Buchungstag.*/",$csv[0]))
           {
           $csvheadFound = TRUE;
           if($this->dbFormatSelect($csv) === false)
@@ -242,6 +242,9 @@ class CsvImportController extends AbstractController
    */
   private function dbFormatSelect(array $csvheader): bool
     {
+
+      //dd($csvheader);
+
     if(count($csvheader) == 6)
       {
       $this->DB_ACC_TEXT      = 2;
@@ -279,6 +282,17 @@ class CsvImportController extends AbstractController
       $this->DB_ACC_SOLL      = 15;
       $this->DB_ACC_HABEN     = 16;
       $this->DB_ACC_CURRENCY  = 17;
+      $this->DB_OLD_FORMAT    = 2;
+      $this->DB_ACC_RECIPIENT_ACCOUNT = 5;
+      }
+    elseif(count($csvheader) === 19)
+      {
+      $this->DB_ACC_TYPE      = 2;
+      $this->DB_ACC_PERSON    = 3;
+      $this->DB_ACC_TEXT      = 4;
+      $this->DB_ACC_SOLL      = 16;
+      $this->DB_ACC_HABEN     = 17;
+      $this->DB_ACC_CURRENCY  = 18;
       $this->DB_OLD_FORMAT    = 2;
       $this->DB_ACC_RECIPIENT_ACCOUNT = 5;
       }
