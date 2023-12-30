@@ -1,1 +1,29 @@
-{{ dump() }}
+{# Output of entries for a given project - note that this HTML code is specific to tcpdf !!#}
+<table cellpadding="1" cellspacing="1">
+<tr>
+  <th colspan="3"><b><u>{{ PROJECT_NAME }}</u></b></th>
+</tr>
+{% for e in ENTRIES %}
+<tr style="{% if loop.index is odd %}background-color:#eeeeee;{% else %}background-color:#dddddd;{% endif %}">
+  <td width="50">{{ e.ymd|format_date }}</td>
+  <td width="40" style="text-align:center;">{{ e.work_time_in_secs|formatWorkTime }}</td>
+  <td width="363">{{ e.work_description|nl2br }}</td>
+</tr>
+{% endfor %}
+<tr>
+  <td style="text-align:right;border-top: 1px solid #666666;"><b>Total:</b></td>
+  <td style="text-align:center;border-top: 1px solid #666666;"><b>{{ TOTAL_SECONDS|formatWorkTime }}</b></td>
+  <td style="border-top: 1px solid #666666;"><b>{{ TOTAL_SALARY|format_currency('EUR') }}</b></td>
+</tr>
+</table>
+{#
+
+"id" => 10905
+"salary" => "45.00"
+"ymd" => "2023-12-29"
+"project_name" => "IT Administration"
+"customer_name" => "Rechtsanwalt Frank Meier"
+"no_reporting" => false
+"work_time_in_secs" => 1800
+"work_description" => "Prüfung Backup, Einrichtung Strato HiDrive, Einbindung HiD
+#}

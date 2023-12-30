@@ -145,7 +145,6 @@ class ReportingHelper
    */
   public function getMonthText(string $locale, int|string $monid):string
     {
-//    $df = IntlDateFormatter::create($locale,IntlDateFormatter::MEDIUM,IntlDateFormatter::NONE);
     $df =  new IntlDateFormatter($locale,IntlDateFormatter::FULL,IntlDateFormatter::NONE,null,IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
     return $df->format(DateTime::createFromFormat('Ym',(string)$monid));
     }

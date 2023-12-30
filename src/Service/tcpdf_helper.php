@@ -63,10 +63,11 @@ class tcpdf_helper
   public function Download(string $filename, string $buffer):Response
     {
     $response = new Response();
-    $response->headers->set('Cache-Control', 'private');
-    $response->headers->set('Content-type', 'application/pdf' );
+    $response->headers->set('Cache-Control', 'must-revalidate');
+    $response->headers->set('Content-type', 'application/octet-stream' );
     $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '";');
     $response->headers->set('Content-length',  sprintf("%s",strlen($buffer)));
+    $response->headers->set('Content-Transfer-Encoding', 'binary');
     // Send headers before outputting anything
     $response->sendHeaders();
     $response->setContent($buffer);

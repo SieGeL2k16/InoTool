@@ -1,6 +1,6 @@
 #### 29-Dec-2023
 
-
+- Added reporting for a given project and date range incl. PDF output
 - Updated Bootstrap to 5.3.2
 - Updated Fontawesome to 6.5.1
 - Updated Symfony to 7.0.1
