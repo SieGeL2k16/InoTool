@@ -95,7 +95,8 @@
         <tr>
           <th class="w-20">Kunde</th>
           <th class="w-20">Projekt</th>
-          <th>Dauer</th>
+          <th class="text-center">Dauer</th>
+          <th class="text-end">Verdienst</th>
           <th class="w-50">Beschreibung</th>
         </tr>
         </thead>
@@ -104,7 +105,16 @@
         <tr>
           <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.customer_name }}</a></td>
           <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.project_name }}</a></td>
-          <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.work_time_in_secs|formatWorkTime }}</a></td>
+          <td class="text-center">
+            <a href="{{ path("fl_time_edit",{'id':t.id}) }}">
+            {% if t.record_type == constant('App\\Entity\\FlProjectEntries::RT_PROJECT_ENTRY') %}
+              {{ t.work_time_in_secs|formatWorkTime }}
+            {% elseif t.record_type == constant('App\\Entity\\FlProjectEntries::RT_TRAVEL_ALLOWANCE') %}
+              <small>Fahrkostenpauschale</small>
+            {% endif %}
+            </a>
+          </td>
+          <td class="text-end">{{ t.salary|format_currency('EUR') }}</td>
           <td><a href="{{ path("fl_time_edit",{'id':t.id}) }}">{{ t.work_description }}</a></td>
         </tr>
         {% endfor %}
@@ -112,7 +122,8 @@
         <tfoot>
         <tr>
           <td colspan="2" class="text-end pe-2 fw-bold">Total:</td>
-          <td class="fw-bold">{{ TODAY_TIME|formatWorkTime }}</td>
+          <td class="fw-bold text-center">{{ TODAY_TIME|formatWorkTime }}</td>
+          <td class="fw-bold text-end">{{ TODAY_SUM|format_currency('EUR') }}</td>
         </tr>
         </tfoot>
         </table>

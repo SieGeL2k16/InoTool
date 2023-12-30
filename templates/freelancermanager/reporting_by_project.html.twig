@@ -64,7 +64,7 @@
             <thead>
             <tr>
               <th>Datum</th>
-              <th>Zeit</th>
+              <th class="text-center">Zeit</th>
               <th class="text-end">Verdienst</th>
               <th class="w-100">Beschreibung</th>
             </tr>
@@ -73,9 +73,16 @@
 {% for pe in PROJECT_ENTRIES['data'] %}
             <tr>
               <td>{{ pe['ymd']|format_date }}</td>
-              <td>{{ pe['work_time_in_secs']|formatWorkTime }}</td>
+              <td class="text-center">
+                {{ pe['work_time_in_secs']|formatWorkTime}}
+              </td>
               <td class="text-end{% if pe['no_reporting'] == true %} fst-italic{% endif %}">{{ pe['salary']|format_currency('EUR') }}</td>
-              <td>{{ pe['work_description'] }}</td>
+              <td>
+                {% if pe['record_type'] == constant('App\\Entity\\FlProjectEntries::RT_TRAVEL_ALLOWANCE') %}
+                  <span class="me-4">Fahrkostenpauschale</span>
+                {% endif %}
+                {{ pe['work_description'] }}
+              </td>
             </tr>
 {% endfor %}
             </tbody>

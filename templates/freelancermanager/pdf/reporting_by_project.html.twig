@@ -6,8 +6,14 @@
 {% for e in ENTRIES %}
 <tr style="{% if loop.index is odd %}background-color:#eeeeee;{% else %}background-color:#dddddd;{% endif %}">
   <td width="50">{{ e.ymd|format_date }}</td>
-  <td width="40" style="text-align:center;">{{ e.work_time_in_secs|formatWorkTime }}</td>
-  <td width="363">{{ e.work_description|nl2br }}</td>
+  <td width="50" style="text-align:center;">
+  {% if e.record_type == constant('App\\Entity\\FlProjectEntries::RT_PROJECT_ENTRY') %}
+    {{ e.work_time_in_secs|formatWorkTime }}
+  {% elseif e.record_type == constant('App\\Entity\\FlProjectEntries::RT_TRAVEL_ALLOWANCE')%}
+    {{ e.salary|format_currency('EUR') }}
+  {% endif %}
+  </td>
+  <td width="363">{% if e.record_type == constant('App\\Entity\\FlProjectEntries::RT_TRAVEL_ALLOWANCE') %}Fahrkostenpauschale{% if e.work_description != "" %}<br>{% endif %}{% endif %}{{ e.work_description|nl2br }}</td>
 </tr>
 {% endfor %}
 <tr>

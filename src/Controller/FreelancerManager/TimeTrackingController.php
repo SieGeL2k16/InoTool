@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted("ROLE_USER")]
@@ -83,9 +83,11 @@ class TimeTrackingController extends AbstractController
     $tentry = new FlProjectEntries();
     $todays_entries = $entriesRepository->getEntriesForDate($user,$dt->format('Y-m-d'));
     $todays_time = 0;
+    $todays_sum  = 0.00;
     foreach($todays_entries as $te)
       {
       $todays_time+=(int)$te['work_time_in_secs'];
+      $todays_sum+=(float)$te['salary'];
       }
     return $this->render('freelancermanager/timetracking_form.html.twig',[
       'ACTNAV'        => self::ACTNAV,
@@ -95,6 +97,7 @@ class TimeTrackingController extends AbstractController
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
       'TODAY_ENTRIES' => $todays_entries,
       'TODAY_TIME'    => $todays_time,
+      'TODAY_SUM'     => $todays_sum,
       'ENTRY'         => $tentry,
       'START_TIME'    => '00:00',
       'END_TIME'      => '00:00',
@@ -139,6 +142,7 @@ class TimeTrackingController extends AbstractController
       $this->addFlash('warning',"Editieren nicht möglich - keinen Eintrag gefunden?!");
       return $this->redirectToRoute("fl_time_form");
       }
+    
     /** @var DateTime $edate */
     $edate  = $entry->getEntryDate();
     $dates  = $this->getCalendarRange($edate);
@@ -227,6 +231,7 @@ class TimeTrackingController extends AbstractController
         }
       $worktime = intval($hh) * 3600 + intval($mm) * 60;
       $fle->setEntryDate($dt)->setRefProject($prj)->setWorkDescription($request->get('wdesc'))->setWorkTimeInSecs($worktime)->setStatus(timeTrackingHelper::ENTRY_STATUS_ACTIVE);
+      $fle->setRecordType(FlProjectEntries::RT_PROJECT_ENTRY);
       $em->persist($fle);
       $em->flush();
       $this->logger->info($lmsg);

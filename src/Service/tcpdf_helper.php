@@ -18,7 +18,7 @@ use TCPDF;
 class tcpdf_helper
   {
   /** Page margin for left & right */
-  const PAGE_MARGIN_X = 24;
+  const PAGE_MARGIN_X = 22;
 
   /** @var TCPDF $tcpdf */
   private TCPDF $tcpdf;

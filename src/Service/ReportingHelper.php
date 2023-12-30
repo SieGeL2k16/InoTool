@@ -62,7 +62,7 @@ class ReportingHelper
     $SQL = "SELECT  i.TOTSECS,i.SALARY,i.PROJECT_NAME,i.CUSTOMER_NAME
               FROM (
                 SELECT 	SUM(pe.WORK_TIME_IN_SECS) AS TOTSECS,
-      		              calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT) AS SALARY,
+      		              coalesce(calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT),sum(pe.costs)) AS SALARY,
       		              p.PROJECT_NAME,
       		              c.NAME AS CUSTOMER_NAME
                 FROM	fl_customer c , fl_projects p, fl_project_entries pe
@@ -115,7 +115,7 @@ class ReportingHelper
                     SUM(final.TOTAL_SALARY) AS TOTAL_SALARY
               FROM  (SELECT SUM(i.TOTSECS) AS TOTAL_SECONDS,SUM(i.SALARY) AS TOTAL_SALARY
                        FROM (SELECT SUM(pe.WORK_TIME_IN_SECS) AS TOTSECS,
-          		                      calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT) AS SALARY
+          		                      coalesce(calculateProjectEntry(SUM(pe.WORK_TIME_IN_SECS),p.WORK_UNIT, p.PAY_PER_WORK_UNIT),sum(pe.costs)) AS SALARY
                                FROM fl_customer c, fl_projects  p, fl_project_entries pe
                               WHERE c.ID = p.REF_CUSTOMER_ID
                                 AND p.ID  = pe.REF_PROJECT_ID

@@ -1,5 +1,6 @@
 #### 29-Dec-2023
 
+- Added new freelancer menuentry "services" to allow to manually add additional fees for traveling, hotels etc.
 - Added reporting for a given project and date range incl. PDF output
 - Updated Bootstrap to 5.3.2
 - Updated Fontawesome to 6.5.1

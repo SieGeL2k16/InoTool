@@ -77,6 +77,8 @@ class PDFController extends AbstractController
     $pdf = $this->tcpdf_helper->SetMetaData($user);
     $pdf->setTitle($TITLE." (Zeitraum: $trange)");
     $pdf->setSubject("Stundenauswertung");
+    $pdf->setLeftMargin(tcpdf_helper::PAGE_MARGIN_X);
+    $pdf->setRightMargin(tcpdf_helper::PAGE_MARGIN_X);
     $pdf->AddPage();
     $pdf->SetFont('helvetica', 'B', 14);
     $pdf->SetColor('text',0,0,0);

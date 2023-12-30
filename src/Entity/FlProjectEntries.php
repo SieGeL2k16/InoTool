@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FlProjectEntriesRepository::class)]
 class FlProjectEntries
-{
+  {
+  const RT_PROJECT_ENTRY      = 0;    // Standard record holding work items
+  const RT_TRAVEL_ALLOWANCE   = 1;    // "Fahrkostenpauschale"
+
+  const STATUS_ACTIVE         = 0;
+  const STATUS_INACTIVE       = 1;
+  const STATUS_ARCHIVED       = 2;
+  
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -40,6 +47,12 @@ class FlProjectEntries
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $LastModifiedOn = null;
+
+    #[ORM\Column(type: Types::SMALLINT, nullable: true,options: ['default' => 0])]
+    private ?int $RecordType = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $Costs = null;
 
     public function getId(): ?int
     {
@@ -138,6 +151,30 @@ class FlProjectEntries
     public function setLastModifiedOn(?\DateTimeInterface $LastModifiedOn): self
     {
         $this->LastModifiedOn = $LastModifiedOn;
+
+        return $this;
+    }
+
+    public function getRecordType(): ?int
+    {
+        return $this->RecordType;
+    }
+
+    public function setRecordType(?int $RecordType): static
+    {
+        $this->RecordType = $RecordType;
+
+        return $this;
+    }
+
+    public function getCosts(): ?string
+    {
+        return $this->Costs;
+    }
+
+    public function setCosts(?string $Costs): static
+    {
+        $this->Costs = $Costs;
 
         return $this;
     }

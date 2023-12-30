@@ -70,7 +70,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   public function getEntriesForDate(UserInterface $user,string $date): array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
-      select fpe.*,fp.project_name,c.name as customer_name
+      select fpe.*,fp.project_name,c.name as customer_name,coalesce(calculateProjectEntry(fpe.WORK_TIME_IN_SECS,fp.WORK_UNIT,fp.PAY_PER_WORK_UNIT),costs) as salary
         from fl_project_entries fpe,fl_projects fp,fl_customer c
        where to_char(entry_date,'YYYY-MM-DD') = :ymd
          and fpe.ref_project_id = fp.id
@@ -116,7 +116,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
         select sum(i.salary), sum(i.work_time_in_secs) as sum_worktime,i.y
-          from (select calculateProjectEntry(fpe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT) as salary,
+          from (select coalesce(calculateProjectEntry(fpe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT),fpe.costs) as salary,
                        to_char(fpe.entry_date, 'YYYY') as y,
                        fpe.work_time_in_secs
                   from fl_project_entries fpe,fl_projects p
@@ -158,7 +158,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
         select sum(i.salary),i.m
           from (
-                select calculateProjectEntry(fpe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT) as salary,
+                select coalesce(calculateProjectEntry(fpe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT),fpe.costs) as salary,
                        to_char(fpe.entry_date, 'MM') as m
                   from fl_project_entries fpe,fl_projects p
                  where fpe.ref_user_id = :uid
@@ -199,7 +199,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
       }
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
       select pe.id,
-             calculateProjectEntry(pe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT) as salary,
+             coalesce(calculateProjectEntry(pe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT),pe.costs) as salary,
              to_char(pe.entry_date, 'YYYY-MM-DD') as ymd,
              p.project_name,c.name as customer_name,
              p.no_reporting,
@@ -228,13 +228,14 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
       select pe.id,
-             calculateProjectEntry(pe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT) as salary,
+             coalesce(calculateProjectEntry(pe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT),pe.costs) as salary,
              to_char(pe.entry_date, 'YYYY-MM-DD') as ymd,
              p.project_name,
              c.name as customer_name,
              p.no_reporting,
              pe.work_time_in_secs,
-             pe.work_description
+             pe.work_description,
+             pe.record_type
         from fl_project_entries pe, fl_projects p, fl_customer c
        where p.id = pe.ref_project_id
          and pe.ref_user_id=:uid

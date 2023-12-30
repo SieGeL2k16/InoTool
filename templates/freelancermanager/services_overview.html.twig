@@ -1,0 +1,86 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+<div class="row">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item h3" aria-current="page"><a href="{{ path("fl_services_overview") }}"><i class="fa-solid fa-money-bill-1-wave fa-fw"></i> Zusatzleistungen</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<form method="post" action="{{ path("fl_services_save") }}" novalidate class="needs-validation" id="frm_services">
+  <div class="row mb-4">
+    <div class="col-xl-6 col-md-8 col-12">
+      <div class="card">
+        <div class="card-header">
+          <span>Bitte Projekt und gewünschte Zusatzleistung auswählen</span>
+        </div>
+        <div class="card-body">
+          <div class="form-floating mb-4">
+            <select name="fl_project" id="fl_project" class="form-select cfgload" required="required">
+              <option value=""></option>
+              {% for p in PROJECTS_LIST%}
+                <option value="{{ p.id }}">{{ p.projectName }} [{{ p.refCustomer.name }}]</option>
+              {% endfor %}
+            </select>
+            <label for="fl_project">Projekt auswählen</label>
+          </div>
+          <div class="form-floating">
+            <select name="fl_service" id="fl_service" class="form-select cfgload" required="required">
+              <option value=""></option>
+              {% for si,st in SERVICES_LIST %}
+                <option value="{{ si }}">{{ st }}</option>
+              {% endfor %}
+            </select>
+            <label for="fl_project">Zusatzleistung auswählen</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-xl-6 col-md-8 col-12" id="div_service_config">
+      <div class="placeholder w-100"></div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6 col-md-8 col-12">
+      <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Speichern</button>
+    </div>
+  </div>
+ 
+</form>
+{% endblock %}
+{% block javascripts %}
+<script>
+function loadConfig()
+  {
+  let pid = parseInt($("#fl_project").val());
+  let sid = parseInt($("#fl_service").val());
+  if(!pid || !sid)
+    {
+    $("#div_service_config").html('<div class="placeholder w-100"></div>');
+    console.log("Incomplete");
+    return;
+    }
+  console.log("Gogo");
+  $.ajax("{{ path("fl_services_ajax_cfgload") }}", {
+      method: 'post',
+      dataType: 'json',
+      data: {
+        'rtid': sid
+      },
+    }).done(function(json) {
+      $("#div_service_config").html(json['HTML']);
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+      let emsg = "ERROR: "+textStatus+" ("+errorThrown+")";
+      console.log(emsg);
+    });
+
+  }
+$(".cfgload").on('change', function() {
+  loadConfig();
+});
+</script>
+{% endblock %}

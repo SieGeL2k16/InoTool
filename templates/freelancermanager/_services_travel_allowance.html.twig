@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-header">
+    <span>Konfiguration für Fahrkostenpauschale</span>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-floating mb-3">
+          <input type="date" class="form-control" name="fl_ta_date" id="fl_ta_date" value="" required="required">
+          <label for="fl_sd">Datum</label>
+        </div>
+      </div>
+      <div class="col">
+        
+        <div class="input-group mb-3">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="fl_ta_sum" name="fl_ta_sum" placeholder="Zu berechnende Fahrkosten in EUR" required="required">
+            <label for="fl_ta_sum">Fahrkosten</label>
+          </div>
+          <span class="input-group-text">&euro;</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-floating">
+      <textarea class="form-control" name="wdesc" placeholder="Weitere Informationen" id="description" style="height:100px;"></textarea>
+      <label for="description">Zusätzliche Informationen (opt.)</label>
+    </div>
+    </div>
+</div>

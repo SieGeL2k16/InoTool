@@ -150,11 +150,15 @@ class AppRuntime implements RuntimeExtensionInterface
   
   /**
    * Wrapper method.
-   * @param int $seconds
+   * @param int|null $seconds
    * @return string
    */
-  public function formatWorkTime(int $seconds):string
+  public function formatWorkTime(?int $seconds):string
     {
+    if($seconds === null)
+      {
+      return '-';
+      }
     return $this->timeTrackingHelper->formatWorkTime($seconds);
     }
   
