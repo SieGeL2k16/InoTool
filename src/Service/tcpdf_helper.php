@@ -53,7 +53,13 @@ class tcpdf_helper
     $this->tcpdf->setPrintFooter(false);
     return $this->tcpdf;
     }
-
+  
+  /**
+   * Downloads PDF stored in $buffer
+   * @param string $filename
+   * @param string $buffer
+   * @return Response
+   */
   public function Download(string $filename, string $buffer):Response
     {
     $response = new Response();
@@ -65,6 +71,17 @@ class tcpdf_helper
     $response->sendHeaders();
     $response->setContent($buffer);
     return $response;
+    }
+  
+  /**
+   * Adds folding lines to the current page.
+   */
+  public function addFoldLines():void
+    {
+    $this->tcpdf->SetDrawColor(200,200,200);
+    $this->tcpdf->Line(3,100.5,7,100.5);
+    $this->tcpdf->Line(3,140.85,7,140.85);
+    $this->tcpdf->Line(3,210,7,210);
     }
   
   }

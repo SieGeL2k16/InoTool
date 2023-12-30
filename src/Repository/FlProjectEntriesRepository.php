@@ -215,4 +215,54 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
     return $stmt->fetchAllAssociative();
     }
   
+  /**
+   * Returns project entries for a given project id and date range.
+   * @param User|UserInterface $user
+   * @param int $pid
+   * @param DateTime $sd
+   * @param DateTime $ed
+   * @return array
+   * @throws Exception
+   */
+  public function getEntriesForProjectAndRange(User|UserInterface $user, int $pid, DateTime $sd, DateTime $ed):array
+    {
+    $stmt = $this->getEntityManager()->getConnection()->executeQuery("
+      select pe.id,
+             calculateProjectEntry(pe.WORK_TIME_IN_SECS,p.WORK_UNIT,p.PAY_PER_WORK_UNIT) as salary,
+             to_char(pe.entry_date, 'YYYY-MM-DD') as ymd,
+             p.project_name,
+             c.name as customer_name,
+             p.no_reporting,
+             pe.work_time_in_secs,
+             pe.work_description
+        from fl_project_entries pe, fl_projects p, fl_customer c
+       where p.id = pe.ref_project_id
+         and pe.ref_user_id=:uid
+         and c.ref_user_id=:uid
+         and p.id = :pid
+         and c.id = p.ref_customer_id
+         and pe.entry_date between :sd and :ed
+       order by 3 desc,1 desc
+      ",['uid' => $user->getId(),'pid' => $pid,'sd' => $sd->format('Y-m-d').' 00:00:00','ed' => $ed->format('Y-m-d').' 23:59:59']);
+    $data = $stmt->fetchAllAssociative();
+    $totals = ['ROWS' => 0, 'WORK_TIME' => 0, 'SALARY' => 0.00, 'PROJECT' => '', 'CUSTOMER' => ''];
+    foreach($data as $d)
+      {
+      if($totals['PROJECT'] === "")
+        {
+        $totals['PROJECT']      = $d['project_name'];
+        $totals['CUSTOMER']     = $d['customer_name'];
+        $totals['NO_REPORTING'] = false;
+        }
+      $totals['ROWS']++;
+      $totals['WORK_TIME']+=(int)$d['work_time_in_secs'];
+      $totals['SALARY']+=(floatval($d['salary']));
+      if($d['no_reporting'] === true)
+        {
+        $totals['NO_REPORTING'] = true;
+        }
+      }
+    return ['data' => $data,'totals' => $totals];
+    }
+  
   }

@@ -1,11 +1,14 @@
 <?php declare(strict_types=1);
 /**
  * Helper service for all reporting
+ * @todo Refactor all SQL statements - these shouldn't be here at all...
  */
 namespace App\Service;
 
+use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use IntlDateFormatter;
 
 class ReportingHelper
   {
@@ -134,4 +137,45 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
     return $stmt->fetchAssociative();
     }
+  
+  /**
+   * Returns the month/year as clear-text date string.
+   * @input integer $monid The month to convert (format: YYYYMM)
+   * @return string The formatted string localized in format <month> <year>.
+   */
+  public function getMonthText(string $locale, int|string $monid):string
+    {
+//    $df = IntlDateFormatter::create($locale,IntlDateFormatter::MEDIUM,IntlDateFormatter::NONE);
+    $df =  new IntlDateFormatter($locale,IntlDateFormatter::FULL,IntlDateFormatter::NONE,null,IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+    return $df->format(DateTime::createFromFormat('Ym',(string)$monid));
+    }
+  
+  /**
+   * Returns a text describing the given date range between sdate and edate.
+   * @param string $sdate Startdate, can be empty
+   * @param string $edate Enddate, can be empty
+   * @return string Text with specified date range
+   */
+  public function getDateRangeText(string $sdate,string $edate):string
+    {
+    $trange = '';
+    if($sdate == '' && $edate == '')
+      {
+      $trange = 'Alle erfassten Einträge';
+      }
+    else if($sdate != '' && $edate == '')
+      {
+      $trange = sprintf('Seit dem %s',$sdate);
+      }
+    else if($sdate == '' && $edate != '')
+      {
+      $trange = sprintf('Bis einschliesslich %s',$edate);
+      }
+    else
+      {
+      $trange = sprintf("Vom %s bis einschliesslich %s",$sdate,$edate);
+      }
+    return $trange;
+    }
+  
   }

@@ -1,3 +1,10 @@
+#### 29-Dec-2023
+
+
+- Updated Bootstrap to 5.3.2
+- Updated Fontawesome to 6.5.1
+- Updated Symfony to 7.0.1
+
 #### 16-Apr-2023
 
 - Freelancer Dashboard implemented

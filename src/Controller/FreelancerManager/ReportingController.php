@@ -9,6 +9,9 @@ namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlConfiguration;
 use App\Entity\FlProjectEntries;
+use App\Entity\FlProjects;
+use App\Repository\FlProjectEntriesRepository;
+use App\Repository\FlProjectsRepository;
 use App\Service\globalHelper;
 use App\Service\ReportingHelper;
 use DateTime;
@@ -19,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
@@ -123,8 +126,43 @@ class ReportingController extends AbstractController
       $total_time+=$d['work_time_in_secs'];
       }
     return new JsonResponse([
-      'HTML' => $this->render('freelancermanager/_entries_yyyymm.html.twig', ['DATA' => $data,'TOTAL_TIME' => $total_time,'TOTAL_SALARY' => $total_salary])->getContent(),
-    ]);
-  }
+      'HTML' => $this->render('freelancermanager/_entries_yyyymm.html.twig', [
+                  'DATA'        => $data,
+                  'TOTAL_TIME'  => $total_time,
+                  'TOTAL_SALARY'=> $total_salary])->getContent(),
+      ]);
+    }
   
-}
+  /**
+   * Renders selection for project + date range to report from
+   * @param Request $request
+   * @param FlProjectsRepository $projectsRepository
+   * @param FlProjectEntriesRepository $entriesRepository
+   * @return Response
+   * @throws Exception
+   */
+  #[Route("by-project",name: "fl_report_by_project")]
+  public function reportByProject(Request $request,FlProjectsRepository $projectsRepository,FlProjectEntriesRepository $entriesRepository):Response
+    {
+    $user = $this->getUser();
+    $pid  = $request->get("fl_project");
+    $sd   = $request->get('fl_sd');
+    $ed   = $request->get('fl_ed');
+    if($pid !== null && $sd !== null && $ed !== null)
+      {
+      $report = $entriesRepository->getEntriesForProjectAndRange($user,(int)$pid,new DateTime($sd),new DateTime($ed));
+      }
+    else
+      {
+      $report = ['data' => [], 'totals' => []];
+      }
+    return $this->render('freelancermanager/reporting_by_project.html.twig',[
+      'ACTNAV'          => self::ACTNAV,
+      'PROJECTS_LIST'   => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
+      'PROJECT_ENTRIES' => $report,
+      'PROJECT_ID'      => $pid,
+      'SD'              => $sd,
+      'ED'              => $ed,
+      ]);
+    }
+  }

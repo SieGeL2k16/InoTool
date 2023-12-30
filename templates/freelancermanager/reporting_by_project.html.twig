@@ -1,0 +1,108 @@
+{% extends 'InoFreelancerManager.html.twig' %}
+{% block body %}
+  <div class="row">
+    <div class="col-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item h3" aria-current="page"><a href="{{ path("fl_report_index") }}"><i class="fa-solid fa-chart-line fa-fw"></i> Auswertungen</a></li>
+          <li class="breadcrumb-item active h3" aria-current="page">Nach Projekt für einen Zeitraum</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-6 col-md-9 col-12">
+      <div class="card">
+        <div class="card-header">
+          <span>Bitte Projekt und Zeitraum wählen</span>
+        </div>
+        <div class="card-body">
+          <form method="post" action="{{ path("fl_report_by_project") }}" novalidate class="needs-validation">
+            <div class="form-floating mb-4">
+              <select name="fl_project" id="fl_project" class="form-select" required="required">
+                <option value=""></option>
+{% for p in PROJECTS_LIST%}
+                <option value="{{ p.id }}"{% if PROJECT_ID|default(0) == p.id %} selected{% endif %}>{{ p.projectName }} [{{ p.refCustomer.name }}]</option>
+{% endfor %}
+              </select>
+              <label for="fl_report">Projekt auswählen</label>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-floating mb-4">
+                  <input type="date" class="form-control" name="fl_sd" id="fl_sd" value="{{ SD }}" required="required">
+                  <label for="fl_sd">Report von</label>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-floating mb-4">
+                  <input type="date" class="form-control" name="fl_ed" id="fl_ed" value="{{ ED }}" required="required">
+                  <label for="fl_ed">Report bis</label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass-chart"></i> Anzeigen</button>
+            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Zurück</button>
+            {% if PROJECT_ENTRIES['data']|length %}
+            <button type="button" class="btn btn-secondary btn_pdf"><i class="fa-regular fa-file-pdf"></i> PDF erzeugen</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% if PROJECT_ENTRIES['data']|length %}
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <span class="font-weight-bold">Es sind <strong>{{ PROJECT_ENTRIES['data']|length }}</strong> Einträge im Zeitraum <strong>{{ SD|format_date }}</strong> - <strong>{{ ED|format_date }}</strong> für das Projekt <strong>{{ PROJECT_ENTRIES['totals']['PROJECT']}}</strong> vorhanden</span>
+          
+        </div>
+        <div class="card-body">
+          <table class="table table-sm table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Zeit</th>
+              <th class="text-end">Verdienst</th>
+              <th class="w-100">Beschreibung</th>
+            </tr>
+            </thead>
+            <tbody>
+{% for pe in PROJECT_ENTRIES['data'] %}
+            <tr>
+              <td>{{ pe['ymd']|format_date }}</td>
+              <td>{{ pe['work_time_in_secs']|formatWorkTime }}</td>
+              <td class="text-end{% if pe['no_reporting'] == true %} fst-italic{% endif %}">{{ pe['salary']|format_currency('EUR') }}</td>
+              <td>{{ pe['work_description'] }}</td>
+            </tr>
+{% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+              <td><b>Total:</b></td>
+              <td><b>{{ PROJECT_ENTRIES['totals']['WORK_TIME']|formatWorkTime }}</b></td>
+              <td class="text-end{% if PROJECT_ENTRIES['totals']['NO_REPORTING'] == true %} fst-italic{% endif %}"><b>{{ PROJECT_ENTRIES['totals']['SALARY']|format_currency('EUR') }}</b></td>
+              <td>{% if PROJECT_ENTRIES['totals']['NO_REPORTING'] == false %}&nbsp;{% else %}<div class="small ms-2">(<span class="fst-italic">Italic</span> => Summen werden nicht verrechnet)</div>{% endif %}</td>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<form method="post" action="{{ path("pdf_report_by_project") }}" id="frm_pdf_report">
+  <input type="hidden" name="pid" value="{{ PROJECT_ID }}">
+  <input type="hidden" name="sd" value="{{ SD }}">
+  <input type="hidden" name="ed" value="{{ ED }}">
+</form>
+{% endif %}
+{% endblock %}
+{% block javascripts %}
+<script>
+$(".btn_pdf").on('click', function() {
+  $("#frm_pdf_report").submit();
+});
+</script>
+{% endblock %}

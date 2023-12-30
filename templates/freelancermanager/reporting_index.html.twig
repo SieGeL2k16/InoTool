@@ -17,6 +17,7 @@
             <div class="form-floating mb-4">
               <select name="fl_report" id="fl_report" class="form-select">
                 <option value=""></option>
+                <option value="{{ path("fl_report_by_project") }}">Nach Projekt für einen Zeitraum</option>
               </select>
               <label for="fl_report">Gewünschten Report auswählen</label>
             </div>
@@ -150,7 +151,7 @@
               <tr>
                 <td>{{ s.project_name }}</td>
                 <td>{{ s.customer_name }}</td>
-                <td class="text-end">{{ s.totsecs|formatWorkTimeLocalized  }}</td>
+                <td class="text-end">{{ s.totsecs|formatWorkTimeLocalized }}</td>
                 <td class="text-end">{{ s.salary|format_currency('EUR') }}</td>
               </tr>
             {% else %}
@@ -164,4 +165,15 @@
       </div>
     </div>
   </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+$("#fl_report").on('change', function() {
+  let url = $(this).val();
+  if(url !== "")
+    {
+    window.location.href=url;
+    }
+});
+</script>
 {% endblock %}
