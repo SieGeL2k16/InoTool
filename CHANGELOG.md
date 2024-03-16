@@ -1,3 +1,8 @@
+#### 16-Mar-2024
+
+- Fix: Missing variable when editing time tracking entry
+- Upd: Symfony to 7.0.5
+
 #### 29-Dec-2023
 
 - Added new freelancer menuentry "services" to allow to manually add additional fees for traveling, hotels etc.

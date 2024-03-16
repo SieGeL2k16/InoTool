@@ -151,9 +151,11 @@ class TimeTrackingController extends AbstractController
     $enddt->add(new DateInterval("PT".$entry->getWorkTimeInSecs()."S"));
     $todays_entries = $entriesRepository->getEntriesForDate($user,$entry->getEntryDate()->format('Y-m-d'));
     $todays_time = 0;
+    $todays_sum  = 0.00;
     foreach($todays_entries as $te)
       {
       $todays_time+=(int)$te['work_time_in_secs'];
+      $todays_sum+=(float)$te['salary'];
       }
     return $this->render('freelancermanager/timetracking_form.html.twig',[
       'ACTNAV'        => self::ACTNAV,
@@ -163,6 +165,7 @@ class TimeTrackingController extends AbstractController
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
       'TODAY_ENTRIES' => $todays_entries,
       'TODAY_TIME'    => $todays_time,
+      'TODAY_SUM'     => $todays_sum,
       'ENTRY'         => $entry,
       'START_TIME'    => sprintf("%s:%s",$edate->format('H'),$edate->format('i')),
       'END_TIME'      => sprintf("%s:%s",$enddt->format('H'),$enddt->format('i')),
