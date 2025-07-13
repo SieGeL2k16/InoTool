@@ -51,7 +51,7 @@ class TimeTrackingController extends AbstractController
     }
   
   /**
-   * Renders Time tracking form for a given date.
+   * Renders time tracking form for a given date.
    * @param FlProjectsRepository $projectsRepository
    * @param FlProjectEntriesRepository $entriesRepository
    * @param string|null $date
@@ -59,7 +59,7 @@ class TimeTrackingController extends AbstractController
    * @throws Exception
    */
   #[Route("form/{date}",name: "fl_time_form")]
-  public function form(FlProjectsRepository $projectsRepository, FlProjectEntriesRepository $entriesRepository,string $date = null):Response
+  public function form(FlProjectsRepository $projectsRepository, FlProjectEntriesRepository $entriesRepository,?string $date = null):Response
     {
     $user= $this->getUser();
     if($date === null)

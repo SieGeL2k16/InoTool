@@ -27,7 +27,7 @@ class AppRuntime implements RuntimeExtensionInterface
    * @param bool $val
    * @return string
    */
-  public function YesNo(bool $val = null):string
+  public function YesNo(?bool $val = null):string
     {
     if($val === true)
       {

@@ -149,7 +149,7 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
    * @return array
    * @throws Exception
    */
-  public function getYearProfitByMonth(User|UserInterface $user, int $year = null):array
+  public function getYearProfitByMonth(User|UserInterface $user, ?int $year = null):array
     {
     if($year === null)
       {

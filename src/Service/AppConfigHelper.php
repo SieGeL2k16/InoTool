@@ -31,7 +31,7 @@ class AppConfigHelper
    * @param User|null $user
    * @return AppConfig|null
    */
-  public function GetObject(string $key, User $user = null):?AppConfig
+  public function GetObject(string $key, ?User $user = null):?AppConfig
     {
     return $this->entity->getRepository(AppConfig::class)->findOneBy(['RefUser' => $user, 'KeyName' => $key]);
     }
@@ -43,7 +43,7 @@ class AppConfigHelper
    * @param User|null $user
    * @return string|null
    */
-  public function Get(string $key, string $default = null, User $user = null):?string
+  public function Get(string $key, ?string $default = null, ?User $user = null):?string
     {
     $obj = $this->GetObject($key,$user);
     if($obj !== null)
@@ -59,7 +59,7 @@ class AppConfigHelper
    * @param string $val
    * @param User|null $user
    */
-  public function Set(string $key, string $val, User $user = null): void
+  public function Set(string $key, string $val, ?User $user = null): void
     {
     $obj = $this->GetObject($key,$user);
     if($obj === null)
@@ -77,7 +77,7 @@ class AppConfigHelper
    * @param string $key Config item to remove
    * @param User|null $user Opt. user
    */
-  public function Del(string $key, User $user = null): void
+  public function Del(string $key, ?User $user = null): void
     {
     $obj = $this->GetObject($key, $user);
     if($obj === null)
@@ -94,7 +94,7 @@ class AppConfigHelper
    * @param UserInterface|null $user
    * @return array
    */
-  public function xGet(array $fields,UserInterface $user = null):array
+  public function xGet(array $fields,?UserInterface $user = null):array
     {
     $ret = [];
     foreach($fields as $f)

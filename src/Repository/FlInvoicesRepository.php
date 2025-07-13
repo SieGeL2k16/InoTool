@@ -50,7 +50,7 @@ class FlInvoicesRepository extends ServiceEntityRepository
    * @return array total_count,total_sum,entries_year
    * @throws Exception
    */
-  public function getTotals(int $uid, string $year = null):array
+  public function getTotals(int $uid, ?string $year = null):array
     {
     if($year === null)
       {
