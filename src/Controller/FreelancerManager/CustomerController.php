@@ -9,6 +9,7 @@
 namespace App\Controller\FreelancerManager;
 
 use App\Entity\FlCustomer;
+use App\Entity\User;
 use App\Repository\FlCustomerRepository;
 use App\Service\AppConfigHelper;
 use App\Service\globalHelper;
@@ -32,13 +33,13 @@ class CustomerController extends AbstractController
 
   /** @var string Key for filter configuration */
   const CFG_FILTER_ACTIVE = 'fl.customer.active';
-  
+
   /** @var LoggerInterface $logger */
   private LoggerInterface $logger;
 
   /** @var AppConfigHelper $configHelper */
   private AppConfigHelper $configHelper;
-  
+
   /**
    * @param LoggerInterface $logger
    * @param AppConfigHelper $configHelper
@@ -48,7 +49,7 @@ class CustomerController extends AbstractController
     $this->logger = $logger;
     $this->configHelper = $configHelper;
     }
-  
+
   /**
    * Lists all customer currently registered for current user.
    * @return Response
@@ -61,7 +62,7 @@ class CustomerController extends AbstractController
       'F_ACTIVE'  => $this->configHelper->Get(self::CFG_FILTER_ACTIVE,'',$this->getUser()),
       ]);
     }
-  
+
   /**
    * AJAX backend for customer list
    * @param Request $request
@@ -72,6 +73,7 @@ class CustomerController extends AbstractController
   #[Route("ajax",name: "fl_customer_ajax")]
   public function list_ajax(Request $request,FlCustomerRepository $customerRepository):JsonResponse
     {
+    /** @var User $user */
     $user     = $this->getUser();
     $colcount = count($request->get('columns'));
     $draw     = $request->get('draw');      // Draw counter for datatable rendering
@@ -93,7 +95,7 @@ class CustomerController extends AbstractController
       'data'            => $data['DATA'],
       ]);
     }
-  
+
   /**
    * HTML formular to add or modify customer data.
    * @param FlCustomerRepository $customerRepository
@@ -131,7 +133,7 @@ class CustomerController extends AbstractController
       'PAGE_TITLE'  => $page_title,
       ]);
     }
-  
+
   /**
    * Saves form data.
    * @param Request $request
@@ -182,7 +184,7 @@ class CustomerController extends AbstractController
     $this->logger->info("Customer {$customer->getName()} successfully $logsuffix");
     return $this->redirectToRoute('fl_customer_list');
     }
-  
+
   /**
    * Removes a customer from database.
    * @param Request $request
@@ -206,5 +208,5 @@ class CustomerController extends AbstractController
     $this->addFlash('success',"Kunde {$customer->getName()} erfolgreich gelöscht.");
     return $this->redirectToRoute('fl_customer_list');
     }
-  
+
   }

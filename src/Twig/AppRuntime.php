@@ -14,7 +14,7 @@ use Twig\Extension\RuntimeExtensionInterface;
 class AppRuntime implements RuntimeExtensionInterface
   {
   private timeTrackingHelper $timeTrackingHelper;
-  
+
   /**
    * AppRuntime constructor.
    */
@@ -62,8 +62,8 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return '<i class="fa-solid fa-xmark text-danger"></i>';
     }
-  
-  
+
+
   /**
    * Simple text-based wrapper for 0/1 flags
    * @param int $val
@@ -77,7 +77,7 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return 'Ja';
     }
-  
+
   /**
    * Returns bootstrap class based on money < 0
    * @param float $money
@@ -94,7 +94,7 @@ class AppRuntime implements RuntimeExtensionInterface
 
   /**
    * Wrapper for Base64Encode(), can be used with strings or stream resources
-   * @param string $raw
+   * @param mixed $raw
    * @return string
    */
   public function Base64Encode(mixed $raw):string
@@ -105,7 +105,7 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return base64_encode(stream_get_contents($raw));
     }
-  
+
   /**
    * Returns fontawesome icons for postgres bool return "true" and "false"
    * @param string $bool
@@ -119,7 +119,7 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return $this->YesNo(false);
     }
-  
+
   /**
    * Adds classes based on given date.
    * Current date i.e. will add classes "text-success fw-bold"
@@ -147,7 +147,7 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return ['CSS_CLASSES' => $cl, 'DAY' => $fmtday];
     }
-  
+
   /**
    * Wrapper method.
    * @param int|null $seconds
@@ -161,7 +161,7 @@ class AppRuntime implements RuntimeExtensionInterface
       }
     return $this->timeTrackingHelper->formatWorkTime($seconds);
     }
-  
+
   /**
    * Wrapper method.
    * @param int $seconds
@@ -171,7 +171,7 @@ class AppRuntime implements RuntimeExtensionInterface
     {
     return $this->timeTrackingHelper->getWorkTimeFromSeconds($seconds);
     }
-  
+
   /**
    * Wrapper method.
    * @param int $seconds
@@ -181,6 +181,6 @@ class AppRuntime implements RuntimeExtensionInterface
     {
     return $this->timeTrackingHelper->formatWorkTimeLoc($seconds);
     }
-  
+
   }
 

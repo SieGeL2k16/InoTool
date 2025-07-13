@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AppConfigHelper
   {
   private EntityManagerInterface $entity;
-  
+
   /**
    * @param EntityManagerInterface $entity
    */
@@ -24,26 +24,26 @@ class AppConfigHelper
     {
     $this->entity = $entity;
     }
-  
+
   /**
    * Returns AppConfig object, null if nothing is found
    * @param string $key
-   * @param User|null $user
+   * @param User|UserInterface|null $user
    * @return AppConfig|null
    */
-  public function GetObject(string $key, ?User $user = null):?AppConfig
+  public function GetObject(string $key, User|UserInterface|null $user = null):?AppConfig
     {
     return $this->entity->getRepository(AppConfig::class)->findOneBy(['RefUser' => $user, 'KeyName' => $key]);
     }
-  
-  /**
-   * Returns value for a given key/user combo.
-   * @param string $key
-   * @param string|null $default
-   * @param User|null $user
-   * @return string|null
-   */
-  public function Get(string $key, ?string $default = null, ?User $user = null):?string
+
+    /**
+     * Returns value for a given key/user combo.
+     * @param string $key
+     * @param string|null $default
+     * @param User|UserInterface|null $user
+     * @return string|null
+     */
+  public function Get(string $key, ?string $default = null, User|UserInterface|null $user = null):?string
     {
     $obj = $this->GetObject($key,$user);
     if($obj !== null)
@@ -52,14 +52,14 @@ class AppConfigHelper
       }
     return $default;
     }
-  
-  /**
-   * Add or update configuration item $key with value $val for user $user.
-   * @param string $key
-   * @param string $val
-   * @param User|null $user
-   */
-  public function Set(string $key, string $val, ?User $user = null): void
+
+    /**
+     * Add or update configuration item $key with value $val for user $user.
+     * @param string $key
+     * @param string $val
+     * @param User|UserInterface|null $user
+     */
+  public function Set(string $key, string $val, User|UserInterface|null $user = null): void
     {
     $obj = $this->GetObject($key,$user);
     if($obj === null)
@@ -71,13 +71,13 @@ class AppConfigHelper
     $this->entity->persist($obj);
     $this->entity->flush();
     }
-  
+
   /**
    * Removes a config item.
    * @param string $key Config item to remove
-   * @param User|null $user Opt. user
+   * @param User|UserInterface|null $user Opt. user
    */
-  public function Del(string $key, ?User $user = null): void
+  public function Del(string $key, User|UserInterface|null $user = null): void
     {
     $obj = $this->GetObject($key, $user);
     if($obj === null)
@@ -87,7 +87,7 @@ class AppConfigHelper
     $this->entity->remove($obj);
     $this->entity->flush();
     }
-  
+
   /**
    * Returns configuration values as associative array for the given key names.
    * @param array $fields
@@ -108,5 +108,5 @@ class AppConfigHelper
       }
     return $ret;
     }
-  
+
   }
