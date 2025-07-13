@@ -32,13 +32,13 @@ class TimeTrackingController extends AbstractController
   const ACTNAV = 'time';
 
   const CAL_CNT = 3;    // How many calendars should be shown - defaults to 3
-  
+
   /** @var timeTrackingHelper $timeTrackingHelper */
   private timeTrackingHelper $timeTrackingHelper;
-  
+
   /** @var LoggerInterface $logger */
   private LoggerInterface $logger;
-  
+
   /**
    * Constructor
    * @param timeTrackingHelper $timeTrackingHelper
@@ -49,7 +49,7 @@ class TimeTrackingController extends AbstractController
     $this->timeTrackingHelper = $timeTrackingHelper;
     $this->logger = $logger;
     }
-  
+
   /**
    * Renders time tracking form for a given date.
    * @param FlProjectsRepository $projectsRepository
@@ -93,7 +93,7 @@ class TimeTrackingController extends AbstractController
       'ACTNAV'        => self::ACTNAV,
       'CURRENT_DATE'  => $dt,
       'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$dates['ST']->format("m"),(int)$dates['ST']->format("Y"),self::CAL_CNT),
-      'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET']),
+      'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET'],$entriesRepository),
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
       'TODAY_ENTRIES' => $todays_entries,
       'TODAY_TIME'    => $todays_time,
@@ -105,7 +105,7 @@ class TimeTrackingController extends AbstractController
       'DURATION_MM'   => '',
       ]);
     }
-  
+
   /**
    * Calculates start- and endtime fpr a given DateTime object.
    * Uses self::CAL_CNT as base.
@@ -122,7 +122,7 @@ class TimeTrackingController extends AbstractController
     $et->add(new DateInterval("P".(self::CAL_CNT-1)."M"));  // Startedate is already set!
     return ['ST' => $st, 'ET' => $et];
     }
-  
+
   /**
    * Edits an entry.
    * @param int $id
@@ -142,7 +142,7 @@ class TimeTrackingController extends AbstractController
       $this->addFlash('warning',"Editieren nicht möglich - keinen Eintrag gefunden?!");
       return $this->redirectToRoute("fl_time_form");
       }
-    
+
     /** @var DateTime $edate */
     $edate  = $entry->getEntryDate();
     $dates  = $this->getCalendarRange($edate);
@@ -161,7 +161,7 @@ class TimeTrackingController extends AbstractController
       'ACTNAV'        => self::ACTNAV,
       'CURRENT_DATE'  => $entry->getEntryDate(),
       'CALENDAR'      => $this->timeTrackingHelper->createCalendar((int)$dates['ST']->format("m"),(int)$dates['ST']->format("Y"),self::CAL_CNT),
-      'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET']),
+      'EVENTS'        => $this->timeTrackingHelper->GetEventsForDateRange($user,$dates['ST'],$dates['ET'],$entriesRepository),
       'PROJECTS_LIST' => $projectsRepository->findBy(['RefUser' => $user,'Status' => FlProjects::PROJ_STATUS_ACTIVE],['ProjectName' => 'asc']),
       'TODAY_ENTRIES' => $todays_entries,
       'TODAY_TIME'    => $todays_time,
@@ -173,7 +173,7 @@ class TimeTrackingController extends AbstractController
       'DURATION_MM'   => $wtime['M'],
       ]);
     }
-  
+
   /**
    * Saves form
    * @param Request $request
@@ -255,7 +255,7 @@ class TimeTrackingController extends AbstractController
         }
       }
     }
-  
+
   /**
    * Removes an entry from database.
    * @param Request $request
@@ -283,5 +283,5 @@ class TimeTrackingController extends AbstractController
     $this->addFlash('success',"Datensatz wurde gelöscht.");
     return $this->redirectToRoute("fl_time_form",['date' => $edate]);
     }
-  
+
   }

@@ -9,7 +9,9 @@
 namespace App\Service;
 
 use App\Entity\FlProjectEntries;
+use App\Repository\FlProjectEntriesRepository;
 use DateTime;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,17 +23,6 @@ class timeTrackingHelper
   const ENTRY_STATUS_INACTIVE = 1;
   const ENTRY_STATUS_ARCHIVED = 2;
 
-  /** @var EntityManagerInterface $entity */
-  private EntityManagerInterface $entity;
-  
-  /**
-   * @param EntityManagerInterface $entity
-   */
-  public function __construct(EntityManagerInterface $entity)
-    {
-    $this->entity = $entity;
-    }
-    
   /**
    * Returns array with date representation of $month / $year, with optional $cnt month following
    * @param int $month
@@ -56,7 +47,7 @@ class timeTrackingHelper
       }
     return $cal;
     }
-  
+
   /**
    * Creates an array with a complete month defined by passed parameter
    * @param int $month
@@ -91,24 +82,26 @@ class timeTrackingHelper
       }
     return $cal;
     }
-  
+
   /**
    * Checks for entries for given daterange and returns assoc. array with dates and number of events per date
    * @param UserInterface $user
    * @param DateTime $st
    * @param DateTime $et
+   * @param FlProjectEntriesRepository $flProjectEntriesRepository
    * @return array
+   * @throws Exception
    */
-  public function GetEventsForDateRange(UserInterface $user,DateTime $st, DateTime $et):array
+  public function GetEventsForDateRange(UserInterface $user,DateTime $st, DateTime $et,FlProjectEntriesRepository $flProjectEntriesRepository):array
     {
     $arr = [];
-    foreach($this->entity->getRepository(FlProjectEntries::class)->getEventListByDateRange($user,$st,$et) as $item)
+    foreach($flProjectEntriesRepository->getEventListByDateRange($user,$st,$et) as $item)
       {
       $arr[$item['edate']] = $item['cnt'];
       }
     return $arr;
     }
-  
+
   /**
    * Returns given seconds in HH:MM format.
    * @param $seconds int The number of seconds to convert
@@ -127,7 +120,7 @@ class timeTrackingHelper
       return(sprintf("%02.2d:%02.2d",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)));
       }
     }
-  
+
   /**
    * Returns the hours and minutes from given seconds as array.
    * @param $seconds int The number of seconds
@@ -140,7 +133,7 @@ class timeTrackingHelper
       'M' => (($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60)
       ];
     }
-  
+
   /**
    * Returns seconds as localized string in format xx days, yyH etc.
    * @param int $seconds
@@ -179,5 +172,5 @@ class timeTrackingHelper
       return(sprintf("%02.2dh %02.2dmin %02.2ds",($seconds / 3600),(($seconds / 60) >= 60) ? ($seconds - ((floor($seconds / 3600) * 3600))) / 60 : ($seconds / 60),($seconds % 60)));
       }
     }
-  
+
   }
