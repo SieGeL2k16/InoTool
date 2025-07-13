@@ -13,7 +13,7 @@ use IntlDateFormatter;
 class ReportingHelper
   {
   private EntityManagerInterface $entity;
-  
+
   /**
    * @param EntityManagerInterface $entity
    */
@@ -21,7 +21,7 @@ class ReportingHelper
     {
     $this->entity = $entity;
     }
-  
+
   /**
    * Returns Top-<n> projects grouped by time
    * @param int $uid
@@ -49,7 +49,7 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid, 'l' => $limit]);
     return $stmt->fetchAllAssociative();
     }
-  
+
   /**
    * Returns Top-<n> projects ordered by money earned
    * @param int $uid
@@ -76,7 +76,7 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid, 'l' => $limit]);
     return $stmt->fetchAllAssociative();
     }
-  
+
   /**
    * Returns overview data for given userid
    * @param int $uid
@@ -102,7 +102,7 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
     return $stmt->fetchAssociative();
     }
-  
+
   /**
    * Returns totals for given userid
    * @param int $uid
@@ -137,7 +137,7 @@ class ReportingHelper
     $stmt = $this->entity->getConnection()->executeQuery($SQL,['uid' => $uid]);
     return $stmt->fetchAssociative();
     }
-  
+
   /**
    * Returns the month/year as clear-text date string.
    * @input integer $monid The month to convert (format: YYYYMM)
@@ -148,7 +148,7 @@ class ReportingHelper
     $df =  new IntlDateFormatter($locale,IntlDateFormatter::FULL,IntlDateFormatter::NONE,null,IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
     return $df->format(DateTime::createFromFormat('Ym',(string)$monid));
     }
-  
+
   /**
    * Returns a text describing the given date range between sdate and edate.
    * @param string $sdate Startdate, can be empty
@@ -158,15 +158,15 @@ class ReportingHelper
   public function getDateRangeText(string $sdate,string $edate):string
     {
     $trange = '';
-    if($sdate == '' && $edate == '')
+    if($sdate === '' && $edate === '')
       {
       $trange = 'Alle erfassten Einträge';
       }
-    else if($sdate != '' && $edate == '')
+    else if($sdate !== '' && $edate === '')
       {
       $trange = sprintf('Seit dem %s',$sdate);
       }
-    else if($sdate == '' && $edate != '')
+    else if($edate !== '')
       {
       $trange = sprintf('Bis einschliesslich %s',$edate);
       }
@@ -176,5 +176,5 @@ class ReportingHelper
       }
     return $trange;
     }
-  
+
   }

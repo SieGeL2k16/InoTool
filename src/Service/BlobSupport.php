@@ -54,7 +54,7 @@ class BlobSupport
     $response->setContent($data);
     return $response;
     }
-  
+
   /**
    * Returns invoice PDF stored with given ID for the given user.
    * @param int $id
@@ -77,11 +77,11 @@ class BlobSupport
       $response->headers->set('Content-type', $invoice->getPdfMimeType());
       }
     $response->headers->set('Content-Disposition', 'attachment; filename="'.$invoice->getPdfFilename().'";');
-    $response->headers->set('Content-length',  $invoice->getPdfFilesize());
+    $response->headers->set('Content-length',  (string)$invoice->getPdfFilesize());
     $response->sendHeaders();
     $response->setContent($content);
     return $response;
     }
-  
+
 
   }

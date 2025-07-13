@@ -25,27 +25,27 @@ class tcpdf_helper
 
   /** @var ContainerBagInterface $bag */
   private ContainerBagInterface $bag;
-  
+
   public function __construct(ContainerBagInterface $bag)
     {
     $this->bag = $bag;
     }
-  
+
   /**
    * Use this to initialize the TCPDF class.
    * @param string $orientation
    * @param string $unit
    * @param mixed $format
-   * @param bool $pdfa
+   * @param bool|int $pdfa
    * @return TCPDF
    */
-  public function Init(string $orientation = 'P', string $unit = 'mm', mixed $format = 'A4', bool $pdfa = false): TCPDF
+  public function Init(string $orientation = 'P', string $unit = 'mm', mixed $format = 'A4', bool|int $pdfa = false): TCPDF
     {
     $this->tcpdf = new TCPDF($orientation,$unit,$format,true,'UTF-8',false,$pdfa);
     return $this->tcpdf;
     }
 
-  public function SetMetaData(User|UserInterface $user):TCPDF
+  public function SetMetaData(User $user):TCPDF
     {
     $this->tcpdf->setAuthor($user->getFirstName().' '.$user->getLastName());
     $this->tcpdf->setCreator("InoTool ".$this->bag->get('APP_VERSION'));
@@ -53,7 +53,7 @@ class tcpdf_helper
     $this->tcpdf->setPrintFooter(false);
     return $this->tcpdf;
     }
-  
+
   /**
    * Downloads PDF stored in $buffer
    * @param string $filename
@@ -73,7 +73,7 @@ class tcpdf_helper
     $response->setContent($buffer);
     return $response;
     }
-  
+
   /**
    * Adds folding lines to the current page.
    */
@@ -84,5 +84,5 @@ class tcpdf_helper
     $this->tcpdf->Line(3,140.85,7,140.85);
     $this->tcpdf->Line(3,210,7,210);
     }
-  
+
   }
