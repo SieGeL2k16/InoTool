@@ -1,3 +1,10 @@
+#### 24-Oct-2026
+
+- Updated to Symfony 7.4.x LTS version
+- PHPStan now green (thx claude!)
+- Freelancer->Invoices completed
+- Updated Bootstrap to 5.3.8
+
 #### 16-Mar-2024
 
 - Fix: Missing variable when editing time tracking entry
