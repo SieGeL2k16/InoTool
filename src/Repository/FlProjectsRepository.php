@@ -93,9 +93,7 @@ class FlProjectsRepository extends ServiceEntityRepository
               ORDER BY {$params['ORDER']}, p.id desc
               LIMIT {$params['LIMIT']} OFFSET {$params['START']}";
     $total = 0;
-    //  $data   = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par)->fetchAllNumeric();
-    $stmt = $this->getEntityManager()->getConnection()->prepare($SQL);
-    $res  = $stmt->executeQuery($par);
+    $res  = $this->getEntityManager()->getConnection()->executeQuery($SQL,$par);
     $data = [];
     while($d = $res->fetchNumeric())
       {

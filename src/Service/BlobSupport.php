@@ -64,7 +64,7 @@ class BlobSupport
   public function downloadInvoice(int $id,UserInterface|User $user):Response
     {
     $invoice = $this->em->getRepository(FlInvoices::class)->findOneBy(['id' => $id, 'RefUser' => $user]);
-    if($invoice === null)
+    if($invoice === null || $invoice->getPdfData() === null)
       {
       return new Response();
       }

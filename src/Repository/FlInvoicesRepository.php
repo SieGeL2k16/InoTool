@@ -79,7 +79,7 @@ class FlInvoicesRepository extends ServiceEntityRepository
     $par = ['uid' => $userid];
     if($params['SEARCH'] !== "")
       {
-      $SEARCH_SQL.= " AND (i.invoice_number LIKE :srch OR lower(i.comment) LIKE :srch OR lower(i.pdf_filename) LIKE :srch or i.invoice_date::text like :srch)";
+      $SEARCH_SQL.= " AND (lower(i.invoice_number) LIKE :srch OR lower(c.name) LIKE :srch OR lower(i.comment) LIKE :srch OR lower(i.pdf_filename) LIKE :srch or i.invoice_date::text like :srch or to_char(i.invoice_date,'DD.MM.YYYY') like :srch)";
       $par['srch'] = '%'.mb_strtolower($params['SEARCH']).'%';
       }
     if($params['F_TYPE'] !== "")

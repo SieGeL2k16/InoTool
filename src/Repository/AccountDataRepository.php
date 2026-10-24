@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\Persistence\ManagerRegistry;
@@ -186,7 +187,11 @@ class AccountDataRepository extends ServiceEntityRepository
     {
     try
       {
-      $this->istmt->executeStatement($data);
+      foreach($data as $key => $value)
+        {
+        $this->istmt->bindValue($key,$value,is_bool($value) ? ParameterType::BOOLEAN : ParameterType::STRING);
+        }
+      $this->istmt->executeStatement();
       return $this->getEntityManager()->getConnection()->lastInsertId();
       }
     catch(UniqueConstraintViolationException $e)
