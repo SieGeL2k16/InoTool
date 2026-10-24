@@ -112,7 +112,7 @@ class FlProjectsRepository extends ServiceEntityRepository
         $txt  = 'Aktiv';
         }
       $d[3] = "<span class='$cl'>$txt</span>";
-      $d[4] = $this->appRuntime->FormatCheckbox(!(int)$d[4]);
+      $d[4] = $this->appRuntime->FormatCheckbox((int)$d[4] === 0 ? 1 : 0);
       $data[] = $d;
       }
     return [

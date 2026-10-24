@@ -14,13 +14,13 @@ use App\Entity\AccountData;
 use App\Entity\User;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-class IndexController extends AbstractController
+class IndexController extends BaseController
   {
   /**
    * Renders dashboard

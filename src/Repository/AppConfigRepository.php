@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\AppConfig;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\User;
 
 /**
  * @method AppConfig|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,10 +23,10 @@ class AppConfigRepository extends ServiceEntityRepository
   /**
    * Returns list of elements for the given
    * @param array $keys
-   * @param UserInterface|null $user
+   * @param User|null $user
    * @return float|int|mixed|string
    */
-  public function getListByKeys(array $keys,?UserInterface $user): mixed
+  public function getListByKeys(array $keys,?User $user): mixed
     {
     $qb = $this->createQueryBuilder('c')
             ->andWhere('c.KeyName in (:val)')

@@ -6,7 +6,7 @@ use App\Entity\FlCustomer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\User;
 
 /**
  * @extends ServiceEntityRepository<FlCustomer>
@@ -83,11 +83,11 @@ class FlCustomerRepository extends ServiceEntityRepository
   /**
    * Returns the highest customer number.
    * NOTE: Use this number only as suggestion!
-   * @param UserInterface $user
+   * @param User $user
    * @return string
    * @throws Exception
    */
-  public function GetNextCustomerNumber(UserInterface $user):string
+  public function GetNextCustomerNumber(User $user):string
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("select to_char(max(regexp_replace(customer_number,'\D','')::int)+1,'0000009') as maxcustid from fl_customer fc where ref_user_id=:uid",['uid' => $user->getId()]);
     return $stmt->fetchAssociative()['maxcustid'];

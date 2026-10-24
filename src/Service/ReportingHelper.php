@@ -166,7 +166,7 @@ class ReportingHelper
       {
       $trange = sprintf('Seit dem %s',$sdate);
       }
-    else if($edate !== '')
+    else if($sdate === '')
       {
       $trange = sprintf('Bis einschliesslich %s',$edate);
       }

@@ -13,7 +13,6 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
 use Doctrine\Persistence\ManagerRegistry;
-use JetBrains\PhpStorm\ArrayShape;
 use NumberFormatter;
 
 /**
@@ -37,10 +36,9 @@ class AccountDataRepository extends ServiceEntityRepository
    * Returns overview of a given (or current) year
    * @param int $uid
    * @param int $year
-   * @return array
+   * @return array{INCOME: float, OUTCOME: float, DIFFERENCE: float}
    * @throws Exception
    */
-  #[ArrayShape(['INCOME' => "float", 'OUTCOME' => "float", 'DIFFERENCE' => "float"])]
   public function GetYearlyStats(int $uid, int $year = 0):array
     {
     $stats = ['INCOME' => 0.00, 'OUTCOME' => 0.00, 'DIFFERENCE' => 0.0];

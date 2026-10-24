@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\FlConfigurationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: FlConfigurationRepository::class)]
 class FlConfiguration
@@ -263,7 +262,7 @@ class FlConfiguration
         return $this->RefUser;
     }
 
-    public function setRefUser(UserInterface|User $RefUser): self
+    public function setRefUser(User $RefUser): self
     {
         $this->RefUser = $RefUser;
 

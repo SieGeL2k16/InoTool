@@ -14,7 +14,7 @@ use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\User;
 
 class timeTrackingHelper
   {
@@ -85,14 +85,14 @@ class timeTrackingHelper
 
   /**
    * Checks for entries for given daterange and returns assoc. array with dates and number of events per date
-   * @param UserInterface $user
+   * @param User $user
    * @param DateTime $st
    * @param DateTime $et
    * @param FlProjectEntriesRepository $flProjectEntriesRepository
    * @return array
    * @throws Exception
    */
-  public function GetEventsForDateRange(UserInterface $user,DateTime $st, DateTime $et,FlProjectEntriesRepository $flProjectEntriesRepository):array
+  public function GetEventsForDateRange(User $user,DateTime $st, DateTime $et,FlProjectEntriesRepository $flProjectEntriesRepository):array
     {
     $arr = [];
     foreach($flProjectEntriesRepository->getEventListByDateRange($user,$st,$et) as $item)

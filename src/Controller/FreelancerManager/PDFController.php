@@ -8,7 +8,6 @@
 
 namespace App\Controller\FreelancerManager;
 
-use App\Entity\FlConfiguration;
 use App\Repository\FlConfigurationRepository;
 use App\Repository\FlProjectEntriesRepository;
 use App\Service\ReportingHelper;
@@ -17,7 +16,7 @@ use DateTime;
 use Doctrine\DBAL\Exception;
 use IntlDateFormatter;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,7 +24,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route("/pdf/")]
 #[IsGranted("ROLE_USER")]
-class PDFController extends AbstractController
+class PDFController extends BaseController
   {
   public function __construct(private readonly ReportingHelper $reportingHelper,
                               private readonly tcpdf_helper $tcpdf_helper,
@@ -53,7 +52,6 @@ class PDFController extends AbstractController
       $logger->warning(__METHOD__.": PID=$pid|SD=$sd|ED=$ed");
       return $this->redirectToRoute("fl_index");
       }
-      /** @var FlConfiguration $company */
     $company = $this->configurationRepository->findOneBy(['RefUser' => $user->getId()]);
     if($company === null)
       {
@@ -82,12 +80,12 @@ class PDFController extends AbstractController
     $pdf->AddPage();
     $pdf->SetFont('helvetica', 'B', 14);
     $pdf->SetColor('text',0,0,0);
-    $pdf->Cell(0,16,$TITLE,0,true,'L',0,'',0,false,'B','B');
+    $pdf->Cell(0,16,$TITLE,0,1,'L',false,'',0,false,'B','B');
     $pdf->SetFont('helvetica', '', 9);
     $pdf->SetY(16);
-    $pdf->Cell(0,16,'Stundenauflistung von '.$company->getCompanyName(),0,true,'L',0,'',0,false,'B','B');
+    $pdf->Cell(0,16,'Stundenauflistung von '.$company->getCompanyName(),0,1,'L',false,'',0,false,'B','B');
     $pdf->SetY(21);
-    $pdf->Cell(0,16,'Zeitraum: '.$trange,0,false,'L',0,'',0,false,'B','B');
+    $pdf->Cell(0,16,'Zeitraum: '.$trange,0,0,'L',false,'',0,false,'B','B');
     $pdf->WriteHTMLCell(0,0,tcpdf_helper::PAGE_MARGIN_X,30,$buffer);
     $pdfbuffer = $pdf->Output("ignored.pdf","S");
     $filename  = sprintf("%s_%s-%s_stundenauswertung.pdf",str_replace(" ","_",mb_strtolower($report['totals']['PROJECT'])),$dt_sd->format("Ymd"),$dt_ed->format("Ymd"));

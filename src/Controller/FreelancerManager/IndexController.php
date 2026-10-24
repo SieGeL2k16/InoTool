@@ -16,14 +16,14 @@ use App\Entity\FlProjects;
 use App\Entity\FlServiceContracts;
 use App\Service\globalHelper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-class IndexController extends AbstractController
+class IndexController extends BaseController
   {
   /** @var EntityManagerInterface $entity */
   private EntityManagerInterface $entity;

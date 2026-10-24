@@ -15,7 +15,7 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use IntlDateFormatter;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-class ReportingController extends AbstractController
+class ReportingController extends BaseController
   {
   const ACT_NAV = 'report';
 
@@ -86,7 +86,7 @@ class ReportingController extends AbstractController
     $user = $this->getUser();
     $ylist= $this->registry->getRepository(AccountData::class)->GetDistinctYears($user->getId());
     if($year === 0) {
-      $year = (int)$ylist[0]['y'] ?? date('Y');
+      $year = (int)($ylist[0]['y'] ?? date('Y'));
       }
     return $this->render('kontomanager/report_costs_month.html.twig', [
       'ACTNAV'    => self::ACT_NAV,

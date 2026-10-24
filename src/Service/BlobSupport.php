@@ -13,7 +13,6 @@ use App\Entity\FlInvoices;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class BlobSupport
   {
@@ -26,10 +25,10 @@ class BlobSupport
 
   /**
    * Downloads company logo for given User
-   * @param UserInterface $user
+   * @param User $user
    * @return Response
    */
-  public function DownloadCompanyLogo(UserInterface $user):Response
+  public function DownloadCompanyLogo(User $user):Response
     {
     $cfg = $this->em->getRepository(FlConfiguration::class)->findOneBy(['RefUser' => $user]);
     $response = new Response();
@@ -58,10 +57,10 @@ class BlobSupport
   /**
    * Returns invoice PDF stored with given ID for the given user.
    * @param int $id
-   * @param UserInterface|User $user
+   * @param User $user
    * @return Response
    */
-  public function downloadInvoice(int $id,UserInterface|User $user):Response
+  public function downloadInvoice(int $id,User $user):Response
     {
     $invoice = $this->em->getRepository(FlInvoices::class)->findOneBy(['id' => $id, 'RefUser' => $user]);
     if($invoice === null || $invoice->getPdfData() === null)

@@ -8,7 +8,6 @@ use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<FlProjectEntries>
@@ -44,13 +43,13 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
     }
   
   /**
-   * @param UserInterface $user
+   * @param User $user
    * @param DateTime $start
    * @param DateTime $end
    * @return array[]
    * @throws Exception
    */
-  public function getEventListByDateRange(UserInterface $user, DateTime $start, DateTime $end): array
+  public function getEventListByDateRange(User $user, DateTime $start, DateTime $end): array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("select to_char(fpe.entry_date,'YYYY-MM-DD') as edate,count(*) as cnt from fl_project_entries fpe where fpe.entry_date between :sd and :ed and fpe.ref_user_id=:uid group by 1 order by 1",[
       'sd'  => $start->format('Y-m-d').' 00:00:00',
@@ -62,12 +61,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns list of entries for a given date in format YYYY-MM-DD
-   * @param UserInterface $user
+   * @param User $user
    * @param string $date
    * @return array[]
    * @throws Exception
    */
-  public function getEntriesForDate(UserInterface $user,string $date): array
+  public function getEntriesForDate(User $user,string $date): array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
       select fpe.*,fp.project_name,c.name as customer_name,coalesce(calculateProjectEntry(fpe.WORK_TIME_IN_SECS,fp.WORK_UNIT,fp.PAY_PER_WORK_UNIT),costs) as salary
@@ -85,12 +84,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns last <n> entries for the given user.
-   * @param UserInterface $user
+   * @param User $user
    * @param int $nr_entries
    * @return array
    * @throws Exception
    */
-  public function getLastEntries(UserInterface $user, int $nr_entries = 5):array
+  public function getLastEntries(User $user, int $nr_entries = 5):array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
       select fpe.*,fp.project_name,c.name as customer_name
@@ -108,11 +107,11 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns yearly profit for the given user.
-   * @param User|UserInterface $user
+   * @param User $user
    * @return array
    * @throws Exception
    */
-  public function getYearlyProfit(User|UserInterface $user):array
+  public function getYearlyProfit(User $user):array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
         select sum(i.salary), sum(i.work_time_in_secs) as sum_worktime,i.y
@@ -144,12 +143,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns summary of monthly profit for a given year.
-   * @param User|UserInterface $user
+   * @param User $user
    * @param int|NULL $year Year to load, NULL for current year
    * @return array
    * @throws Exception
    */
-  public function getYearProfitByMonth(User|UserInterface $user, ?int $year = null):array
+  public function getYearProfitByMonth(User $user, ?int $year = null):array
     {
     if($year === null)
       {
@@ -186,12 +185,12 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns project entries for the given user and year+month combo.
-   * @param User|UserInterface $user
+   * @param User $user
    * @param string $yyyymm
    * @return array[]
    * @throws Exception
    */
-  public function getEntriesFromYYYYMM(User|UserInterface $user, string $yyyymm = ""):array
+  public function getEntriesFromYYYYMM(User $user, string $yyyymm = ""):array
     {
     if($yyyymm === "")
       {
@@ -217,14 +216,14 @@ class FlProjectEntriesRepository extends ServiceEntityRepository
   
   /**
    * Returns project entries for a given project id and date range.
-   * @param User|UserInterface $user
+   * @param User $user
    * @param int $pid
    * @param DateTime $sd
    * @param DateTime $ed
    * @return array
    * @throws Exception
    */
-  public function getEntriesForProjectAndRange(User|UserInterface $user, int $pid, DateTime $sd, DateTime $ed):array
+  public function getEntriesForProjectAndRange(User $user, int $pid, DateTime $sd, DateTime $ed):array
     {
     $stmt = $this->getEntityManager()->getConnection()->executeQuery("
       select pe.id,

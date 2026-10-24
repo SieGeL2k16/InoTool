@@ -20,14 +20,14 @@ use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use IntlDateFormatter;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_USER')]
-class OverviewController extends AbstractController
+class OverviewController extends BaseController
   {
   const ACT_NAV = 'list';
   const ACT_NAV_ADD = 'add';
@@ -121,7 +121,7 @@ class OverviewController extends AbstractController
    * Handles printing of selected list items.
    * @param Request $request
    * @param ManagerRegistry $registry
-   * @param tcpdf_helper $pdf
+   * @param tcpdf_helper $tcpdf
    * @return Response
    * @throws Exception
    */

@@ -20,7 +20,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,7 +33,7 @@ use Twig\Extra\Intl\IntlExtension;
 
 #[IsGranted('ROLE_USER')]
 #[Route("/freelancer/invoices/")]
-class InvoicesController extends AbstractController
+class InvoicesController extends BaseController
   {
   const ACTNAV = 'invoices';
   
