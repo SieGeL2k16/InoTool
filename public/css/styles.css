@@ -193,3 +193,8 @@ a:hover {
 .def_height_textarea {
   height: 90px !important;
 }
+
+/* Logo on about page */
+.about_logo {
+  max-height: 120px;
+}

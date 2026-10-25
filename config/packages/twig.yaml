@@ -3,6 +3,7 @@ twig:
 
     globals:
         APP_VERSION:    '%APP_VERSION%'
+        APP_AUTHOR:     '%APP_AUTHOR%'
         APP_LOGIN_LOGO: '%env(resolve:LOGIN_LOGO)%'
 
 when@test:

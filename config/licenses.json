@@ -1,0 +1,1556 @@
+{
+    "generated": "2026-10-25T12:14:52+01:00",
+    "composer": [
+        {
+            "name": "doctrine/collections",
+            "version": "3.1.0",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Johannes Schmitt",
+            "url": "https://www.doctrine-project.org/projects/collections.html",
+            "description": "PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/dbal",
+            "version": "4.5.0",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage",
+            "url": "https://www.doctrine-project.org/projects/dbal.html",
+            "description": "Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/deprecations",
+            "version": "1.1.6",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://www.doctrine-project.org/",
+            "description": "A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/doctrine-bundle",
+            "version": "3.3.3",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Benjamin Eberlei, Symfony Community, Doctrine Project",
+            "url": "https://www.doctrine-project.org",
+            "description": "Symfony DoctrineBundle",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "doctrine/doctrine-migrations-bundle",
+            "version": "4.0.1",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Doctrine Project, Symfony Community",
+            "url": "https://www.doctrine-project.org",
+            "description": "Symfony DoctrineMigrationsBundle",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "doctrine/event-manager",
+            "version": "2.1.1",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Johannes Schmitt, Marco Pivetta",
+            "url": "https://www.doctrine-project.org/projects/event-manager.html",
+            "description": "The Doctrine Event Manager is a simple PHP event system that was built to be used with the various Doctrine projects.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/inflector",
+            "version": "2.1.0",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Johannes Schmitt",
+            "url": "https://www.doctrine-project.org/projects/inflector.html",
+            "description": "PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/instantiator",
+            "version": "2.1.0",
+            "license": "MIT",
+            "authors": "Marco Pivetta",
+            "url": "https://www.doctrine-project.org/projects/instantiator.html",
+            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/lexer",
+            "version": "3.0.3",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Johannes Schmitt",
+            "url": "https://www.doctrine-project.org/projects/lexer.html",
+            "description": "PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/migrations",
+            "version": "3.9.8",
+            "license": "MIT",
+            "authors": "Benjamin Eberlei, Jonathan Wage, Michael Simonson",
+            "url": "https://www.doctrine-project.org/projects/migrations.html",
+            "description": "PHP Doctrine Migrations project offer additional functionality on top of the database abstraction layer (DBAL) for versioning your database schema and easily deploying changes to it. It is a very easy to use and a powerful tool.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/orm",
+            "version": "3.7.5",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Marco Pivetta",
+            "url": "https://www.doctrine-project.org/projects/orm.html",
+            "description": "Object-Relational-Mapper for PHP",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "doctrine/persistence",
+            "version": "4.2.1",
+            "license": "MIT",
+            "authors": "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Johannes Schmitt, Marco Pivetta",
+            "url": "https://www.doctrine-project.org/projects/persistence.html",
+            "description": "The Doctrine Persistence project is a set of shared interfaces and functionality that the different Doctrine object mappers share.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "doctrine/sql-formatter",
+            "version": "1.5.4",
+            "license": "MIT",
+            "authors": "Jeremy Dorn",
+            "url": "https://github.com/doctrine/sql-formatter/",
+            "description": "a PHP SQL highlighting library",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "egulias/email-validator",
+            "version": "4.0.4",
+            "license": "MIT",
+            "authors": "Eduardo Gulias Davis",
+            "url": "https://github.com/egulias/EmailValidator",
+            "description": "A library for validating emails against several RFCs",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "masterminds/html5",
+            "version": "2.11.0",
+            "license": "MIT",
+            "authors": "Matt Butcher, Matt Farina, Asmir Mustafic",
+            "url": "http://masterminds.github.io/html5-php",
+            "description": "An HTML5 parser and serializer.",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "monolog/monolog",
+            "version": "3.12.1",
+            "license": "MIT",
+            "authors": "Jordi Boggiano",
+            "url": "https://github.com/Seldaek/monolog",
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "myclabs/deep-copy",
+            "version": "1.14.0",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://github.com/myclabs/DeepCopy/tree/1.14.0",
+            "description": "Create deep copies (clones) of your objects",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "nikic/php-parser",
+            "version": "5.9.0",
+            "license": "BSD-3-Clause",
+            "authors": "Nikita Popov",
+            "url": "https://github.com/nikic/PHP-Parser/tree/v5.9.0",
+            "description": "A PHP parser written in PHP",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phar-io/manifest",
+            "version": "2.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Arne Blankerts, Sebastian Heuer, Sebastian Bergmann",
+            "url": "https://github.com/phar-io/manifest/tree/2.0.4",
+            "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phar-io/version",
+            "version": "3.2.1",
+            "license": "BSD-3-Clause",
+            "authors": "Arne Blankerts, Sebastian Heuer, Sebastian Bergmann",
+            "url": "https://github.com/phar-io/version/tree/3.2.1",
+            "description": "Library for handling version information and constraints",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpdocumentor/reflection-common",
+            "version": "2.2.1",
+            "license": "MIT",
+            "authors": "Jaap van Otterdijk",
+            "url": "https://www.phpdoc.org",
+            "description": "Common reflection classes used by phpdocumentor to reflect the code structure",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "phpdocumentor/reflection-docblock",
+            "version": "5.6.7",
+            "license": "MIT",
+            "authors": "Mike van Riel, Jaap van Otterdijk",
+            "url": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.6.7",
+            "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "phpdocumentor/type-resolver",
+            "version": "1.12.0",
+            "license": "MIT",
+            "authors": "Mike van Riel",
+            "url": "https://github.com/phpDocumentor/TypeResolver/tree/1.12.0",
+            "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "phpstan/extension-installer",
+            "version": "1.4.3",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://github.com/phpstan/extension-installer/tree/1.4.3",
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "phpstan/phpdoc-parser",
+            "version": "1.33.0",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://github.com/phpstan/phpdoc-parser/tree/1.33.0",
+            "description": "PHPDoc parser with support for nullable, intersection and generic types",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "2.3.2",
+            "license": "MIT",
+            "authors": "Ondřej Mirtes, Markus Staab, Vincent Langlet",
+            "url": "https://github.com/phpstan/phpstan-src",
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "phpstan/phpstan-doctrine",
+            "version": "2.0.28",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://github.com/phpstan/phpstan-doctrine/tree/2.0.28",
+            "description": "Doctrine extensions for PHPStan",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "phpstan/phpstan-symfony",
+            "version": "2.1.0",
+            "license": "MIT",
+            "authors": "Lukáš Unger",
+            "url": "https://github.com/phpstan/phpstan-symfony/tree/2.1.0",
+            "description": "Symfony Framework extensions and rules for PHPStan",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "phpunit/php-code-coverage",
+            "version": "9.2.32",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/php-code-coverage",
+            "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpunit/php-file-iterator",
+            "version": "3.0.6",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/php-file-iterator/",
+            "description": "FilterIterator implementation that filters files based on a list of suffixes.",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpunit/php-invoker",
+            "version": "3.1.1",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/php-invoker/",
+            "description": "Invoke callables with a timeout",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpunit/php-text-template",
+            "version": "2.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/php-text-template/",
+            "description": "Simple template engine.",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpunit/php-timer",
+            "version": "5.0.3",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/php-timer/",
+            "description": "Utility class for timing",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "phpunit/phpunit",
+            "version": "9.6.38",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://phpunit.de/",
+            "description": "The PHP Unit Testing framework.",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "psr/cache",
+            "version": "3.0.0",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/cache/tree/3.0.0",
+            "description": "Common interface for caching libraries",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "psr/clock",
+            "version": "1.0.0",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/clock",
+            "description": "Common interface for reading the clock.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "psr/container",
+            "version": "2.0.2",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/container",
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "psr/event-dispatcher",
+            "version": "1.0.0",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/event-dispatcher/tree/1.0.0",
+            "description": "Standard interfaces for event handling.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "psr/link",
+            "version": "2.0.1",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/link",
+            "description": "Common interfaces for HTTP links",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "psr/log",
+            "version": "3.0.2",
+            "license": "MIT",
+            "authors": "PHP-FIG",
+            "url": "https://github.com/php-fig/log",
+            "description": "Common interface for logging libraries",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "sebastian/cli-parser",
+            "version": "1.0.2",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/cli-parser",
+            "description": "Library for parsing CLI options",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/code-unit",
+            "version": "1.0.8",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/code-unit",
+            "description": "Collection of value objects that represent the PHP code units",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/code-unit-reverse-lookup",
+            "version": "2.0.3",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
+            "description": "Looks up which function or method a line of code belongs to",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/comparator",
+            "version": "4.0.10",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann, Jeff Welch, Volker Dusch, Bernhard Schussek",
+            "url": "https://github.com/sebastianbergmann/comparator",
+            "description": "Provides the functionality to compare PHP values for equality",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/complexity",
+            "version": "2.0.3",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/complexity",
+            "description": "Library for calculating the complexity of PHP code units",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/diff",
+            "version": "4.0.6",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann, Kore Nordmann",
+            "url": "https://github.com/sebastianbergmann/diff",
+            "description": "Diff implementation",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/environment",
+            "version": "5.1.5",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "http://www.github.com/sebastianbergmann/environment",
+            "description": "Provides functionality to handle HHVM/PHP environments",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/exporter",
+            "version": "4.0.9",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann, Jeff Welch, Volker Dusch, Adam Harvey, Bernhard Schussek",
+            "url": "https://www.github.com/sebastianbergmann/exporter",
+            "description": "Provides the functionality to export PHP variables for visualization",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/global-state",
+            "version": "5.0.8",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "http://www.github.com/sebastianbergmann/global-state",
+            "description": "Snapshotting of global state",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/lines-of-code",
+            "version": "1.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/lines-of-code",
+            "description": "Library for counting the lines of code in PHP source code",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/object-enumerator",
+            "version": "4.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/object-enumerator/",
+            "description": "Traverses array structures and object graphs to enumerate all referenced objects",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/object-reflector",
+            "version": "2.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/object-reflector/",
+            "description": "Allows reflection of object attributes, including inherited and non-public ones",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/recursion-context",
+            "version": "4.0.7",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann, Jeff Welch, Adam Harvey",
+            "url": "https://github.com/sebastianbergmann/recursion-context",
+            "description": "Provides functionality to recursively process PHP variables",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/resource-operations",
+            "version": "3.0.4",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://www.github.com/sebastianbergmann/resource-operations",
+            "description": "Provides a list of PHP built-in functions that operate on resources",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/type",
+            "version": "3.2.1",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/type",
+            "description": "Collection of value objects that represent the types of the PHP type system",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "sebastian/version",
+            "version": "3.0.2",
+            "license": "BSD-3-Clause",
+            "authors": "Sebastian Bergmann",
+            "url": "https://github.com/sebastianbergmann/version",
+            "description": "Library that helps with managing the version number of Git-hosted PHP projects",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "symfony/apache-pack",
+            "version": "1.0.1",
+            "license": "MIT",
+            "authors": "",
+            "url": "https://github.com/symfony/apache-pack/tree/master",
+            "description": "A pack for Apache support in Symfony",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/asset",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/browser-kit",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/cache",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides extended PSR-6, PSR-16 (and tags) implementations",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "3.7.1",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Generic abstractions related to caching",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/clock",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Decouples applications from the system clock",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/config",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/console",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Eases the creation of beautiful and testable command line interfaces",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/css-selector",
+            "version": "7.4.18",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Jean-François Simon, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Converts CSS selectors to XPath expressions",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/debug-bundle",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a tight integration of the Symfony VarDumper component and the ServerLogCommand from MonologBridge into the Symfony full-stack framework",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/dependency-injection",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Allows you to standardize and centralize the way objects are constructed in your application",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "3.7.1",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "A generic function and convention to trigger deprecation notices",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/doctrine-bridge",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides integration for Doctrine with various Symfony components",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Eases DOM navigation for HTML and XML documents",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "7.4.18",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Registers environment variables from a .env file",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/error-handler",
+            "version": "7.4.20",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides tools to manage errors and ease debugging PHP code",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/event-dispatcher",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/event-dispatcher-contracts",
+            "version": "3.7.1",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Generic abstractions related to dispatching event",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/expression-language",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides an engine that can compile and evaluate expressions",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/filesystem",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides basic utilities for the filesystem",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/finder",
+            "version": "7.4.20",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Finds files and directories via an intuitive fluent interface",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/flex",
+            "version": "2.11.0",
+            "license": "MIT",
+            "authors": "Fabien Potencier",
+            "url": "https://github.com/symfony/flex/tree/v2.11.0",
+            "description": "Composer plugin for Symfony",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/form",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Allows to easily create, process and reuse HTML forms",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/framework-bundle",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a tight integration between Symfony components and the Symfony full-stack framework",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/http-client",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides powerful methods to fetch HTTP resources synchronously or asynchronously",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/http-client-contracts",
+            "version": "3.7.3",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Generic abstractions related to HTTP clients",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Defines an object-oriented layer for the HTTP specification",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/http-kernel",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a structured process for converting a Request into a Response",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/intl",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Bernhard Schussek, Eriksen Costa, Igor Wiedler, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides access to the localization data of the ICU library",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/mailer",
+            "version": "7.4.19",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Helps sending emails",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/maker-bundle",
+            "version": "1.68.0",
+            "license": "MIT",
+            "authors": "Symfony Community",
+            "url": "https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html",
+            "description": "Symfony Maker helps you create empty commands, controllers, form classes, tests and more so you can forget about writing boilerplate code.",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/mime",
+            "version": "7.4.19",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Allows manipulating MIME messages",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/monolog-bridge",
+            "version": "7.4.18",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides integration for Monolog with various Symfony components",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/monolog-bundle",
+            "version": "3.11.2",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony MonologBundle",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/notifier",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Sends notifications via one or more channels (email, SMS, ...)",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides an improved replacement for the array_replace PHP function",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/password-hasher",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Robin Chalas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides password hashing utilities",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/phpunit-bridge",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/polyfill-intl-grapheme",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill for intl's grapheme_* functions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-intl-icu",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill for intl's ICU-related data and classes",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-intl-idn",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Laurent Bassin, Trevor Rowbotham, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill for intl's idn_to_ascii and idn_to_utf8 functions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-intl-normalizer",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill for intl's Normalizer class and related functions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill for the Mbstring extension",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-php83",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-php84",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill backporting some PHP 8.4+ features to lower PHP versions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-php85",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill backporting some PHP 8.5+ features to lower PHP versions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/polyfill-php86",
+            "version": "1.43.0",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony polyfill backporting some PHP 8.6+ features to lower PHP versions",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/process",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Executes commands in sub-processes",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/property-access",
+            "version": "7.4.16",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides functions to read and write from/to an object or array using a simple string notation",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/property-info",
+            "version": "7.4.20",
+            "license": "MIT",
+            "authors": "Kévin Dunglas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Extracts information about PHP class' properties using metadata of popular sources",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/rate-limiter",
+            "version": "7.4.18",
+            "license": "MIT",
+            "authors": "Wouter de Jong, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a Token Bucket implementation to rate limit input and output in your application",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/routing",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Maps an HTTP request to a set of configuration variables",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/runtime",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Enables decoupling PHP applications from global state",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/security-bundle",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a tight integration of the Security component into the Symfony full-stack framework",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/security-core",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony Security Component - Core Library",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/security-csrf",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony Security Component - CSRF Library",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/security-http",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Symfony Security Component - HTTP Integration",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/serializer",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/service-contracts",
+            "version": "3.7.3",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Generic abstractions related to writing services",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/stopwatch",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a way to profile code",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/string",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/translation",
+            "version": "7.4.17",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides tools to internationalize your application",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/translation-contracts",
+            "version": "3.7.1",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Generic abstractions related to translation",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/twig-bridge",
+            "version": "7.4.19",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides integration for Twig with various Symfony components",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/twig-bundle",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a tight integration of Twig into the Symfony full-stack framework",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/type-info",
+            "version": "7.4.20",
+            "license": "MIT",
+            "authors": "Mathias Arlaud, Baptiste LEDUC, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Extracts PHP types information.",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/validator",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides tools to validate values",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/var-dumper",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides mechanisms for walking through any arbitrary PHP variable",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/var-exporter",
+            "version": "7.4.18",
+            "license": "MIT",
+            "authors": "Nicolas Grekas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
+            "direct": false,
+            "dev": false
+        },
+        {
+            "name": "symfony/web-link",
+            "version": "7.4.8",
+            "license": "MIT",
+            "authors": "Kévin Dunglas, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Manages links between resources",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "symfony/web-profiler-bundle",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Provides a development tool that gives detailed information about the execution of any request",
+            "direct": true,
+            "dev": true
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "7.4.21",
+            "license": "MIT",
+            "authors": "Fabien Potencier, Symfony Community",
+            "url": "https://symfony.com",
+            "description": "Loads and dumps YAML files",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "tecnickcom/tcpdf",
+            "version": "6.11.4",
+            "license": "LGPL-3.0-or-later",
+            "authors": "Nicola Asuni",
+            "url": "https://tcpdf.org",
+            "description": "Deprecated legacy PDF engine for PHP. Migrate to tecnickcom/tc-lib-pdf.",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "theseer/tokenizer",
+            "version": "1.3.1",
+            "license": "BSD-3-Clause",
+            "authors": "Arne Blankerts",
+            "url": "https://github.com/theseer/tokenizer/tree/1.3.1",
+            "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
+            "direct": false,
+            "dev": true
+        },
+        {
+            "name": "twig/extra-bundle",
+            "version": "3.29.0",
+            "license": "MIT",
+            "authors": "Fabien Potencier",
+            "url": "https://twig.symfony.com",
+            "description": "A Symfony bundle for extra Twig extensions",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "twig/intl-extra",
+            "version": "3.30.0",
+            "license": "MIT",
+            "authors": "Fabien Potencier",
+            "url": "https://twig.symfony.com",
+            "description": "A Twig extension for Intl",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "twig/twig",
+            "version": "3.30.0",
+            "license": "BSD-3-Clause",
+            "authors": "Fabien Potencier, Twig Team, Armin Ronacher",
+            "url": "https://twig.symfony.com",
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "direct": true,
+            "dev": false
+        },
+        {
+            "name": "webmozart/assert",
+            "version": "2.5.0",
+            "license": "MIT",
+            "authors": "Bernhard Schussek, Woody Gilk",
+            "url": "https://github.com/webmozarts/assert/tree/2.5.0",
+            "description": "Assertions to validate method input/output with nice error messages.",
+            "direct": false,
+            "dev": false
+        }
+    ],
+    "frontend": [
+        {
+            "name": "Bootstrap",
+            "version": "5.3.8",
+            "license": "MIT",
+            "authors": "The Bootstrap Authors",
+            "url": "https://getbootstrap.com/",
+            "description": "",
+            "files": [
+                "css/vendor/bootstrap.css",
+                "css/vendor/bootstrap.css.map",
+                "css/vendor/bootstrap.min.css",
+                "css/vendor/bootstrap.min.css.map",
+                "js/vendor/bootstrap.bundle.js",
+                "js/vendor/bootstrap.bundle.js.map",
+                "js/vendor/bootstrap.bundle.min.js",
+                "js/vendor/bootstrap.bundle.min.js.map"
+            ]
+        },
+        {
+            "name": "Chart.js",
+            "version": "4.2.1",
+            "license": "MIT",
+            "authors": "Chart.js Contributors",
+            "url": "https://www.chartjs.org/",
+            "description": "",
+            "files": [
+                "js/vendor/chart.umd.js"
+            ]
+        },
+        {
+            "name": "DataTables",
+            "version": "1.13.1",
+            "license": "MIT",
+            "authors": "SpryMedia Ltd",
+            "url": "https://datatables.net/",
+            "description": "DataTables 1.13.1, AutoFill 2.5.1, Buttons 2.3.3, Column visibility 2.3.3, HTML5 export 2.3.3, Print view 2.3.3, DateTime 1.2.0, FixedColumns 4.2.1, FixedHeader 3.3.1, KeyTable 2.8.0, Responsive 2.4.0, Scroller 2.0.7, SearchBuilder 1.4.0, SearchPanes 2.1.0, Select 1.5.0, StateRestore 1.2.0",
+            "files": [
+                "css/vendor/datatables.min.css",
+                "js/vendor/datatables.de.json",
+                "js/vendor/datatables.min.js"
+            ]
+        },
+        {
+            "name": "Font Awesome Free",
+            "version": "6.5.1",
+            "license": "Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT",
+            "authors": "Fonticons, Inc.",
+            "url": "https://fontawesome.com/",
+            "description": "",
+            "files": [
+                "css/vendor/all.css",
+                "css/vendor/all.min.css",
+                "css/webfonts/fa-brands-400.ttf",
+                "css/webfonts/fa-brands-400.woff2",
+                "css/webfonts/fa-regular-400.ttf",
+                "css/webfonts/fa-regular-400.woff2",
+                "css/webfonts/fa-solid-900.ttf",
+                "css/webfonts/fa-solid-900.woff2",
+                "css/webfonts/fa-v4compatibility.ttf",
+                "css/webfonts/fa-v4compatibility.woff2"
+            ]
+        },
+        {
+            "name": "jQuery",
+            "version": "3.6.3",
+            "license": "MIT",
+            "authors": "OpenJS Foundation and other contributors",
+            "url": "https://jquery.com/",
+            "description": "",
+            "files": [
+                "js/vendor/jquery-3.6.3.js",
+                "js/vendor/jquery-3.6.3.min.js",
+                "js/vendor/jquery-3.6.3.min.map"
+            ]
+        },
+        {
+            "name": "jQuery Toast Plugin",
+            "version": "",
+            "license": "MIT",
+            "authors": "Kamran Ahmed",
+            "url": "https://github.com/kamranahmedse/jquery-toast-plugin",
+            "description": "",
+            "files": [
+                "css/vendor/jquery.toast.min.css",
+                "js/vendor/jquery.toast.min.js"
+            ]
+        },
+        {
+            "name": "jQuery Validation Plugin",
+            "version": "1.19.1",
+            "license": "MIT",
+            "authors": "Jörn Zaefferer",
+            "url": "https://jqueryvalidation.org/",
+            "description": "",
+            "files": [
+                "js/vendor/additional-methods.min.js",
+                "js/vendor/jquery.validate.min.js"
+            ]
+        },
+        {
+            "name": "Luxon",
+            "version": "3.3.0",
+            "license": "MIT",
+            "authors": "Isaac Cambron and contributors",
+            "url": "https://moment.github.io/luxon/",
+            "description": "",
+            "files": [
+                "js/vendor/luxon.min.js"
+            ]
+        },
+        {
+            "name": "Select2",
+            "version": "4.1.0-rc.0",
+            "license": "MIT",
+            "authors": "Kevin Brown, Igor Vaynberg and contributors",
+            "url": "https://select2.org/",
+            "description": "",
+            "files": [
+                "css/vendor/select2.css",
+                "css/vendor/select2.min.css",
+                "js/vendor/i18n/af.js",
+                "js/vendor/i18n/ar.js",
+                "js/vendor/i18n/az.js",
+                "js/vendor/i18n/bg.js",
+                "js/vendor/i18n/bn.js",
+                "js/vendor/i18n/bs.js",
+                "js/vendor/i18n/ca.js",
+                "js/vendor/i18n/cs.js",
+                "js/vendor/i18n/da.js",
+                "js/vendor/i18n/de.js",
+                "js/vendor/i18n/dsb.js",
+                "js/vendor/i18n/el.js",
+                "js/vendor/i18n/en.js",
+                "js/vendor/i18n/eo.js",
+                "js/vendor/i18n/es.js",
+                "js/vendor/i18n/et.js",
+                "js/vendor/i18n/eu.js",
+                "js/vendor/i18n/fa.js",
+                "js/vendor/i18n/fi.js",
+                "js/vendor/i18n/fr.js",
+                "js/vendor/i18n/gl.js",
+                "js/vendor/i18n/he.js",
+                "js/vendor/i18n/hi.js",
+                "js/vendor/i18n/hr.js",
+                "js/vendor/i18n/hsb.js",
+                "js/vendor/i18n/hu.js",
+                "js/vendor/i18n/hy.js",
+                "js/vendor/i18n/id.js",
+                "js/vendor/i18n/is.js",
+                "js/vendor/i18n/it.js",
+                "js/vendor/i18n/ja.js",
+                "js/vendor/i18n/ka.js",
+                "js/vendor/i18n/km.js",
+                "js/vendor/i18n/ko.js",
+                "js/vendor/i18n/lt.js",
+                "js/vendor/i18n/lv.js",
+                "js/vendor/i18n/mk.js",
+                "js/vendor/i18n/ms.js",
+                "js/vendor/i18n/nb.js",
+                "js/vendor/i18n/ne.js",
+                "js/vendor/i18n/nl.js",
+                "js/vendor/i18n/pa.js",
+                "js/vendor/i18n/pl.js",
+                "js/vendor/i18n/ps.js",
+                "js/vendor/i18n/pt-BR.js",
+                "js/vendor/i18n/pt.js",
+                "js/vendor/i18n/ro.js",
+                "js/vendor/i18n/ru.js",
+                "js/vendor/i18n/sk.js",
+                "js/vendor/i18n/sl.js",
+                "js/vendor/i18n/sq.js",
+                "js/vendor/i18n/sr-Cyrl.js",
+                "js/vendor/i18n/sr.js",
+                "js/vendor/i18n/sv.js",
+                "js/vendor/i18n/te.js",
+                "js/vendor/i18n/th.js",
+                "js/vendor/i18n/tk.js",
+                "js/vendor/i18n/tr.js",
+                "js/vendor/i18n/uk.js",
+                "js/vendor/i18n/vi.js",
+                "js/vendor/i18n/zh-CN.js",
+                "js/vendor/i18n/zh-TW.js",
+                "js/vendor/select2.full.js",
+                "js/vendor/select2.full.min.js"
+            ]
+        },
+        {
+            "name": "Select2 Bootstrap 5 Theme",
+            "version": "1.2.0",
+            "license": "MIT",
+            "authors": "apalfrey",
+            "url": "https://github.com/apalfrey/select2-bootstrap-5-theme",
+            "description": "",
+            "files": [
+                "css/vendor/select2-bootstrap-5-theme.min.css"
+            ]
+        },
+        {
+            "name": "SweetAlert2",
+            "version": "11.7.3",
+            "license": "MIT",
+            "authors": "Limon Monte",
+            "url": "https://sweetalert2.github.io/",
+            "description": "",
+            "files": [
+                "js/vendor/sweetalert2.all.min.js"
+            ]
+        }
+    ],
+    "unknown": []
+}

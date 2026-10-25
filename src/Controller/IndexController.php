@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Service\LicenseInfoHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -42,6 +44,21 @@ class IndexController extends BaseController
     return $this->render('index/home.html.twig');
     }
   
+  /**
+   * Shows about page with version and license informations
+   * @param Request $request
+   * @param LicenseInfoHelper $licenseInfoHelper
+   * @return Response
+   */
+  #[IsGranted("ROLE_USER")]
+  #[Route('/about',name: 'about')]
+  public function about(Request $request, LicenseInfoHelper $licenseInfoHelper):Response
+    {
+    $runtime = $licenseInfoHelper->GetRuntimeInfo();
+    $runtime['Webserver'] = (string)$request->server->get('SERVER_SOFTWARE','');
+    return $this->render('index/about.html.twig', ['LICENSES' => $licenseInfoHelper->Load(), 'RUNTIME' => $runtime]);
+    }
+
   /**
    * Dummy for logout functionality
    */

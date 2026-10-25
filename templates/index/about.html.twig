@@ -1,0 +1,130 @@
+{% extends 'InoSession.html.twig' %}
+{% block navbar_title %}Über InoTool{% endblock %}
+{% block body %}
+<div class="container-fluid">
+  <div class="row mt-4">
+    <div class="col-xl-6 col-lg-8 col-12 mx-auto">
+      <div class="card mb-4">
+        <div class="card-body text-center">
+          <img src="{{ asset(APP_LOGIN_LOGO) }}" alt="Logo" class="img-fluid mb-3 about_logo">
+          <h1 class="h3">InoTool {{ APP_VERSION }}</h1>
+          <p class="mb-1">&copy; {{ APP_AUTHOR }}</p>
+          <p class="text-muted small mb-0"><i class="fa-solid fa-robot"></i> Code support by Claude Opus</p>
+        </div>
+      </div>
+      <div class="card mb-4">
+        <div class="card-header"><i class="fa-solid fa-server fa-fw"></i> Laufzeitumgebung</div>
+        <div class="card-body">
+          <table class="table table-sm mb-0">
+            <tbody>
+            {% for label, version in RUNTIME %}
+            <tr>
+              <th class="w-25">{{ label }}</th>
+              <td>{{ version|EmptyString }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if LICENSES is null %}
+  <div class="row">
+    <div class="col-xl-6 col-lg-8 col-12 mx-auto">
+      <div class="alert alert-warning">
+        Keine Komponenten-Informationen vorhanden. Bitte <code>bin/console app:update-licenses</code> ausführen.
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-header"><i class="fa-brands fa-php fa-fw"></i> PHP-Komponenten (Composer)</div>
+        <div class="card-body">
+          <table class="table table-striped table-hover table-sm w-100" id="tbl_composer">
+            <thead>
+            <tr>
+              <th>Paket</th>
+              <th>Version</th>
+              <th>Lizenz</th>
+              <th>Autor(en)</th>
+              <th>Typ</th>
+              <th>Link</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in LICENSES.composer %}
+            <tr>
+              <td>{{ p.name }}{% if p.description != '' %}<br><span class="text-muted small">{{ p.description }}</span>{% endif %}</td>
+              <td class="text-nowrap">{{ p.version|EmptyString }}</td>
+              <td>{{ p.license|EmptyString }}</td>
+              <td>{{ p.authors|EmptyString }}</td>
+              <td class="text-nowrap">
+                {% if p.direct %}<span class="badge bg-primary">direkt</span>{% else %}<span class="badge bg-secondary">indirekt</span>{% endif %}
+                {% if p.dev %}<span class="badge bg-warning text-dark">dev</span>{% else %}<span class="badge bg-success">prod</span>{% endif %}
+              </td>
+              <td>{% if p.url != '' %}<a href="{{ p.url }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> {{ p.url|replace({'https://':'','http://':''}) }}</a>{% else %}---{% endif %}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <div class="card">
+        <div class="card-header"><i class="fa-brands fa-js fa-fw"></i> Frontend-Komponenten (JS/CSS)</div>
+        <div class="card-body">
+          <table class="table table-striped table-hover table-sm w-100" id="tbl_frontend">
+            <thead>
+            <tr>
+              <th>Komponente</th>
+              <th>Version</th>
+              <th>Lizenz</th>
+              <th>Autor(en)</th>
+              <th>Dateien</th>
+              <th>Link</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for f in LICENSES.frontend %}
+            <tr>
+              <td>{{ f.name }}{% if f.description != '' %}<br><span class="text-muted small">{{ f.description }}</span>{% endif %}</td>
+              <td class="text-nowrap">{{ f.version|EmptyString }}</td>
+              <td>{{ f.license|EmptyString }}</td>
+              <td>{{ f.authors|EmptyString }}</td>
+              <td title="{{ f.files|join("\n") }}">{{ f.files|length }}</td>
+              <td><a href="{{ f.url }}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square fa-fw"></i> {{ f.url|replace({'https://':'','http://':''}) }}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-muted small">Stand der Daten: {{ LICENSES.generated|date('d.m.Y H:i') }}</div>
+  </div>
+  {% endif %}
+  <div class="row mt-4">
+    <div class="col text-center">
+      <button type="button" class="btn btn-outline-dark" onclick="window.location.href='{{ path("home") }}'"><i class="fa-solid fa-home"></i> Zurück zum Start</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+  $("#tbl_composer, #tbl_frontend").DataTable({
+    "pageLength": 25,
+    "order": [[0, 'asc']],
+  });
+});
+</script>
+{% endblock %}
