@@ -6,7 +6,7 @@ use App\Service\LicenseInfoHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use LogicException;
@@ -34,7 +34,7 @@ class IndexController extends BaseController
     $lastUsername = $authenticationUtils->getLastUsername();
     return $this->render('index/index.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
-  
+
   /**
    * @return Response
    */
@@ -43,7 +43,7 @@ class IndexController extends BaseController
     {
     return $this->render('index/home.html.twig');
     }
-  
+
   /**
    * Shows about page with version and license informations
    * @param Request $request
@@ -77,5 +77,5 @@ class IndexController extends BaseController
     {
     return new JsonResponse(['PONG' => microtime(true)]);
     }
-  
+
   }

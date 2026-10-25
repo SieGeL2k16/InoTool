@@ -1,3 +1,7 @@
+#### 25-Oct-2026
+
+- Added about page 
+
 #### 24-Oct-2026
 
 - Updated to Symfony 7.4.x LTS version
